@@ -212,7 +212,7 @@ class CyberDemonNPC(NPC):
 
 class StakorNPC(NPC):
     def __init__(self, game, path='resources/sprites/npc/stakor/0.png', pos=(10.5, 5.5),
-                 scale=0.8, shift=0.3, animation_time=150):
+                 scale=0.5, shift=0.4, animation_time=150):
         super().__init__(game, path, pos, scale, shift, animation_time)
         # Posebno učitamo slike za smrt jer imamo drugačiju strukturu direktorija
         self.death_images = deque()
