@@ -23,6 +23,10 @@ class ObjectHandler:
         self.spawn_npc()
 
         # sprite map
+        ##add_sprite(SpriteObject(game, path=self.static_sprite_path + 'ukras1.png', pos=(14.5, 4.0)))
+        ##add_sprite(SpriteObject(game, path=self.static_sprite_path + 'konzola.jpg', pos=(2, 14.5)))
+        
+        """
         add_sprite(AnimatedSprite(game))
         add_sprite(AnimatedSprite(game, pos=(1.5, 1.5)))
         add_sprite(AnimatedSprite(game, pos=(1.5, 7.5)))
@@ -45,7 +49,7 @@ class ObjectHandler:
         add_sprite(AnimatedSprite(game, pos=(14.5, 30.5)))
         add_sprite(AnimatedSprite(game, pos=(1.5, 30.5)))
         add_sprite(AnimatedSprite(game, pos=(1.5, 24.5)))
-
+        """
         # npc map
         # add_npc(SoldierNPC(game, pos=(11.0, 19.0)))
         # add_npc(SoldierNPC(game, pos=(11.5, 4.5)))
