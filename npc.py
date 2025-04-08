@@ -128,6 +128,10 @@ class NPC(AnimatedSprite):
         sin_a = math.sin(ray_angle)
         cos_a = math.cos(ray_angle)
 
+        EPSILON = 1e-6
+        sin_a = sin_a if abs(sin_a) > EPSILON else EPSILON * (1 if sin_a >= 0 else -1)
+        cos_a = cos_a if abs(cos_a) > EPSILON else EPSILON * (1 if cos_a >= 0 else -1)
+
         # horizontals
         y_hor, dy = (y_map + 1, 1) if sin_a > 0 else (y_map - 1e-6, -1)
 
