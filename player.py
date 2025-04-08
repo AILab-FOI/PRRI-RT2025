@@ -14,6 +14,12 @@ class Player:
         self.health_recovery_delay = 700
         self.time_prev = pg.time.get_ticks()
 
+        # Dash svojstva
+        self.is_dashing = False
+        self.dash_direction = (0, 0)  # smjer dasha (dx, dy)
+        self.dash_start_time = 0
+        self.last_dash_time = 0
+
     def recover_health(self):
         if self.check_health_recovery_delay() and self.health < PLAYER_MAX_HEALTH:
             self.health += 1
@@ -66,6 +72,19 @@ class Player:
             dx += -speed_sin
             dy += speed_cos
 
+        # Spremi normalizirani smjer kretanja za dash
+        if dx != 0 or dy != 0:
+            # Normaliziraj vektor smjera
+            length = math.sqrt(dx * dx + dy * dy)
+            self.dash_direction = (dx / length, dy / length)
+        else:
+            # Ako nema kretanja, koristi smjer pogleda
+            self.dash_direction = (cos_a, sin_a)
+
+        # Provjeri tipku za dash
+        if keys[pg.K_SPACE] and not self.is_dashing:
+            self.dash()
+
         self.check_wall_collision(dx, dy)
 
         # if keys[pg.K_LEFT]:
@@ -98,8 +117,43 @@ class Player:
         self.rel = max(-MOUSE_MAX_REL, min(MOUSE_MAX_REL, self.rel))
         self.angle += self.rel * MOUSE_SENSITIVITY * self.game.delta_time
 
+    def dash(self):
+        # Provjeri je li dash na cooldownu
+        current_time = pg.time.get_ticks()
+        if current_time - self.last_dash_time < PLAYER_DASH_COOLDOWN:
+            return False
+
+        # Provjeri ima li smjer kretanja
+        if self.dash_direction == (0, 0):
+            return False
+
+        # Započni dash
+        self.is_dashing = True
+        self.dash_start_time = current_time
+        self.last_dash_time = current_time
+        # Treba zvuk
+        
+        return True
+
+    def update_dash(self):
+        if not self.is_dashing:
+            return
+
+        current_time = pg.time.get_ticks()
+        # Provjeri je li dash završio
+        if current_time - self.dash_start_time > PLAYER_DASH_DURATION:
+            self.is_dashing = False
+            return
+
+        # Primijeni dash kretanje
+        dx, dy = self.dash_direction
+        dash_speed = PLAYER_SPEED * PLAYER_DASH_MULTIPLIER * self.game.delta_time
+        self.check_wall_collision(dx * dash_speed, dy * dash_speed)
+
     def update(self):
-        self.movement()
+        if not self.is_dashing:
+            self.movement()
+        self.update_dash()
         self.mouse_control()
         self.recover_health()
 

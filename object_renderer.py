@@ -21,6 +21,7 @@ class ObjectRenderer:
         self.draw_background()
         self.render_game_objects()
         self.draw_player_health()
+        self.draw_dash_indicator()
 
     def win(self):
         self.screen.blit(self.win_image, (0, 0))
@@ -37,6 +38,36 @@ class ObjectRenderer:
     def player_damage(self):
         self.screen.blit(self.blood_screen, (0, 0))
 
+    def draw_dash_indicator(self):
+        # Izračunaj preostalo vrijeme cooldowna
+        current_time = pg.time.get_ticks()
+        dash_cooldown_remaining = 0
+
+        if not self.game.player.is_dashing:
+            time_since_last_dash = current_time - self.game.player.last_dash_time
+            if time_since_last_dash < PLAYER_DASH_COOLDOWN:
+                dash_cooldown_remaining = 1 - (time_since_last_dash / PLAYER_DASH_COOLDOWN)
+
+        # Nacrtaj indikator cooldowna
+        indicator_width = 200
+        indicator_height = 10
+        indicator_x = WIDTH - indicator_width - 20
+        indicator_y = 20
+
+        # Pozadina indikatora
+        pg.draw.rect(self.screen, (50, 50, 50),
+                     (indicator_x, indicator_y, indicator_width, indicator_height))
+
+        # Popunjeni dio indikatora
+        if dash_cooldown_remaining > 0:
+            fill_width = int(indicator_width * (1 - dash_cooldown_remaining))
+            pg.draw.rect(self.screen, (0, 200, 0),
+                         (indicator_x, indicator_y, fill_width, indicator_height))
+        else:
+            # Dash je spreman - prikaži puni indikator
+            pg.draw.rect(self.screen, (0, 255, 0),
+                         (indicator_x, indicator_y, indicator_width, indicator_height))
+            
     def draw_background(self):
         self.sky_offset = (self.sky_offset + 4.5 * self.game.player.rel) % WIDTH
         self.screen.blit(self.sky_image, (-self.sky_offset, 0))
