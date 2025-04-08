@@ -14,6 +14,11 @@ PLAYER_ROT_SPEED = 0.002
 PLAYER_SIZE_SCALE = 60
 PLAYER_MAX_HEALTH = 100
 
+# dash settings
+PLAYER_DASH_MULTIPLIER = 3.0  # koliko je dash brži od normalnog kretanja
+PLAYER_DASH_DURATION = 200    # trajanje dasha u milisekundama
+PLAYER_DASH_COOLDOWN = 1000   # cooldown dasha u milisekundama
+
 MOUSE_SENSITIVITY = 0.0003
 MOUSE_MAX_REL = 40
 MOUSE_BORDER_LEFT = 100
