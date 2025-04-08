@@ -132,7 +132,7 @@ class Player:
         self.dash_start_time = current_time
         self.last_dash_time = current_time
         # Treba zvuk
-        
+        self.game.sound.player_dash.play()
         return True
 
     def update_dash(self):
