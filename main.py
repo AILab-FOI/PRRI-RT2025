@@ -13,7 +13,7 @@ from pathfinding import *
 
 
 class Game:
-    def __init__(self):
+    def __init__(self): 
         pg.init()
         pg.mouse.set_visible(False)
         self.screen = pg.display.set_mode(RES)
