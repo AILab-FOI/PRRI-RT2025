@@ -10,6 +10,7 @@ from object_handler import *
 from weapon import *
 from sound import *
 from pathfinding import *
+from menu import *
 
 
 class Game:
@@ -22,7 +23,15 @@ class Game:
         self.global_trigger = False
         self.global_event = pg.USEREVENT + 0
         pg.time.set_timer(self.global_event, 40)
-        self.new_game()
+
+        # Initialize sound first so menu can access volume settings
+        self.sound = Sound(self)
+
+        # Create menu
+        self.menu = Menu(self)
+
+        # Start with menu instead of directly starting the game
+        self.game_started = False
 
     def new_game(self):
         self.map = Map(self)
@@ -31,9 +40,9 @@ class Game:
         self.raycasting = RayCasting(self)
         self.object_handler = ObjectHandler(self)
         self.weapon = Weapon(self)
-        self.sound = Sound(self)
         self.pathfinding = PathFinding(self)
         pg.mixer.music.play(-1)
+        self.game_started = True
 
     def update(self):
         self.player.update()
@@ -57,18 +66,36 @@ class Game:
     def check_events(self):
         self.global_trigger = False
         for event in pg.event.get():
-            if event.type == pg.QUIT or (event.type == pg.KEYDOWN and event.key == pg.K_ESCAPE):
+            if event.type == pg.QUIT:
                 pg.quit()
                 sys.exit()
+            elif event.type == pg.KEYDOWN and event.key == pg.K_ESCAPE:
+                # Return to menu when Escape is pressed
+                self.game_started = False
+                self.menu.state = 'main'
+                pg.mouse.set_visible(True)
+                return
             elif event.type == self.global_event:
                 self.global_trigger = True
             self.player.single_fire_event(event)
 
     def run(self):
         while True:
-            self.check_events()
-            self.update()
-            self.draw()
+            if not self.game_started:
+                # Show menu
+                self.menu.run()
+                if self.menu.state == 'game':
+                    # Start or resume game
+                    if not hasattr(self, 'map'):
+                        self.new_game()
+                    else:
+                        self.game_started = True
+                        pg.mouse.set_visible(False)
+            else:
+                # Run game
+                self.check_events()
+                self.update()
+                self.draw()
 
 
 if __name__ == '__main__':
