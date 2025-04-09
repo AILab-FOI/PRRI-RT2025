@@ -11,7 +11,7 @@ class Sound:
         self.npc_pain.set_volume(0.4)   
         self.stakor_smrt = pg.mixer.Sound(self.path + 'stakor_smrt.mp3') 
         self.npc_shot = pg.mixer.Sound(self.path + 'stakor_napad.mp3')
-        self.npc_shot.set_volume(0.7) 
+        self.npc_shot.set_volume(0.6) 
         self.igrac_damage = pg.mixer.Sound(self.path + 'Igrac_damage.wav')
         self.razina1 = pg.mixer.music.load(self.path + 'Pozadinska1.mp3')
         self.player_dash = pg.mixer.Sound(self.path + 'Dash.wav')  
