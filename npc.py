@@ -128,6 +128,10 @@ class NPC(AnimatedSprite):
         sin_a = math.sin(ray_angle)
         cos_a = math.cos(ray_angle)
 
+        EPSILON = 1e-6
+        sin_a = sin_a if abs(sin_a) > EPSILON else EPSILON * (1 if sin_a >= 0 else -1)
+        cos_a = cos_a if abs(cos_a) > EPSILON else EPSILON * (1 if cos_a >= 0 else -1)
+
         # horizontals
         y_hor, dy = (y_map + 1, 1) if sin_a > 0 else (y_map - 1e-6, -1)
 
@@ -210,22 +214,24 @@ class CyberDemonNPC(NPC):
         self.accuracy = 0.25
 
 
+class StakorNPC(NPC):
+    def __init__(self, game, path='resources/sprites/npc/stakor/0.png', pos=(10.5, 5.5),
+                 scale=0.5, shift=0.4, animation_time=150):
+        super().__init__(game, path, pos, scale, shift, animation_time)
+        # Posebno učitamo slike za smrt jer imamo drugačiju strukturu direktorija
+        self.death_images = deque()
+        death_path = self.path + '/death'
+        for file_name in ['0.png', '1.png']:
+            if os.path.isfile(os.path.join(death_path, file_name)):
+                img = pg.image.load(death_path + '/' + file_name).convert_alpha()
+                self.death_images.append(img)
 
+        # Koristimo walk slike za hodanje
+        self.walk_images = self.get_images(self.path + '/walk')
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        # Karakteristike štakora
+        self.attack_dist = 1.5     # Manja udaljenost napada jer je manji neprijatelj
+        self.health = 50           # Manje zdravlje
+        self.attack_damage = 5     # Manji damage
+        self.speed = 0.06          # Brži od ostalih neprijatelja
+        self.accuracy = 0.2        # Srednja točnost

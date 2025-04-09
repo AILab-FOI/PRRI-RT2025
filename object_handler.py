@@ -16,13 +16,17 @@ class ObjectHandler:
         self.npc_positions = {}
 
         # spawn npc
-        self.enemies = 2  # npc count
-        self.npc_types = [SoldierNPC, CacoDemonNPC, CyberDemonNPC]
-        self.weights = [70, 20, 10]
+        self.enemies = 15  # npc count
+        self.npc_types = [StakorNPC]
+        self.weights = [100]
         self.restricted_area = {(i, j) for i in range(10) for j in range(10)}
         self.spawn_npc()
 
         # sprite map
+        ##add_sprite(SpriteObject(game, path=self.static_sprite_path + 'ukras1.png', pos=(14.5, 4.0)))
+        ##add_sprite(SpriteObject(game, path=self.static_sprite_path + 'konzola.jpg', pos=(2, 14.5)))
+        
+        """
         add_sprite(AnimatedSprite(game))
         add_sprite(AnimatedSprite(game, pos=(1.5, 1.5)))
         add_sprite(AnimatedSprite(game, pos=(1.5, 7.5)))
@@ -45,7 +49,7 @@ class ObjectHandler:
         add_sprite(AnimatedSprite(game, pos=(14.5, 30.5)))
         add_sprite(AnimatedSprite(game, pos=(1.5, 30.5)))
         add_sprite(AnimatedSprite(game, pos=(1.5, 24.5)))
-
+        """
         # npc map
         # add_npc(SoldierNPC(game, pos=(11.0, 19.0)))
         # add_npc(SoldierNPC(game, pos=(11.5, 4.5)))
