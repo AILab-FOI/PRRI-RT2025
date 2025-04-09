@@ -16,7 +16,7 @@ class ObjectHandler:
         self.npc_positions = {}
 
         # spawn npc
-        self.enemies = 14  # npc count
+        self.enemies = 1  # npc count
         self.npc_types = [KlonoviNPC, StakorNPC]
         self.weights = [50, 50]
         self.restricted_area = {(i, j) for i in range(10) for j in range(10)}
@@ -52,6 +52,14 @@ class ObjectHandler:
         add_sprite(SpriteObject(game, path=self.static_sprite_path + 'ukras1.png', pos=(20.2, 31.8)))
         add_sprite(SpriteObject(game, path=self.static_sprite_path + 'ukras1.png', pos=(15.2, 32.3)))
         add_sprite(SpriteObject(game, path=self.static_sprite_path + 'ukras1.png', pos=(8.9, 32.3)))
+
+        add_sprite(SpriteObject(game, path=self.static_sprite_path + 'ukras1.png', pos=(20.2, 12.2)))
+        add_sprite(SpriteObject(game, path=self.static_sprite_path + 'ukras1.png', pos=(20.2, 13.2)))
+        add_sprite(SpriteObject(game, path=self.static_sprite_path + 'ukras1.png', pos=(20.2, 14.2)))
+
+        add_sprite(SpriteObject(game, path=self.static_sprite_path + 'ukras2.png', pos=(20.2, 12.7)))
+        add_sprite(SpriteObject(game, path=self.static_sprite_path + 'ukras2.png', pos=(20.2, 13.7)))
+        add_sprite(SpriteObject(game, path=self.static_sprite_path + 'ukras2.png', pos=(20.2, 14.7)))
         # add_sprite(SpriteObject(game, path=self.static_sprite_path + 'konzola.jpg', pos=(2, 14.5)))
 
         """
