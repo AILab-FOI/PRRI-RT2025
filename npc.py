@@ -82,7 +82,7 @@ class NPC(AnimatedSprite):
     def check_health(self):
         if self.health < 1:
             self.alive = False
-            self.game.sound.stakor_smrt.play()
+            self.game.sound.smrt.play()
             # Reset death frame counter and set the initial death frame immediately
             self.death_frame = 0
             # Adjust height shift to position death sprites on the ground
@@ -268,3 +268,17 @@ class StakorNPC(NPC):
             self.game.sound.napad_stakor.play()
             if random() < self.accuracy:
                 self.game.player.get_damage(self.attack_damage)
+    def check_health(self):
+        if self.health < 1:
+            self.alive = False
+            self.game.sound.stakor_smrt.play()
+            # Reset death frame counter and set the initial death frame immediately
+            self.death_frame = 0
+            # Adjust height shift to position death sprites on the ground
+            # Use specific death_height_shift if available, otherwise use default
+            if hasattr(self, 'death_height_shift'):
+                self.SPRITE_HEIGHT_SHIFT = self.death_height_shift
+            else:
+                self.SPRITE_HEIGHT_SHIFT = 0.5  # Default value
+            if len(self.death_images) > 0:
+                self.image = self.death_images[0]
