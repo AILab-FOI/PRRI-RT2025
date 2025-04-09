@@ -101,13 +101,12 @@ class Game:
         """Advance to the next level"""
         if self.level_manager.next_level():
             # Display loading message
-            self.screen.fill((0, 0, 0))  # Clear screen
             font = pg.font.SysFont('Arial', 36)
-            text_surface = font.render(f"Loading Level {self.level_manager.current_level}...", True, (255, 255, 255))
+            text_surface = font.render("Loading next level...", True, (255, 255, 255))
             text_rect = text_surface.get_rect(center=(HALF_WIDTH, HALF_HEIGHT))
             self.screen.blit(text_surface, text_rect)
             pg.display.flip()
-            pg.time.delay(1500)
+            pg.time.delay(1000)
 
     def run(self):
         while True:
