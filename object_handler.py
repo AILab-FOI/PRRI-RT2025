@@ -67,8 +67,6 @@ class ObjectHandler:
                 while (pos in self.game.map.world_map) or (pos in self.restricted_area):
                     pos = x, y = randrange(self.game.map.cols), randrange(self.game.map.rows)
                 self.add_npc(npc(self.game, pos=(x + 0.5, y + 0.5)))
-                print(f"Broj neprijatelja na mapi: {len(self.npc_list)}")  # Dodajte ovu liniju
-
 
     def check_win(self):
         if not len(self.npc_positions):
@@ -78,19 +76,10 @@ class ObjectHandler:
             self.game.new_game()
 
     def update(self):
-     self.npc_positions = {npc.map_pos for npc in self.npc_list if npc.alive}
-    
-     for npc in self.npc_list:
-        if not npc.alive and npc in self.npc_list:  # Proverite da li je neprijatelj u listi
-           # self.npc_list.remove(npc)  # Uklonite neprijatelja iz liste
-            print(f"Neprijatelj uklonjen sa pozicije {npc.map_pos}")
-            
-    
-     [sprite.update() for sprite in self.sprite_list]
-     [npc.update() for npc in self.npc_list]
-     self.check_win()
-    
-    
+        self.npc_positions = {npc.map_pos for npc in self.npc_list if npc.alive}
+        [sprite.update() for sprite in self.sprite_list]
+        [npc.update() for npc in self.npc_list]
+        self.check_win()
 
     def add_npc(self, npc):
         self.npc_list.append(npc)
