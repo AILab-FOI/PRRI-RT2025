@@ -27,7 +27,18 @@ class Game:
         self.new_game()
 
     def new_game(self):
-        self.map = Map(self)
+        # Initialize level manager if it doesn't exist
+        if not hasattr(self, 'level_manager'):
+            self.level_manager = LevelManager(self)
+
+        # Initialize map if it doesn't exist or reset it for a new game
+        if not hasattr(self, 'map'):
+            self.map = Map(self)
+        # Otherwise, make sure the map is loaded for the current level
+        else:
+            self.map.load_level(self.level_manager.current_level)
+
+        # Initialize or reset other game components
         self.player = Player(self)
         self.object_renderer = ObjectRenderer(self)
         self.raycasting = RayCasting(self)
@@ -37,15 +48,17 @@ class Game:
         self.pathfinding = PathFinding(self)
         self.interaction = Interaction(self)
 
-        # Initialize level manager if it doesn't exist
-        if not hasattr(self, 'level_manager'):
-            self.level_manager = LevelManager(self)
-
         # Set up interactive objects for the current level
         self.level_manager.setup_interactive_objects()
 
         # Update pathfinding graph
         self.pathfinding.update_graph()
+
+        # Set player position based on level
+        if self.level_manager.current_level == 1:
+            self.player.x, self.player.y = PLAYER_POS  # Starting position for level 1
+        elif self.level_manager.current_level == 2:
+            self.player.x, self.player.y = PLAYER_POS_LEVEL2  # Starting position for level 2
 
         pg.mixer.music.play(-1)
 
@@ -88,12 +101,13 @@ class Game:
         """Advance to the next level"""
         if self.level_manager.next_level():
             # Display loading message
+            self.screen.fill((0, 0, 0))  # Clear screen
             font = pg.font.SysFont('Arial', 36)
-            text_surface = font.render("Loading next level...", True, (255, 255, 255))
+            text_surface = font.render(f"Loading Level {self.level_manager.current_level}...", True, (255, 255, 255))
             text_rect = text_surface.get_rect(center=(HALF_WIDTH, HALF_HEIGHT))
             self.screen.blit(text_surface, text_rect)
             pg.display.flip()
-            pg.time.delay(1000)
+            pg.time.delay(1500)
 
     def run(self):
         while True:

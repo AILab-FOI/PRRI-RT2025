@@ -17,11 +17,18 @@ class ObjectRenderer:
         self.game_over_image = self.get_texture('resources/textures/game_over.png', RES)
         self.win_image = self.get_texture('resources/textures/win.png', RES)
 
+        # Message display
+        self.message = ""
+        self.message_time = 0
+        self.message_duration = 5000  # 5 seconds
+        self.message_font = pg.font.SysFont('Arial', 36)
+
     def draw(self):
         self.draw_background()
         self.render_game_objects()
         self.draw_player_health()
         self.draw_dash_indicator()
+        self.draw_message()
 
     def win(self):
         self.screen.blit(self.win_image, (0, 0))
@@ -37,6 +44,24 @@ class ObjectRenderer:
 
     def player_damage(self):
         self.screen.blit(self.blood_screen, (0, 0))
+
+    def show_message(self, text):
+        """Display a message on screen for a limited time"""
+        self.message = text
+        self.message_time = pg.time.get_ticks()
+
+    def draw_message(self):
+        """Draw the current message if it's active"""
+        if self.message and pg.time.get_ticks() - self.message_time < self.message_duration:
+            # Create a semi-transparent background
+            bg_surface = pg.Surface((WIDTH, 80), pg.SRCALPHA)
+            bg_surface.fill((0, 0, 0, 180))
+            self.screen.blit(bg_surface, (0, self.digit_size + 10))  # Position below the health display
+
+            # Render the message text
+            text_surface = self.message_font.render(self.message, True, (255, 255, 255))
+            text_rect = text_surface.get_rect(center=(HALF_WIDTH, self.digit_size + 50))  # Center text in the background
+            self.screen.blit(text_surface, text_rect)
 
     def draw_dash_indicator(self):
         # Izračunaj preostalo vrijeme cooldowna
@@ -67,7 +92,7 @@ class ObjectRenderer:
             # Dash je spreman - prikaži puni indikator
             pg.draw.rect(self.screen, (0, 255, 0),
                          (indicator_x, indicator_y, indicator_width, indicator_height))
-            
+
     def draw_background(self):
         self.sky_offset = (self.sky_offset + 4.5 * self.game.player.rel) % WIDTH
         self.screen.blit(self.sky_image, (-self.sky_offset, 0))
@@ -77,7 +102,7 @@ class ObjectRenderer:
 
     def render_game_objects(self):
         list_objects = sorted(self.game.raycasting.objects_to_render, key=lambda t: t[0], reverse=True)
-        for depth, image, pos in list_objects:
+        for _, image, pos in list_objects:  # Use _ to indicate unused variable
             self.screen.blit(image, pos)
 
     @staticmethod

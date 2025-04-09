@@ -16,7 +16,7 @@ class ObjectHandler:
         self.npc_positions = {}
 
         # spawn npc
-        self.enemies = 14  # npc count
+        self.enemies = 4  # npc count
         self.npc_types = [KlonoviNPC, StakorNPC]
         self.weights = [50, 50]
         self.restricted_area = {(i, j) for i in range(10) for j in range(10)}
@@ -105,11 +105,15 @@ class ObjectHandler:
                 self.add_npc(npc(self.game, pos=(x + 0.5, y + 0.5)))
 
     def check_win(self):
-        if not len(self.npc_positions):
-            self.game.object_renderer.win()
-            pg.display.flip()
-            pg.time.delay(1500)
-            self.game.new_game()
+        # Check if all enemies are defeated
+        self.all_enemies_defeated = not len(self.npc_positions)
+
+        # If all enemies are defeated, show a message and enable the level exit door
+        if self.all_enemies_defeated and not hasattr(self, 'win_message_shown'):
+            self.win_message_shown = True
+            self.game.object_renderer.show_message("All enemies defeated! Find the exit door.")
+            # Enable the level exit door
+            self.enable_level_exit()
 
     def update(self):
         self.npc_positions = {npc.map_pos for npc in self.npc_list if npc.alive}
@@ -119,6 +123,15 @@ class ObjectHandler:
 
     def add_npc(self, npc):
         self.npc_list.append(npc)
+
+    def enable_level_exit(self):
+        """Enable the level exit door after all enemies are defeated"""
+        # Find the level exit door if it exists
+        for obj in self.game.interaction.interaction_objects:
+            if hasattr(obj, 'is_level_exit') and obj.is_level_exit:
+                obj.is_enabled = True
+                # Show a message that the exit is now open
+                self.game.object_renderer.show_message("The exit door is now open!")
 
     def add_sprite(self, sprite):
         self.sprite_list.append(sprite)

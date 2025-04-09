@@ -7,7 +7,9 @@ HALF_WIDTH = WIDTH // 2
 HALF_HEIGHT = HEIGHT // 2
 FPS = 0
 
-PLAYER_POS = 1.5, 2.5  # mini_map
+# Default player positions for each level
+PLAYER_POS = 1.5, 2.5  # Level 1 starting position
+PLAYER_POS_LEVEL2 = 12.5, 2.5  # Level 2 starting position
 PLAYER_ANGLE = 0
 PLAYER_SPEED = 0.004
 PLAYER_ROT_SPEED = 0.002

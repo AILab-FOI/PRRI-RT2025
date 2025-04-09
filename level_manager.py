@@ -36,30 +36,40 @@ class LevelManager:
             ]
         }
 
-        # Level 2 data (example for future use)
+        # Level 2 data - Odgovara mapi za level 2
         self.level_data[2] = {
             'terminals': [
                 {
-                    'position': (5, 10),
+                    'position': (5, 5),
                     'code': '4242',
-                    'unlocks_door_id': 3
+                    'unlocks_door_id': None
                 },
                 {
-                    'position': (12, 18),
+                    'position': (16, 5),
                     'code': '8888',
-                    'unlocks_door_id': 4
+                    'unlocks_door_id': None
                 }
             ],
             'doors': [
                 {
-                    'position': (8, 15),
-                    'door_id': 3,
-                    'requires_code': True
+                    'position': (11, 10),
+                    'door_id': 1,
+                    'requires_code': True,
+                    'code': '4242'  # Koristi kod iz prvog terminala
                 },
                 {
-                    'position': (20, 12),
-                    'door_id': 4,
-                    'requires_code': True
+                    'position': (5, 21),
+                    'door_id': 2,
+                    'requires_code': True,
+                    'code': '8888',  # Koristi kod iz drugog terminala
+                    'requires_door_id': 1  # Zahtijeva da prva vrata budu otvorena
+                },
+                {
+                    'position': (16, 21),
+                    'door_id': 3,
+                    'requires_code': True,
+                    'code': '4242',  # Koristi kod iz prvog terminala
+                    'requires_door_id': 2  # Zahtijeva da druga vrata budu otvorena
                 }
             ]
         }
@@ -91,6 +101,7 @@ class LevelManager:
         # Load terminal and door textures
         terminal_path = 'resources/sprites/static_sprites/terminal.png'
         door_path = 'resources/sprites/static_sprites/door.png'
+        level_door_path = 'resources/sprites/static_sprites/level_door.png'
 
         # Use existing textures if terminal.png or door.png don't exist
         try:
@@ -102,6 +113,11 @@ class LevelManager:
             pg.image.load(door_path)
         except:
             door_path = 'resources/sprites/static_sprites/candlebra.png'
+
+        try:
+            pg.image.load(level_door_path)
+        except:
+            level_door_path = door_path  # Use regular door texture if level_door.png doesn't exist
 
         # Add terminals
         for terminal_data in level_data['terminals']:
@@ -131,6 +147,19 @@ class LevelManager:
             self.game.object_handler.add_sprite(door)
             self.game.interaction.add_object(door)
 
+        # Add level exit door if this is level 1
+        if self.current_level == 1:
+            # Add level exit door at position (12, 34)
+            level_exit = InteractiveObject(
+                self.game,
+                path=level_door_path,
+                pos=(12, 34),
+                interaction_type="level_door",
+                is_level_exit=True
+            )
+            self.game.object_handler.add_sprite(level_exit)
+            self.game.interaction.add_object(level_exit)
+
     def auto_detect_interactive_objects(self):
         """Automatically detect interactive objects from the map"""
         # Clear existing interactive objects
@@ -151,16 +180,21 @@ class LevelManager:
         except:
             door_path = 'resources/sprites/static_sprites/candlebra.png'
 
-        # Scan the map for terminal (14) and door (11) objects
+        # Scan the map for terminal (14), door (11), and level exit door objects
         terminal_positions = []
         door_positions = []
+        level_exit_positions = []
 
         for y, row in enumerate(self.game.map.mini_map):
             for x, value in enumerate(row):
                 if value == 14:  # Terminal
                     terminal_positions.append((x, y))
                 elif value == 11:  # Door
-                    door_positions.append((x, y))
+                    # Check if this is the level exit door at position (12, 34)
+                    if x == 12 and y == 34 and self.current_level == 1:
+                        level_exit_positions.append((x, y))
+                    else:
+                        door_positions.append((x, y))
 
         # Create a default code
         default_code = "1337"
@@ -193,11 +227,26 @@ class LevelManager:
             self.game.object_handler.add_sprite(door)
             self.game.interaction.add_object(door)
 
+        # Add level exit doors
+        for pos in level_exit_positions:
+            level_exit = InteractiveObject(
+                self.game,
+                path=door_path,  # Use door texture for level exit
+                pos=pos,
+                interaction_type="level_door",
+                is_level_exit=True
+            )
+            self.game.object_handler.add_sprite(level_exit)
+            self.game.interaction.add_object(level_exit)
+
     def next_level(self):
         """Advance to the next level"""
         next_level = self.current_level + 1
         if next_level in self.level_data:
             self.current_level = next_level
-            self.game.new_game()  # Reset the game with the new level
+            # Load the new map for this level
+            self.game.map.load_level(next_level)
+            # Reset the game with the new level
+            self.game.new_game()
             return True
         return False

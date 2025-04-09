@@ -130,6 +130,21 @@ class Interaction:
                 else:
                     # Door doesn't require a code, just open it
                     self.open_door()
+            elif self.active_object.interaction_type == "level_door":
+                # Check if this is a level exit door
+                if self.active_object.is_level_exit:
+                    # Check if all enemies are defeated
+                    if hasattr(self.game.object_handler, 'all_enemies_defeated') and self.game.object_handler.all_enemies_defeated:
+                        # Check if the door is enabled
+                        if self.active_object.is_enabled:
+                            # Transition to the next level
+                            self.game.next_level()
+                        else:
+                            self.message = "This door is locked."
+                            self.message_time = pg.time.get_ticks()
+                    else:
+                        self.message = "You must defeat all enemies first!"
+                        self.message_time = pg.time.get_ticks()
 
     def show_terminal_code(self):
         if self.active_object and self.active_object.code:
@@ -185,11 +200,12 @@ class Interaction:
 
 class InteractiveObject(SpriteObject):
     def __init__(self, game, path, pos, interaction_type, door_id=None, code=None,
-                 unlocks_door_id=None, requires_code=False, requires_door_id=None):
+                 unlocks_door_id=None, requires_code=False, requires_door_id=None,
+                 is_level_exit=False):
         # Add 0.5 to position for proper sprite rendering in the center of the tile
         adjusted_pos = (pos[0] + 0.5, pos[1] + 0.5) if isinstance(pos, tuple) else pos
         super().__init__(game, path, adjusted_pos)
-        self.interaction_type = interaction_type  # "terminal" or "door"
+        self.interaction_type = interaction_type  # "terminal", "door", or "level_door"
         self.door_id = door_id  # Unique ID for this door
         self.original_pos = pos  # Store original position for map reference
         self.code = code  # Code displayed by terminal or required by door
@@ -197,6 +213,8 @@ class InteractiveObject(SpriteObject):
         self.requires_code = requires_code  # Whether this door requires a code
         self.requires_door_id = requires_door_id  # Door ID that must be opened first
         self.is_unlocked = False  # Whether this door has been unlocked
+        self.is_level_exit = is_level_exit  # Whether this door leads to the next level
+        self.is_enabled = False  # Whether this door is enabled (for level exits)
 
     @property
     def map_pos(self):
