@@ -258,15 +258,15 @@ class StakorNPC(NPC):
         # Karakteristike štakora
         self.attack_dist = 1.0     # udaljenost napada 
         self.health = 50           # zdravlje
-        self.attack_damage = 7     # Srednji damage za melee napad
+        self.attack_damage = 5     # Srednji damage za melee napad
         self.speed = 0.05          # Brzina
-        self.accuracy = 0.5        # točnost za melee napad
+        self.accuracy = 0.3        # točnost za melee napad
 
     #Napad štakora
     def attack(self):
         if self.animation_trigger:
             self.game.sound.napad_stakor.play()
-        if random() < self.accuracy:
+            if random() < self.accuracy:
                 self.game.player.get_damage(self.attack_damage)
     def check_health(self):
         if self.health < 1 and self.alive:
