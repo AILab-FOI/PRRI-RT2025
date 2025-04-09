@@ -82,7 +82,7 @@ class NPC(AnimatedSprite):
     def check_health(self):
         if self.health < 1:
             self.alive = False
-            self.game.sound.npc_death.play()
+            self.game.sound.stakor_smrt.play()
             # Reset death frame counter and set the initial death frame immediately
             self.death_frame = 0
             if len(self.death_images) > 0:
