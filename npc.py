@@ -52,12 +52,12 @@ class NPC(AnimatedSprite):
 
     def attack(self):
         if self.animation_trigger:
-            self.game.sound.napad.play()
+            self.game.sound.npc_attack.play()
             if random() < self.accuracy:
                 self.game.player.get_damage(self.attack_damage)
 
     def animate_death(self):
-        if not self.alive:
+        if not self.alive and len(self.death_images) > 0:
             # Use animation_trigger for smoother animation
             if self.animation_trigger and self.death_frame < len(self.death_images) - 1:
                 # Increment the death frame counter, but only if we haven't reached the last frame
@@ -80,12 +80,21 @@ class NPC(AnimatedSprite):
                 self.check_health()
 
     def check_health(self):
-     if self.health < 1 and self.alive:  # Proverite da li je neprijatelj već mrtav
-        self.alive = False
-        self.game.sound.npc_death.play()
-        print(f"Neprijatelj na poziciji {self.map_pos} je poražen.")
-        self.game.enemy_defeated()  # Obavestite igru da je neprijatelj poražen
-            
+        if self.health < 1 and self.alive:  # Check if the enemy is already dead
+            self.alive = False
+
+            if type(self) is NPC:
+                self.game.sound.npc_death.play()
+
+            # Reset death frame counter and set the initial death frame immediately
+            self.death_frame = 0
+
+            if hasattr(self, 'death_height_shift'):
+                self.SPRITE_HEIGHT_SHIFT = self.death_height_shift
+            else:
+                self.SPRITE_HEIGHT_SHIFT = 0.5  # Default value
+            if len(self.death_images) > 0:
+                self.image = self.death_images[0]
 
     def run_logic(self):
         if self.alive:
@@ -146,7 +155,7 @@ class NPC(AnimatedSprite):
         delta_depth = dy / sin_a
         dx = delta_depth * cos_a
 
-        for i in range(MAX_DEPTH):
+        for _ in range(MAX_DEPTH):
             tile_hor = int(x_hor), int(y_hor)
             if tile_hor == self.map_pos:
                 player_dist_h = depth_hor
@@ -167,7 +176,7 @@ class NPC(AnimatedSprite):
         delta_depth = dx / cos_a
         dy = delta_depth * sin_a
 
-        for i in range(MAX_DEPTH):
+        for _ in range(MAX_DEPTH):
             tile_vert = int(x_vert), int(y_vert)
             if tile_vert == self.map_pos:
                 player_dist_v = depth_vert
@@ -192,22 +201,12 @@ class NPC(AnimatedSprite):
             pg.draw.line(self.game.screen, 'orange', (100 * self.game.player.x, 100 * self.game.player.y),
                          (100 * self.x, 100 * self.y), 2)
 
-
+'''
 class SoldierNPC(NPC):
     def __init__(self, game, path='resources/sprites/npc/soldier/0.png', pos=(10.5, 5.5),
                  scale=0.6, shift=0.38, animation_time=180):
         super().__init__(game, path, pos, scale, shift, animation_time)
 
-class KlonoviNPC(NPC):
-    def __init__(self, game, path='resources/sprites/npc/klonovi/0.png', pos=(10.5, 5.5),
-                 scale=0.6, shift=0.38, animation_time=180):
-        super().__init__(game, path, pos, scale, shift, animation_time)
-        # Make sure all death images are loaded correctly
-        self.death_images = self.get_images(self.path + '/death')
-        # Store original height shift for restoration when needed
-        self.original_height_shift = self.SPRITE_HEIGHT_SHIFT
-        # Set death height shift (will be applied when enemy dies)
-        self.death_height_shift = 0.7  # Specific value for KlonoviNPC
 
 class CacoDemonNPC(NPC):
     def __init__(self, game, path='resources/sprites/npc/caco_demon/0.png', pos=(10.5, 6.5),
@@ -228,7 +227,16 @@ class CyberDemonNPC(NPC):
         self.attack_damage = 15
         self.speed = 0.055
         self.accuracy = 0.25
-
+'''
+class KlonoviNPC(NPC):
+    def __init__(self, game, path='resources/sprites/npc/klonovi/0.png', pos=(10.5, 5.5),
+                 scale=0.6, shift=0.38, animation_time=180):
+        super().__init__(game, path, pos, scale, shift, animation_time)
+        # No need to reload death images as they're already loaded in the parent class
+        # Store original height shift for restoration when needed
+        self.original_height_shift = self.SPRITE_HEIGHT_SHIFT
+        # Set death height shift (will be applied when enemy dies)
+        self.death_height_shift = 0.7  # Specific value for KlonoviNPC
 
 class StakorNPC(NPC):
     def __init__(self, game, path='resources/sprites/npc/stakor/0.png', pos=(10.5, 5.5),
@@ -241,11 +249,8 @@ class StakorNPC(NPC):
             if os.path.isfile(os.path.join(death_path, file_name)):
                 img = pg.image.load(death_path + '/' + file_name).convert_alpha()
                 self.death_images.append(img)
-        # Store original height shift for restoration when needed
         self.original_height_shift = self.SPRITE_HEIGHT_SHIFT
-        # Set death height shift (will be applied when enemy dies)
-        self.death_height_shift = 0.7  # Specific value for StakorNPC - higher because it's smaller
-
+        self.death_height_shift = 0.8  
         # Koristimo walk slike za hodanje
         self.walk_images = self.get_images(self.path + '/walk')
 
@@ -262,16 +267,8 @@ class StakorNPC(NPC):
             if random() < self.accuracy:
                 self.game.player.get_damage(self.attack_damage)
     def check_health(self):
-        if self.health < 1:
-            self.alive = False
+        if self.health < 1 and self.alive:
+            # Play the custom sound for this NPC type
             self.game.sound.stakor_smrt.play()
-            # Reset death frame counter and set the initial death frame immediately
-            self.death_frame = 0
-            # Adjust height shift to position death sprites on the ground
-            # Use specific death_height_shift if available, otherwise use default
-            if hasattr(self, 'death_height_shift'):
-                self.SPRITE_HEIGHT_SHIFT = self.death_height_shift
-            else:
-                self.SPRITE_HEIGHT_SHIFT = 0.5  # Default value
-            if len(self.death_images) > 0:
-                self.image = self.death_images[0]
+            # Call parent method with alive still set to True
+            super().check_health()

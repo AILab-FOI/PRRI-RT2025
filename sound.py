@@ -9,9 +9,9 @@ class Sound:
         self.pistolj = pg.mixer.Sound(self.path + 'Pistolj.wav')
         self.npc_pain = pg.mixer.Sound(self.path + 'npc_pain.wav')
         self.npc_pain.set_volume(0.5)   
-        self.smrt = pg.mixer.Sound(self.path + 'npc_death.wav') 
-        self.napad = pg.mixer.Sound(self.path + 'npc_attack.wav')
-        self.napad.set_volume(0.5) 
+        self.npc_death = pg.mixer.Sound(self.path + 'npc_death.wav') 
+        self.npc_attack = pg.mixer.Sound(self.path + 'npc_attack.wav')
+        self.npc_attack.set_volume(0.5) 
         #Štakor
         self.napad_stakor = pg.mixer.Sound(self.path + 'stakor_napad.mp3')
         self.napad_stakor.set_volume(0.6)
