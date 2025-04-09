@@ -256,16 +256,17 @@ class StakorNPC(NPC):
         self.walk_images = self.get_images(self.path + '/walk')
 
         # Karakteristike štakora
-        self.attack_dist = 1.5     # Manja udaljenost napada jer je manji neprijatelj
-        self.health = 50           # Manje zdravlje
-        self.attack_damage = 5     # Manji damage
-        self.speed = 0.06          # Brži od ostalih neprijatelja
-        self.accuracy = 0.2        # Srednja točnost
+        self.attack_dist = 1.0     # udaljenost napada 
+        self.health = 50           # zdravlje
+        self.attack_damage = 7     # Srednji damage za melee napad
+        self.speed = 0.05          # Brzina
+        self.accuracy = 0.5        # točnost za melee napad
+
     #Napad štakora
     def attack(self):
         if self.animation_trigger:
             self.game.sound.napad_stakor.play()
-            if random() < self.accuracy:
+        if random() < self.accuracy:
                 self.game.player.get_damage(self.attack_damage)
     def check_health(self):
         if self.health < 1 and self.alive:
