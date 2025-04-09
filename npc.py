@@ -262,3 +262,9 @@ class StakorNPC(NPC):
         self.attack_damage = 5     # Manji damage
         self.speed = 0.06          # Brži od ostalih neprijatelja
         self.accuracy = 0.2        # Srednja točnost
+    #Napad štakora
+    def attack(self):
+        if self.animation_trigger:
+            self.game.sound.napad_stakor.play()
+            if random() < self.accuracy:
+                self.game.player.get_damage(self.attack_damage)
