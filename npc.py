@@ -21,7 +21,7 @@ class NPC(AnimatedSprite):
         self.alive = True
         self.pain = False
         self.ray_cast_value = False
-        self.frame_counter = 0
+        self.death_frame = 0  # Use a consistent name for death animation frame counter
         self.player_search_trigger = False
 
     def update(self):
@@ -58,10 +58,12 @@ class NPC(AnimatedSprite):
 
     def animate_death(self):
         if not self.alive:
-            if self.game.global_trigger and self.frame_counter < len(self.death_images) - 1:
-                self.death_images.rotate(-1)
-                self.image = self.death_images[0]
-                self.frame_counter += 1
+            # Use animation_trigger for smoother animation
+            if self.animation_trigger and self.death_frame < len(self.death_images) - 1:
+                # Increment the death frame counter, but only if we haven't reached the last frame
+                self.death_frame += 1
+                # Set the image to the current death frame
+                self.image = self.death_images[self.death_frame]
 
     def animate_pain(self):
         self.animate(self.pain_images)
@@ -81,6 +83,10 @@ class NPC(AnimatedSprite):
         if self.health < 1:
             self.alive = False
             self.game.sound.npc_death.play()
+            # Reset death frame counter and set the initial death frame immediately
+            self.death_frame = 0
+            if len(self.death_images) > 0:
+                self.image = self.death_images[0]
 
     def run_logic(self):
         if self.alive:
@@ -197,6 +203,8 @@ class KlonoviNPC(NPC):
     def __init__(self, game, path='resources/sprites/npc/klonovi/0.png', pos=(10.5, 5.5),
                  scale=0.6, shift=0.38, animation_time=180):
         super().__init__(game, path, pos, scale, shift, animation_time)
+        # Make sure all death images are loaded correctly
+        self.death_images = self.get_images(self.path + '/death')
 
 class CacoDemonNPC(NPC):
     def __init__(self, game, path='resources/sprites/npc/caco_demon/0.png', pos=(10.5, 6.5),
@@ -221,7 +229,7 @@ class CyberDemonNPC(NPC):
 
 class StakorNPC(NPC):
     def __init__(self, game, path='resources/sprites/npc/stakor/0.png', pos=(10.5, 5.5),
-                 scale=0.5, shift=0.4, animation_time=150):
+                 scale=0.5, shift=0.4, animation_time=200):
         super().__init__(game, path, pos, scale, shift, animation_time)
         # Posebno učitamo slike za smrt jer imamo drugačiju strukturu direktorija
         self.death_images = deque()
