@@ -52,7 +52,7 @@ class ObjectHandler:
         add_sprite(SpriteObject(game, path=self.static_sprite_path + 'ukras1.png', pos=(20.2, 31.8)))
         add_sprite(SpriteObject(game, path=self.static_sprite_path + 'ukras1.png', pos=(15.2, 32.3)))
         add_sprite(SpriteObject(game, path=self.static_sprite_path + 'ukras1.png', pos=(8.9, 32.3)))
-        ##add_sprite(SpriteObject(game, path=self.static_sprite_path + 'konzola.jpg', pos=(2, 14.5)))
+        # add_sprite(SpriteObject(game, path=self.static_sprite_path + 'konzola.jpg', pos=(2, 14.5)))
 
         """
         add_sprite(AnimatedSprite(game))
@@ -89,7 +89,7 @@ class ObjectHandler:
         # add_npc(CyberDemonNPC(game, pos=(14.5, 25.5)))
 
     def spawn_npc(self):
-        for i in range(self.enemies):
+        for _ in range(self.enemies):
                 npc = choices(self.npc_types, self.weights)[0]
                 pos = x, y = randrange(self.game.map.cols), randrange(self.game.map.rows)
                 while (pos in self.game.map.world_map) or (pos in self.restricted_area):

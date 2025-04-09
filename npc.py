@@ -195,11 +195,12 @@ class NPC(AnimatedSprite):
             return True
         return False
 
-    def draw_ray_cast(self):
-        pg.draw.circle(self.game.screen, 'red', (100 * self.x, 100 * self.y), 15)
-        if self.ray_cast_player_npc():
-            pg.draw.line(self.game.screen, 'orange', (100 * self.game.player.x, 100 * self.game.player.y),
-                         (100 * self.x, 100 * self.y), 2)
+    # Debug method for visualizing ray casting - not used in production
+    # def draw_ray_cast(self):
+    #     pg.draw.circle(self.game.screen, 'red', (100 * self.x, 100 * self.y), 15)
+    #     if self.ray_cast_player_npc():
+    #         pg.draw.line(self.game.screen, 'orange', (100 * self.game.player.x, 100 * self.game.player.y),
+    #                      (100 * self.x, 100 * self.y), 2)
 
 '''
 class SoldierNPC(NPC):
@@ -249,8 +250,8 @@ class StakorNPC(NPC):
             if os.path.isfile(os.path.join(death_path, file_name)):
                 img = pg.image.load(death_path + '/' + file_name).convert_alpha()
                 self.death_images.append(img)
-        self.original_height_shift = self.SPRITE_HEIGHT_SHIFT
-        self.death_height_shift = 0.8  
+        # Death height shift will be applied when enemy dies
+        self.death_height_shift = 0.8
         # Koristimo walk slike za hodanje
         self.walk_images = self.get_images(self.path + '/walk')
 

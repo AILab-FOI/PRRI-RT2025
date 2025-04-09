@@ -13,7 +13,7 @@ from pathfinding import *
 
 
 class Game:
-    def __init__(self): 
+    def __init__(self):
         pg.init()
         pg.mouse.set_visible(False)
         self.screen = pg.display.set_mode(RES)
@@ -45,9 +45,12 @@ class Game:
         pg.display.set_caption(f'{self.clock.get_fps() :.1f}')
 
     def draw(self):
-        # self.screen.fill('black')
+        # Draw the game scene
         self.object_renderer.draw()
         self.weapon.draw()
+
+        # Debug visualization methods - not used in production
+        # self.screen.fill('black')
         # self.map.draw()
         # self.player.draw()
 
