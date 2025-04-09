@@ -99,5 +99,6 @@ class ObjectRenderer:
             9: self.get_texture('resources/teksture/9.png'),
             10: self.get_texture('resources/teksture/10.png'),
             11: self.get_texture('resources/teksture/vrata.jpg'),
+            12: self.get_texture('resources/teksture/ukras4.png'),
             
         }
