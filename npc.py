@@ -80,6 +80,7 @@ class NPC(AnimatedSprite):
                 self.check_health()
 
     def check_health(self):
+
         if self.health < 1:
             self.alive = False
             self.game.sound.smrt.play()
@@ -93,6 +94,9 @@ class NPC(AnimatedSprite):
                 self.SPRITE_HEIGHT_SHIFT = 0.5  # Default value
             if len(self.death_images) > 0:
                 self.image = self.death_images[0]
+
+            
+
 
     def run_logic(self):
         if self.alive:
