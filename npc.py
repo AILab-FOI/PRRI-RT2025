@@ -78,9 +78,12 @@ class NPC(AnimatedSprite):
                 self.check_health()
 
     def check_health(self):
-        if self.health < 1:
-            self.alive = False
-            self.game.sound.npc_death.play()
+     if self.health < 1 and self.alive:  # Proverite da li je neprijatelj već mrtav
+        self.alive = False
+        self.game.sound.npc_death.play()
+        print(f"Neprijatelj na poziciji {self.map_pos} je poražen.")
+        self.game.enemy_defeated()  # Obavestite igru da je neprijatelj poražen
+            
 
     def run_logic(self):
         if self.alive:
