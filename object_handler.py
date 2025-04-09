@@ -16,16 +16,44 @@ class ObjectHandler:
         self.npc_positions = {}
 
         # spawn npc
-        self.enemies = 15  # npc count
-        self.npc_types = [StakorNPC]
-        self.weights = [100]
+        self.enemies = 14  # npc count
+        self.npc_types = [KlonoviNPC, StakorNPC]
+        self.weights = [50, 50]
         self.restricted_area = {(i, j) for i in range(10) for j in range(10)}
         self.spawn_npc()
 
         # sprite map
-        ##add_sprite(SpriteObject(game, path=self.static_sprite_path + 'ukras1.png', pos=(14.5, 4.0)))
+        add_sprite(SpriteObject(game, path=self.static_sprite_path + 'ukras1.png', pos=(12.9, 33.5)))
+        add_sprite(SpriteObject(game, path=self.static_sprite_path + 'ukras1.png', pos=(12.2, 33.5)))
+
+        add_sprite(SpriteObject(game, path=self.static_sprite_path + 'ukras1.png', pos=(1.5, 26.1)))
+        add_sprite(SpriteObject(game, path=self.static_sprite_path + 'ukras2.png', pos=(1.9, 26.1)))
+        add_sprite(SpriteObject(game, path=self.static_sprite_path + 'ukras2.png', pos=(2.3, 26.1)))
+        add_sprite(SpriteObject(game, path=self.static_sprite_path + 'ukras2.png', pos=(1.1, 26.5)))
+        add_sprite(SpriteObject(game, path=self.static_sprite_path + 'ukras2.png', pos=(1.1, 27)))
+        add_sprite(SpriteObject(game, path=self.static_sprite_path + 'ukras2.png', pos=(1.1, 27.5)))
+        add_sprite(SpriteObject(game, path=self.static_sprite_path + 'ukras1.png', pos=(1.1, 28)))
+        add_sprite(SpriteObject(game, path=self.static_sprite_path + 'ukras1.png', pos=(1.1, 28.5)))
+        add_sprite(SpriteObject(game, path=self.static_sprite_path + 'ukras1.png', pos=(1.1, 29)))
+        add_sprite(SpriteObject(game, path=self.static_sprite_path + 'ukras2.png', pos=(1.1, 29.5)))
+        add_sprite(SpriteObject(game, path=self.static_sprite_path + 'ukras2.png', pos=(1.1, 30)))
+        add_sprite(SpriteObject(game, path=self.static_sprite_path + 'ukras2.png', pos=(1.1, 30.5)))
+        add_sprite(SpriteObject(game, path=self.static_sprite_path + 'ukras2.png', pos=(1.1, 31)))
+        add_sprite(SpriteObject(game, path=self.static_sprite_path + 'ukras2.png', pos=(1.1, 31.5)))
+        add_sprite(SpriteObject(game, path=self.static_sprite_path + 'ukras1.png', pos=(1.1, 32)))
+        add_sprite(SpriteObject(game, path=self.static_sprite_path + 'ukras1.png', pos=(1.1, 32.5)))
+        add_sprite(SpriteObject(game, path=self.static_sprite_path + 'ukras1.png', pos=(1.5, 32.9)))
+        add_sprite(SpriteObject(game, path=self.static_sprite_path + 'ukras1.png', pos=(1.9, 32.9)))
+        add_sprite(SpriteObject(game, path=self.static_sprite_path + 'ukras1.png', pos=(2.3, 32.9)))
+
+        add_sprite(SpriteObject(game, path=self.static_sprite_path + 'ukras1.png', pos=(23.2, 31.2)))
+        add_sprite(SpriteObject(game, path=self.static_sprite_path + 'ukras1.png', pos=(23.2, 33.5)))
+
+        add_sprite(SpriteObject(game, path=self.static_sprite_path + 'ukras1.png', pos=(20.2, 31.8)))
+        add_sprite(SpriteObject(game, path=self.static_sprite_path + 'ukras1.png', pos=(15.2, 32.3)))
+        add_sprite(SpriteObject(game, path=self.static_sprite_path + 'ukras1.png', pos=(8.9, 32.3)))
         ##add_sprite(SpriteObject(game, path=self.static_sprite_path + 'konzola.jpg', pos=(2, 14.5)))
-        
+
         """
         add_sprite(AnimatedSprite(game))
         add_sprite(AnimatedSprite(game, pos=(1.5, 1.5)))

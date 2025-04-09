@@ -21,7 +21,7 @@ class NPC(AnimatedSprite):
         self.alive = True
         self.pain = False
         self.ray_cast_value = False
-        self.frame_counter = 0
+        self.death_frame = 0  # Use a consistent name for death animation frame counter
         self.player_search_trigger = False
 
     def update(self):
@@ -52,16 +52,18 @@ class NPC(AnimatedSprite):
 
     def attack(self):
         if self.animation_trigger:
-            self.game.sound.npc_shot.play()
+            self.game.sound.napad.play()
             if random() < self.accuracy:
                 self.game.player.get_damage(self.attack_damage)
 
     def animate_death(self):
         if not self.alive:
-            if self.game.global_trigger and self.frame_counter < len(self.death_images) - 1:
-                self.death_images.rotate(-1)
-                self.image = self.death_images[0]
-                self.frame_counter += 1
+            # Use animation_trigger for smoother animation
+            if self.animation_trigger and self.death_frame < len(self.death_images) - 1:
+                # Increment the death frame counter, but only if we haven't reached the last frame
+                self.death_frame += 1
+                # Set the image to the current death frame
+                self.image = self.death_images[self.death_frame]
 
     def animate_pain(self):
         self.animate(self.pain_images)
@@ -78,12 +80,23 @@ class NPC(AnimatedSprite):
                 self.check_health()
 
     def check_health(self):
-     if self.health < 1 and self.alive:  # Proverite da li je neprijatelj već mrtav
-        self.alive = False
-        self.game.sound.npc_death.play()
-        print(f"Neprijatelj na poziciji {self.map_pos} je poražen.")
-        self.game.enemy_defeated()  # Obavestite igru da je neprijatelj poražen
+
+        if self.health < 1:
+            self.alive = False
+            self.game.sound.smrt.play()
+            # Reset death frame counter and set the initial death frame immediately
+            self.death_frame = 0
+            # Adjust height shift to position death sprites on the ground
+            # Use specific death_height_shift if available, otherwise use default
+            if hasattr(self, 'death_height_shift'):
+                self.SPRITE_HEIGHT_SHIFT = self.death_height_shift
+            else:
+                self.SPRITE_HEIGHT_SHIFT = 0.5  # Default value
+            if len(self.death_images) > 0:
+                self.image = self.death_images[0]
+
             
+
 
     def run_logic(self):
         if self.alive:
@@ -196,6 +209,17 @@ class SoldierNPC(NPC):
                  scale=0.6, shift=0.38, animation_time=180):
         super().__init__(game, path, pos, scale, shift, animation_time)
 
+class KlonoviNPC(NPC):
+    def __init__(self, game, path='resources/sprites/npc/klonovi/0.png', pos=(10.5, 5.5),
+                 scale=0.6, shift=0.38, animation_time=180):
+        super().__init__(game, path, pos, scale, shift, animation_time)
+        # Make sure all death images are loaded correctly
+        self.death_images = self.get_images(self.path + '/death')
+        # Store original height shift for restoration when needed
+        self.original_height_shift = self.SPRITE_HEIGHT_SHIFT
+        # Set death height shift (will be applied when enemy dies)
+        self.death_height_shift = 0.7  # Specific value for KlonoviNPC
+
 class CacoDemonNPC(NPC):
     def __init__(self, game, path='resources/sprites/npc/caco_demon/0.png', pos=(10.5, 6.5),
                  scale=0.7, shift=0.27, animation_time=250):
@@ -219,7 +243,7 @@ class CyberDemonNPC(NPC):
 
 class StakorNPC(NPC):
     def __init__(self, game, path='resources/sprites/npc/stakor/0.png', pos=(10.5, 5.5),
-                 scale=0.5, shift=0.4, animation_time=150):
+                 scale=0.5, shift=0.4, animation_time=200):
         super().__init__(game, path, pos, scale, shift, animation_time)
         # Posebno učitamo slike za smrt jer imamo drugačiju strukturu direktorija
         self.death_images = deque()
@@ -228,6 +252,10 @@ class StakorNPC(NPC):
             if os.path.isfile(os.path.join(death_path, file_name)):
                 img = pg.image.load(death_path + '/' + file_name).convert_alpha()
                 self.death_images.append(img)
+        # Store original height shift for restoration when needed
+        self.original_height_shift = self.SPRITE_HEIGHT_SHIFT
+        # Set death height shift (will be applied when enemy dies)
+        self.death_height_shift = 0.7  # Specific value for StakorNPC - higher because it's smaller
 
         # Koristimo walk slike za hodanje
         self.walk_images = self.get_images(self.path + '/walk')
@@ -238,3 +266,23 @@ class StakorNPC(NPC):
         self.attack_damage = 5     # Manji damage
         self.speed = 0.06          # Brži od ostalih neprijatelja
         self.accuracy = 0.2        # Srednja točnost
+    #Napad štakora
+    def attack(self):
+        if self.animation_trigger:
+            self.game.sound.napad_stakor.play()
+            if random() < self.accuracy:
+                self.game.player.get_damage(self.attack_damage)
+    def check_health(self):
+        if self.health < 1:
+            self.alive = False
+            self.game.sound.stakor_smrt.play()
+            # Reset death frame counter and set the initial death frame immediately
+            self.death_frame = 0
+            # Adjust height shift to position death sprites on the ground
+            # Use specific death_height_shift if available, otherwise use default
+            if hasattr(self, 'death_height_shift'):
+                self.SPRITE_HEIGHT_SHIFT = self.death_height_shift
+            else:
+                self.SPRITE_HEIGHT_SHIFT = 0.5  # Default value
+            if len(self.death_images) > 0:
+                self.image = self.death_images[0]
