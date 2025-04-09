@@ -10,6 +10,8 @@ from object_handler import *
 from weapon import *
 from sound import *
 from pathfinding import *
+from interaction import Interaction
+from level_manager import LevelManager
 
 
 class Game:
@@ -33,6 +35,18 @@ class Game:
         self.weapon = Weapon(self)
         self.sound = Sound(self)
         self.pathfinding = PathFinding(self)
+        self.interaction = Interaction(self)
+
+        # Initialize level manager if it doesn't exist
+        if not hasattr(self, 'level_manager'):
+            self.level_manager = LevelManager(self)
+
+        # Set up interactive objects for the current level
+        self.level_manager.setup_interactive_objects()
+
+        # Update pathfinding graph
+        self.pathfinding.update_graph()
+
         pg.mixer.music.play(-1)
 
     def update(self):
@@ -40,6 +54,7 @@ class Game:
         self.raycasting.update()
         self.object_handler.update()
         self.weapon.update()
+        self.interaction.update()
         pg.display.flip()
         self.delta_time = self.clock.tick(FPS)
         pg.display.set_caption(f'{self.clock.get_fps() :.1f}')
@@ -48,6 +63,7 @@ class Game:
         # Draw the game scene
         self.object_renderer.draw()
         self.weapon.draw()
+        self.interaction.draw()
 
         # Debug visualization methods - not used in production
         # self.screen.fill('black')
@@ -57,12 +73,27 @@ class Game:
     def check_events(self):
         self.global_trigger = False
         for event in pg.event.get():
-            if event.type == pg.QUIT or (event.type == pg.KEYDOWN and event.key == pg.K_ESCAPE):
+            if event.type == pg.QUIT or (event.type == pg.KEYDOWN and event.key == pg.K_ESCAPE and not self.interaction.input_active):
                 pg.quit()
                 sys.exit()
             elif event.type == self.global_event:
                 self.global_trigger = True
+            # Debug key to advance to next level (N key)
+            elif event.type == pg.KEYDOWN and event.key == pg.K_n:
+                self.next_level()
             self.player.single_fire_event(event)
+            self.interaction.handle_key_event(event)
+
+    def next_level(self):
+        """Advance to the next level"""
+        if self.level_manager.next_level():
+            # Display loading message
+            font = pg.font.SysFont('Arial', 36)
+            text_surface = font.render("Loading next level...", True, (255, 255, 255))
+            text_rect = text_surface.get_rect(center=(HALF_WIDTH, HALF_HEIGHT))
+            self.screen.blit(text_surface, text_rect)
+            pg.display.flip()
+            pg.time.delay(1000)
 
     def run(self):
         while True:
@@ -74,5 +105,3 @@ class Game:
 if __name__ == '__main__':
     game = Game()
     game.run()
-
-#test
