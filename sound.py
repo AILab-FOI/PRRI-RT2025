@@ -21,14 +21,9 @@ class Sound:
         self.razina1 = pg.mixer.music.load(self.path + 'Pozadinska1.mp3')
         self.player_dash = pg.mixer.Sound(self.path + 'Dash.wav')
         self.player_dash.set_volume(0.5)
-
-        # Interaction sounds
-        try:
-            self.terminal_beep = pg.mixer.Sound(self.path + 'terminal.wav')
-            self.door_open = pg.mixer.Sound(self.path + 'vrata.wav')
-        except:
-            # If sounds don't exist, use existing sounds
-            self.terminal_beep = self.pistolj
-            self.door_open = self.player_dash
+       
+        self.terminal_beep = pg.mixer.Sound(self.path + 'terminal.wav')
+        self.door_open = pg.mixer.Sound(self.path + 'vrata.wav')
+        
 
         pg.mixer.music.set_volume(0.3)
