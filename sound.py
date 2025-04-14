@@ -43,9 +43,9 @@ class Sound:
         self.door_open = pg.mixer.Sound(self.path + 'vrata.wav')
 
         # Menu sounds - using existing sounds as placeholders
-        self.menu_hover = pg.mixer.Sound(self.path + 'terminal.wav')
+        self.menu_hover = pg.mixer.Sound(self.path + 'menu_hover.mp3')
         self.menu_hover.set_volume(0.3 * self.sfx_volume)
-        self.menu_click = pg.mixer.Sound(self.path + 'Pistolj.wav')
+        self.menu_click = pg.mixer.Sound(self.path + 'menu_klik.wav')
         self.menu_click.set_volume(0.4 * self.sfx_volume)
 
         # Load background music
