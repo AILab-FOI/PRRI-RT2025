@@ -13,11 +13,13 @@ from pathfinding import *
 from interaction import Interaction
 from level_manager import LevelManager
 from dialogue import DialogueManager
+from menu import Menu
 
 
 class Game:
     def __init__(self):
         pg.init()
+        pg.display.set_caption('PRRI-RT2025')
         pg.mouse.set_visible(False)
         self.screen = pg.display.set_mode(RES)
         self.clock = pg.time.Clock()
@@ -25,7 +27,18 @@ class Game:
         self.global_trigger = False
         self.global_event = pg.USEREVENT + 0
         pg.time.set_timer(self.global_event, 40)
-        self.new_game()
+
+        # Initialize sound first since menu needs it
+        self.sound = Sound(self)
+
+        # Create menu
+        self.menu = Menu(self)
+
+        # Track if game is already initialized
+        self.game_initialized = False
+
+        # Start with the menu, then transition to the game
+        self.show_menu()
 
     def new_game(self):
         # Initialize level manager if it doesn't exist
@@ -51,7 +64,7 @@ class Game:
             self.object_handler.reset()  # Reset for new level
 
         self.weapon = Pistol(self)  # Start with a pistol
-        self.sound = Sound(self)
+        # Sound is already initialized in __init__
         self.pathfinding = PathFinding(self)
         self.interaction = Interaction(self)
 
@@ -76,7 +89,9 @@ class Game:
         elif self.level_manager.current_level == 3:
             self.player.x, self.player.y = PLAYER_POS_LEVEL3  # Starting position for level 3
 
-        pg.mixer.music.play(-1)
+        # Start music if it's not already playing
+        if not pg.mixer.music.get_busy():
+            pg.mixer.music.play(-1)
 
     def update(self):
         self.player.update()
@@ -104,9 +119,14 @@ class Game:
     def check_events(self):
         self.global_trigger = False
         for event in pg.event.get():
-            if event.type == pg.QUIT or (event.type == pg.KEYDOWN and event.key == pg.K_ESCAPE and not self.interaction.input_active):
+            if event.type == pg.QUIT:
                 pg.quit()
                 sys.exit()
+            # Handle Escape key - return to menu if not in dialogue or input mode
+            elif event.type == pg.KEYDOWN and event.key == pg.K_ESCAPE and not self.interaction.input_active:
+                # Return to menu
+                self.show_menu()
+                return  # Exit the event loop since we're going back to menu
             elif event.type == self.global_event:
                 self.global_trigger = True
             # Debug key to advance to next level (N key)
@@ -139,7 +159,35 @@ class Game:
             pg.display.flip()
             pg.time.delay(1000)
 
-    def run(self):
+    def show_menu(self):
+        """Show the main menu and start the game when ready"""
+        # Make mouse visible for menu
+        pg.mouse.set_visible(True)
+
+        # Reset menu state if returning from game
+        self.menu.state = 'main'
+
+        # Let music continue playing in the menu
+        # We don't need to do anything special here since we're not pausing the music
+
+        # Run the menu loop
+        self.menu.run()
+
+        # When menu.run() returns, start or continue the game
+        if not self.game_initialized:
+            # First time starting the game
+            self.new_game()
+            self.game_initialized = True
+        # else: game is already initialized, just continue
+
+        # Make sure mouse is invisible for game
+        pg.mouse.set_visible(False)
+
+        # Start the game loop
+        self.game_loop()
+
+    def game_loop(self):
+        """Main game loop"""
         while True:
             self.check_events()
             self.update()
@@ -148,4 +196,4 @@ class Game:
 
 if __name__ == '__main__':
     game = Game()
-    game.run()
+    # The game starts from show_menu() which is called in __init__
