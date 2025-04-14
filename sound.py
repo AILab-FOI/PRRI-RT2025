@@ -25,7 +25,7 @@ class Sound:
         # Interaction sounds
         try:
             self.terminal_beep = pg.mixer.Sound(self.path + 'terminal.wav')
-            self.door_open = pg.mixer.Sound(self.path + 'door_open.wav')
+            self.door_open = pg.mixer.Sound(self.path + 'vrata.wav')
         except:
             # If sounds don't exist, use existing sounds
             self.terminal_beep = self.pistolj
