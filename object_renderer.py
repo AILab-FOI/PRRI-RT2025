@@ -1,5 +1,6 @@
 import pygame as pg
 from settings import *
+from font_manager import load_custom_font
 
 
 class ObjectRenderer:
@@ -21,7 +22,7 @@ class ObjectRenderer:
         self.message = ""
         self.message_time = 0
         self.message_duration = 5000  # 5 seconds
-        self.message_font = pg.font.SysFont('Arial', 36)
+        self.message_font = load_custom_font(30)
 
     def draw(self):
         self.draw_background()
@@ -44,8 +45,8 @@ class ObjectRenderer:
         # Create the counter text
         counter_text = f"Enemies: {remaining_enemies}/{total_enemies}"
 
-        # Render the text
-        font = pg.font.SysFont('Arial', 24)
+        # Render the text with the custom font
+        font = load_custom_font(20)
         text_surface = font.render(counter_text, True, (255, 255, 255))
 
         # Position in bottom right corner

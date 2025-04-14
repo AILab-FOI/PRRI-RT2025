@@ -4,6 +4,7 @@ from settings import *
 from npc import NPC
 import json
 import os
+from font_manager import load_custom_font
 
 
 class DialogueManager:
@@ -21,8 +22,8 @@ class DialogueManager:
         self.load_dialogues()
 
         # UI settings
-        self.font = pg.font.SysFont('Arial', 24)
-        self.title_font = pg.font.SysFont('Arial', 30, bold=True)
+        self.font = load_custom_font(20)  # Slightly smaller for readability
+        self.title_font = load_custom_font(24)
         self.dialogue_box_height = 200
         self.dialogue_box_padding = 20
         self.line_spacing = 30
@@ -289,7 +290,7 @@ class DialogueNPC(NPC):
         pg.draw.circle(self.game.screen, (255, 255, 255), (int(screen_x), int(screen_y)), int(pulse))
 
         # Draw "Press E to talk" text with background
-        font = pg.font.SysFont('Arial', 18)
+        font = load_custom_font(16)  # Smaller size for this text
         text = font.render("Press E to talk", True, (255, 255, 255))
         text_rect = text.get_rect(center=(screen_x, screen_y - 25))
 
