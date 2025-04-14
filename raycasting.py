@@ -17,6 +17,10 @@ class RayCasting:
         for ray, values in enumerate(self.ray_casting_result):
             depth, proj_height, texture, offset = values
 
+            # Skip if texture is None
+            if texture is None:
+                continue
+
             # Create a cache key for this wall column
             cache_key = (texture, offset, proj_height)
 
@@ -27,6 +31,13 @@ class RayCasting:
                 wall_pos = (ray * SCALE, wall_pos[1])
             else:
                 # Calculate wall column and position
+                # Make sure texture exists in the textures dictionary
+                if texture not in self.textures:
+                    # Use a default texture (first one in the dictionary) if the requested texture doesn't exist
+                    texture = next(iter(self.textures)) if self.textures else None
+                    if texture is None:
+                        continue  # Skip this ray if no textures are available
+
                 if proj_height < HEIGHT:
                     wall_column = self.textures[texture].subsurface(
                         offset * (TEXTURE_SIZE - SCALE), 0, SCALE, TEXTURE_SIZE

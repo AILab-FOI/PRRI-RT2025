@@ -356,7 +356,7 @@ class LevelManager:
             self.current_level = next_level
             # Load the new map for this level
             self.game.map.load_level(next_level)
-            # Reset the game with the new level
-            self.game.new_game()
+            # Reset the game with the new level, but don't show loading screen
+            # (the loading screen will be handled by main.py)
             return True
         return False

@@ -1,5 +1,6 @@
 import pygame as pg
 import sys
+import time
 from settings import *
 from map import *
 from player import *
@@ -14,6 +15,7 @@ from interaction import Interaction
 from level_manager import LevelManager
 from dialogue import DialogueManager
 from texture_manager import TextureManager
+from loading_screen import LoadingScreen
 
 
 class Game:
@@ -30,12 +32,27 @@ class Game:
         # Initialize texture manager before other components
         self.texture_manager = TextureManager()
 
+        # Initialize loading screen
+        self.loading_screen = LoadingScreen(self)
+
+        # Show initial loading screen
+        self.loading_screen.start_loading("Starting game...")
+        self.loading_screen.draw()
+
+        # Start the game
         self.new_game()
 
-    def new_game(self):
+    def new_game(self, skip_loading_screen=False):
+        # Show loading screen (unless we're skipping it)
+        if not skip_loading_screen:
+            self.loading_screen.start_loading("Loading game...", self.level_manager.current_level if hasattr(self, 'level_manager') else 1)
+            self.loading_screen.draw()
+
         # Initialize level manager if it doesn't exist
         if not hasattr(self, 'level_manager'):
             self.level_manager = LevelManager(self)
+            self.loading_screen.update(20)
+            self.loading_screen.draw()
 
         # Initialize map if it doesn't exist or reset it for a new game
         if not hasattr(self, 'map'):
@@ -43,32 +60,46 @@ class Game:
         # Otherwise, make sure the map is loaded for the current level
         else:
             self.map.load_level(self.level_manager.current_level)
+        self.loading_screen.update(30)
+        self.loading_screen.draw()
 
         # Initialize or reset other game components
         self.player = Player(self)
         self.object_renderer = ObjectRenderer(self)
         self.raycasting = RayCasting(self)
+        self.loading_screen.update(40)
+        self.loading_screen.draw()
 
         # Initialize object handler if it doesn't exist or reset it for a new level
         if not hasattr(self, 'object_handler'):
             self.object_handler = ObjectHandler(self)
         else:
             self.object_handler.reset()  # Reset for new level
+        self.loading_screen.update(50)
+        self.loading_screen.draw()
 
         self.weapon = Weapon(self)
         self.sound = Sound(self)
         self.pathfinding = PathFinding(self)
         self.interaction = Interaction(self)
+        self.loading_screen.update(60)
+        self.loading_screen.draw()
 
         # Initialize dialogue manager
         if not hasattr(self, 'dialogue_manager'):
             self.dialogue_manager = DialogueManager(self)
+        self.loading_screen.update(70)
+        self.loading_screen.draw()
 
         # Set up dialogue NPCs for the current level
         self.level_manager.setup_dialogue_npcs()
+        self.loading_screen.update(80)
+        self.loading_screen.draw()
 
         # Set up interactive objects for the current level
         self.level_manager.setup_interactive_objects()
+        self.loading_screen.update(90)
+        self.loading_screen.draw()
 
         # Update pathfinding graph
         self.pathfinding.update_graph()
@@ -80,8 +111,15 @@ class Game:
             self.player.x, self.player.y = PLAYER_POS_LEVEL2  # Starting position for level 2
         elif self.level_manager.current_level == 3:
             self.player.x, self.player.y = PLAYER_POS_LEVEL3  # Starting position for level 3
+        self.loading_screen.update(95)
+        self.loading_screen.draw()
 
         pg.mixer.music.play(-1)
+
+        # Complete loading and wait for minimum time
+        self.loading_screen.update(100)
+        self.loading_screen.draw()
+        self.loading_screen.wait_for_minimum_time()
 
     def update(self):
         self.player.update()
@@ -133,13 +171,19 @@ class Game:
     def next_level(self):
         """Advance to the next level"""
         if self.level_manager.next_level():
-            # Display loading message
-            font = pg.font.SysFont('Arial', 36)
-            text_surface = font.render("Loading next level...", True, (255, 255, 255))
-            text_rect = text_surface.get_rect(center=(HALF_WIDTH, HALF_HEIGHT))
-            self.screen.blit(text_surface, text_rect)
-            pg.display.flip()
-            pg.time.delay(1000)
+            # Show loading screen for next level
+            next_level = self.level_manager.current_level
+
+            # Reset loading screen progress and start loading
+            self.loading_screen.progress = 0
+            self.loading_screen.start_loading(f"Loading Level {next_level}...", next_level)
+            self.loading_screen.draw()
+
+            # Wait a moment to show the loading screen with 0% progress
+            pg.time.delay(500)
+
+            # Now initialize the new level
+            self.new_game(skip_loading_screen=True)
 
     def run(self):
         while True:
