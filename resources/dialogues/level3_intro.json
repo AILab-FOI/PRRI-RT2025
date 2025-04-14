@@ -1,0 +1,11 @@
+{
+    "npc_name": "Scientist",
+    "lines": [
+        "You've made it to Level 3! This is the most dangerous area yet.",
+        "The enemies here are numerous and aggressive - be extremely careful.",
+        "This level is infested with Stakor creatures. They're fast but have less health.",
+        "Find the terminal with code 9999 to unlock the main door.",
+        "Once you've defeated all enemies, the exit will be revealed.",
+        "This is the final test of your skills. Good luck, and may you survive!"
+    ]
+}

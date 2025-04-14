@@ -2,6 +2,7 @@ import pygame as pg
 import os
 from interaction import InteractiveObject
 from npc import KlonoviNPC, StakorNPC
+from dialogue import create_dialogue_npcs
 
 class LevelManager:
     def __init__(self, game):
@@ -43,7 +44,15 @@ class LevelManager:
                 'weights': [50, 50],  # Spawn weights for each enemy type
                 'restricted_area': {(i, j) for i in range(10) for j in range(10)},  # Areas where enemies cannot spawn
                 'fixed_positions': []  # Optional list of fixed positions for enemies: [(x, y), (x, y), ...]
-            }
+            },
+            # Dialogue NPCs for level 1
+            'dialogue_npcs': [
+                {
+                    'pos': (3.5, 2.5),
+                    'dialogue_id': 'guide',
+                    'path': 'resources/sprites/npc/dialogue_npc/0.png'
+                }
+            ]
         }
 
         # Level 2 data - Odgovara mapi za level 2
@@ -89,7 +98,15 @@ class LevelManager:
                 'weights': [70, 30],  # More KlonoviNPC in level 2
                 'restricted_area': {(i, j) for i in range(5) for j in range(5)},  # Different restricted area
                 'fixed_positions': []  # No fixed positions for this level
-            }
+            },
+            # Dialogue NPCs for level 2
+            'dialogue_npcs': [
+                {
+                    'pos': (12.5, 5.5),
+                    'dialogue_id': 'level2_intro',
+                    'path': 'resources/sprites/npc/dialogue_npc/0.png'
+                }
+            ]
         }
 
         # Level 3 data - Only StakorNPC enemies
@@ -116,7 +133,15 @@ class LevelManager:
                 'weights': [100],  # 100% StakorNPC
                 'restricted_area': {(i, j) for i in range(3) for j in range(3)},  # Small restricted area
                 'fixed_positions': [(5, 5), (15, 5), (10, 10)]  # Some enemies at fixed positions
-            }
+            },
+            # Dialogue NPCs for level 3
+            'dialogue_npcs': [
+                {
+                    'pos': (12.5, 5.5),
+                    'dialogue_id': 'level3_intro',
+                    'path': 'resources/sprites/npc/dialogue_npc/0.png'
+                }
+            ]
         }
 
     def load_level(self, level_number):
@@ -316,6 +341,13 @@ class LevelManager:
             )
             self.game.object_handler.add_sprite(level_exit)
             self.game.interaction.add_object(level_exit)
+
+    def setup_dialogue_npcs(self):
+        """Set up dialogue NPCs for the current level"""
+        level_data = self.get_current_level_data()
+        if level_data and 'dialogue_npcs' in level_data:
+            # Create dialogue NPCs for the current level
+            create_dialogue_npcs(self.game, level_data['dialogue_npcs'])
 
     def next_level(self):
         """Advance to the next level"""

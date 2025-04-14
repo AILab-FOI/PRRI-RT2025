@@ -12,6 +12,7 @@ from sound import *
 from pathfinding import *
 from interaction import Interaction
 from level_manager import LevelManager
+from dialogue import DialogueManager
 
 
 class Game:
@@ -54,6 +55,13 @@ class Game:
         self.pathfinding = PathFinding(self)
         self.interaction = Interaction(self)
 
+        # Initialize dialogue manager
+        if not hasattr(self, 'dialogue_manager'):
+            self.dialogue_manager = DialogueManager(self)
+
+        # Set up dialogue NPCs for the current level
+        self.level_manager.setup_dialogue_npcs()
+
         # Set up interactive objects for the current level
         self.level_manager.setup_interactive_objects()
 
@@ -76,6 +84,7 @@ class Game:
         self.object_handler.update()
         self.weapon.update()
         self.interaction.update()
+        self.dialogue_manager.update()
         pg.display.flip()
         self.delta_time = self.clock.tick(FPS)
         pg.display.set_caption(f'{self.clock.get_fps() :.1f}')
@@ -85,6 +94,7 @@ class Game:
         self.object_renderer.draw()
         self.weapon.draw()
         self.interaction.draw()
+        self.dialogue_manager.draw()
 
         # Debug visualization methods - not used in production
         # self.screen.fill('black')
@@ -102,6 +112,19 @@ class Game:
             # Debug key to advance to next level (N key)
             elif event.type == pg.KEYDOWN and event.key == pg.K_n:
                 self.next_level()
+            # Handle dialogue key events
+            elif event.type == pg.KEYDOWN and event.key == pg.K_e:
+                # If dialogue is active, advance or end it
+                if self.dialogue_manager.dialogue_active:
+                    self.dialogue_manager.handle_key_press()
+                # Otherwise, check if player is near a dialogue NPC
+                else:
+                    for npc in self.object_handler.npc_list:
+                        if hasattr(npc, 'is_friendly') and npc.is_friendly and hasattr(npc, 'interaction_indicator_visible'):
+                            if npc.interaction_indicator_visible:
+                                npc.start_dialogue()
+                                break
+
             self.player.single_fire_event(event)
             self.interaction.handle_key_event(event)
 

@@ -33,9 +33,13 @@ class ObjectRenderer:
 
     def draw_enemy_counter(self):
         """Draw a counter showing the number of remaining enemies"""
-        # Get the number of remaining enemies
-        remaining_enemies = len(self.game.object_handler.npc_positions)
-        total_enemies = self.game.object_handler.enemies
+        # Get the number of remaining enemies (excluding friendly NPCs)
+        remaining_enemies = sum(1 for npc in self.game.object_handler.npc_list
+                              if npc.alive and not hasattr(npc, 'is_friendly'))
+
+        # Get total number of hostile enemies
+        total_enemies = sum(1 for npc in self.game.object_handler.npc_list
+                          if not hasattr(npc, 'is_friendly'))
 
         # Create the counter text
         counter_text = f"Enemies: {remaining_enemies}/{total_enemies}"

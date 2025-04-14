@@ -128,20 +128,30 @@ class ObjectHandler:
             self._spawn_random_enemies(remaining)
 
     def check_win(self):
-        # Check if all enemies are defeated
-        self.all_enemies_defeated = not len(self.npc_positions)
+        # Get only hostile NPCs (exclude friendly NPCs like dialogue NPCs)
+        hostile_npcs = [npc for npc in self.npc_list if npc.alive and not hasattr(npc, 'is_friendly')]
+
+        # Check if all hostile enemies are defeated
+        self.all_enemies_defeated = len(hostile_npcs) == 0
 
         # If all enemies are defeated, show a message and enable the level exit door
         if self.all_enemies_defeated and not self.win_message_shown:
             self.win_message_shown = True
-            self.game.object_renderer.show_message(f"All {self.enemies} enemies defeated! Find the exit door.")
+            # Count only hostile enemies for the message
+            hostile_count = sum(1 for npc in self.npc_list if not hasattr(npc, 'is_friendly'))
+            self.game.object_renderer.show_message(f"All {hostile_count} enemies defeated! Find the exit door.")
             # Enable the level exit door
             self.enable_level_exit()
 
     def update(self):
+        # Update NPC positions, excluding friendly NPCs for win condition checking
         self.npc_positions = {npc.map_pos for npc in self.npc_list if npc.alive}
+
+        # Update all sprites and NPCs
         [sprite.update() for sprite in self.sprite_list]
         [npc.update() for npc in self.npc_list]
+
+        # Check win condition
         self.check_win()
 
     def add_npc(self, npc):
