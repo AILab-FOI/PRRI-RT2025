@@ -195,40 +195,9 @@ class NPC(AnimatedSprite):
             return True
         return False
 
-    # Debug method for visualizing ray casting - not used in production
-    # def draw_ray_cast(self):
-    #     pg.draw.circle(self.game.screen, 'red', (100 * self.x, 100 * self.y), 15)
-    #     if self.ray_cast_player_npc():
-    #         pg.draw.line(self.game.screen, 'orange', (100 * self.game.player.x, 100 * self.game.player.y),
-    #                      (100 * self.x, 100 * self.y), 2)
-
-'''
-class SoldierNPC(NPC):
-    def __init__(self, game, path='resources/sprites/npc/soldier/0.png', pos=(10.5, 5.5),
-                 scale=0.6, shift=0.38, animation_time=180):
-        super().__init__(game, path, pos, scale, shift, animation_time)
 
 
-class CacoDemonNPC(NPC):
-    def __init__(self, game, path='resources/sprites/npc/caco_demon/0.png', pos=(10.5, 6.5),
-                 scale=0.7, shift=0.27, animation_time=250):
-        super().__init__(game, path, pos, scale, shift, animation_time)
-        self.attack_dist = 1.0
-        self.health = 150
-        self.attack_damage = 25
-        self.speed = 0.05
-        self.accuracy = 0.35
 
-class CyberDemonNPC(NPC):
-    def __init__(self, game, path='resources/sprites/npc/cyber_demon/0.png', pos=(11.5, 6.0),
-                 scale=1.0, shift=0.04, animation_time=210):
-        super().__init__(game, path, pos, scale, shift, animation_time)
-        self.attack_dist = 6
-        self.health = 350
-        self.attack_damage = 15
-        self.speed = 0.055
-        self.accuracy = 0.25
-'''
 class KlonoviNPC(NPC):
     def __init__(self, game, path='resources/sprites/npc/klonovi/0.png', pos=(10.5, 5.5),
                  scale=0.6, shift=0.38, animation_time=180):
@@ -243,13 +212,9 @@ class StakorNPC(NPC):
     def __init__(self, game, path='resources/sprites/npc/stakor/0.png', pos=(10.5, 5.5),
                  scale=0.5, shift=0.4, animation_time=200):
         super().__init__(game, path, pos, scale, shift, animation_time)
-        # Posebno učitamo slike za smrt jer imamo drugačiju strukturu direktorija
-        self.death_images = deque()
+        # Use texture manager to load death images
         death_path = self.path + '/death'
-        for file_name in ['0.png', '1.png']:
-            if os.path.isfile(os.path.join(death_path, file_name)):
-                img = pg.image.load(death_path + '/' + file_name).convert_alpha()
-                self.death_images.append(img)
+        self.death_images = deque(self.game.texture_manager.get_animation_frames(death_path))
         # Death height shift will be applied when enemy dies
         self.death_height_shift = 0.8
         # Koristimo walk slike za hodanje

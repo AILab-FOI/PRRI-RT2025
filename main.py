@@ -13,6 +13,7 @@ from pathfinding import *
 from interaction import Interaction
 from level_manager import LevelManager
 from dialogue import DialogueManager
+from texture_manager import TextureManager
 
 
 class Game:
@@ -25,6 +26,10 @@ class Game:
         self.global_trigger = False
         self.global_event = pg.USEREVENT + 0
         pg.time.set_timer(self.global_event, 40)
+
+        # Initialize texture manager before other components
+        self.texture_manager = TextureManager()
+
         self.new_game()
 
     def new_game(self):
@@ -96,10 +101,7 @@ class Game:
         self.interaction.draw()
         self.dialogue_manager.draw()
 
-        # Debug visualization methods - not used in production
-        # self.screen.fill('black')
-        # self.map.draw()
-        # self.player.draw()
+
 
     def check_events(self):
         self.global_trigger = False

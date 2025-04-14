@@ -6,16 +6,17 @@ class ObjectRenderer:
     def __init__(self, game):
         self.game = game
         self.screen = game.screen
+        self.texture_manager = game.texture_manager
         self.wall_textures = self.load_wall_textures()
-        self.sky_image = self.get_texture('resources/textures/sky.png', (WIDTH, HALF_HEIGHT))
+        self.sky_image = self.texture_manager.get_texture('resources/textures/sky.png', (WIDTH, HALF_HEIGHT))
         self.sky_offset = 0
-        self.blood_screen = self.get_texture('resources/textures/blood_screen.png', RES)
+        self.blood_screen = self.texture_manager.get_texture('resources/textures/blood_screen.png', RES)
         self.digit_size = 90
-        self.digit_images = [self.get_texture(f'resources/teksture/brojevi/{i}.png', [self.digit_size] * 2)
+        self.digit_images = [self.texture_manager.get_texture(f'resources/teksture/brojevi/{i}.png', [self.digit_size] * 2)
                              for i in range(11)]
         self.digits = dict(zip(map(str, range(11)), self.digit_images))
-        self.game_over_image = self.get_texture('resources/textures/game_over.png', RES)
-        self.win_image = self.get_texture('resources/textures/win.png', RES)
+        self.game_over_image = self.texture_manager.get_texture('resources/textures/game_over.png', RES)
+        self.win_image = self.texture_manager.get_texture('resources/textures/win.png', RES)
 
         # Message display
         self.message = ""
@@ -135,10 +136,9 @@ class ObjectRenderer:
         for _, image, pos in list_objects:  # Use _ to indicate unused variable
             self.screen.blit(image, pos)
 
-    @staticmethod
-    def get_texture(path, res=(TEXTURE_SIZE, TEXTURE_SIZE)):
-        texture = pg.image.load(path).convert_alpha()
-        return pg.transform.scale(texture, res)
+    def get_texture(self, path, res=(TEXTURE_SIZE, TEXTURE_SIZE)):
+        # Use the texture manager instead of loading directly
+        return self.texture_manager.get_texture(path, res)
 
     def load_wall_textures(self):
         return {

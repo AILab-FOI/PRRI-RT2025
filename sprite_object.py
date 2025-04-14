@@ -1,6 +1,5 @@
 import pygame as pg
 from settings import *
-import os
 from collections import deque
 
 
@@ -14,20 +13,8 @@ class SpriteObject:
         self.player = game.player
         self.x, self.y = pos
 
-        # Add error handling for missing textures
-        try:
-            if os.path.isfile(path):
-                self.image = pg.image.load(path).convert_alpha()
-            else:
-                print(f"Warning: Sprite texture not found at {path}")
-                # Create a small blank/transparent surface instead
-                self.image = pg.Surface((32, 32), pg.SRCALPHA)
-                self.image.fill((0, 0, 0, 0))  # Transparent
-        except Exception as e:
-            print(f"Error loading sprite texture: {e}")
-            # Create a small blank/transparent surface
-            self.image = pg.Surface((32, 32), pg.SRCALPHA)
-            self.image.fill((0, 0, 0, 0))  # Transparent
+        # Use texture manager to load the image
+        self.image = self.game.texture_manager.get_texture(path)
         self.IMAGE_WIDTH = self.image.get_width()
         self.IMAGE_HALF_WIDTH = self.image.get_width() // 2
         self.IMAGE_RATIO = self.IMAGE_WIDTH / self.image.get_height()
@@ -98,33 +85,6 @@ class AnimatedSprite(SpriteObject):
             self.animation_trigger = True
 
     def get_images(self, path):
-        images = deque()
-        try:
-            if os.path.isdir(path):
-                for file_name in os.listdir(path):
-                    if os.path.isfile(os.path.join(path, file_name)):
-                        try:
-                            img = pg.image.load(path + '/' + file_name).convert_alpha()
-                            images.append(img)
-                        except Exception as e:
-                            print(f"Error loading animation frame {file_name}: {e}")
-            else:
-                print(f"Warning: Animation directory not found at {path}")
-                # Create a blank image if directory doesn't exist
-                blank_img = pg.Surface((32, 32), pg.SRCALPHA)
-                blank_img.fill((0, 0, 0, 0))  # Transparent
-                images.append(blank_img)
-        except Exception as e:
-            print(f"Error loading animation frames: {e}")
-            # Create a blank image if there's an error
-            blank_img = pg.Surface((32, 32), pg.SRCALPHA)
-            blank_img.fill((0, 0, 0, 0))  # Transparent
-            images.append(blank_img)
-
-        # Make sure we have at least one image
-        if not images:
-            blank_img = pg.Surface((32, 32), pg.SRCALPHA)
-            blank_img.fill((0, 0, 0, 0))  # Transparent
-            images.append(blank_img)
-
-        return images
+        # Use texture manager to load animation frames
+        frames = self.game.texture_manager.get_animation_frames(path)
+        return deque(frames)
