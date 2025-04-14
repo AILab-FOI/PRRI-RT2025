@@ -53,10 +53,7 @@ class DialogueManager:
         sample_dialogue = {
             "npc_name": "Guide",
             "lines": [
-                "Welcome to the game! I'm here to guide you.",
-                "You need to defeat all enemies to progress to the next level.",
-                "Good luck on your journey!",
-                "Press E to continue the conversation or exit."
+                "Use .json files for dialogue"
             ]
         }
 

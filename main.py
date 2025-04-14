@@ -7,7 +7,7 @@ from raycasting import *
 from object_renderer import *
 from sprite_object import *
 from object_handler import *
-from weapon import *
+from weapon import Weapon, Pistol, SMG
 from sound import *
 from pathfinding import *
 from interaction import Interaction
@@ -50,7 +50,7 @@ class Game:
         else:
             self.object_handler.reset()  # Reset for new level
 
-        self.weapon = Weapon(self)
+        self.weapon = Pistol(self)  # Start with a pistol
         self.sound = Sound(self)
         self.pathfinding = PathFinding(self)
         self.interaction = Interaction(self)

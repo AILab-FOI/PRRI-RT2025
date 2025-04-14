@@ -23,6 +23,11 @@ class Player:
         # Dialogue mode - when active, player can't move
         self.dialogue_mode = False
 
+        # Automatic weapon firing properties
+        self.auto_fire = False  # Whether auto-firing is active
+        self.auto_fire_delay = 150  # Milliseconds between auto shots (faster for SMG)
+        self.last_auto_fire_time = 0  # Last time an auto shot was fired
+
     def recover_health(self):
         if self.check_health_recovery_delay() and self.health < PLAYER_MAX_HEALTH:
             self.health += 1
@@ -51,11 +56,30 @@ class Player:
         if self.dialogue_mode:
             return
 
+        # Handle mouse button down - start firing
         if event.type == pg.MOUSEBUTTONDOWN:
             if event.button == 1 and not self.shot and not self.game.weapon.reloading:
-                self.game.sound.pistolj.play()
-                self.shot = True
-                self.game.weapon.reloading = True
+                # For SMG, start auto-firing mode
+                if self.game.weapon.name == 'smg':
+                    self.auto_fire = True
+                    self.fire_weapon()
+                else:  # For pistol, just fire once
+                    self.fire_weapon()
+
+        # Handle mouse button up - stop auto-firing
+        elif event.type == pg.MOUSEBUTTONUP:
+            if event.button == 1:
+                self.auto_fire = False
+
+    def fire_weapon(self):
+        # Play the appropriate sound based on weapon type
+        if self.game.weapon.name == 'smg':
+            self.game.sound.smg.play()
+        else:  # Default to pistol sound
+            self.game.sound.pistolj.play()
+        self.shot = True
+        self.game.weapon.reloading = True
+        self.last_auto_fire_time = pg.time.get_ticks()
 
     def movement(self):
         # Skip movement if in dialogue mode
@@ -172,6 +196,16 @@ class Player:
         self.update_dash()
         self.mouse_control()
         self.recover_health()
+        self.update_auto_fire()
+
+    def update_auto_fire(self):
+        # Handle automatic firing for SMG
+        if self.auto_fire and self.game.weapon.name == 'smg':
+            current_time = pg.time.get_ticks()
+            # Check if enough time has passed since the last shot
+            if (not self.game.weapon.reloading and
+                current_time - self.last_auto_fire_time >= self.auto_fire_delay):
+                self.fire_weapon()
 
     @property
     def pos(self):

@@ -2,6 +2,7 @@ import pygame as pg
 import math
 from settings import *
 from sprite_object import SpriteObject
+from weapon import Pistol, SMG
 
 class Interaction:
     def __init__(self, game):
@@ -145,6 +146,9 @@ class Interaction:
                     else:
                         self.message = "You must defeat all enemies first!"
                         self.message_time = pg.time.get_ticks()
+            elif self.active_object.interaction_type == "weapon":
+                # Pick up the weapon
+                self.pickup_weapon()
 
     def show_terminal_code(self):
         if self.active_object and self.active_object.code:
@@ -198,14 +202,54 @@ class Interaction:
             self.show_interaction_prompt = False
 
 
+    def pickup_weapon(self):
+        if self.active_object and self.active_object.interaction_type == "weapon":
+            # Get the weapon type from the interactive object
+            weapon_type = self.active_object.weapon_type
+
+            # Create the new weapon
+            if weapon_type == "smg":
+                new_weapon = SMG(self.game)
+            elif weapon_type == "pistol":
+                new_weapon = Pistol(self.game)
+            else:
+                # Default to pistol if unknown weapon type
+                new_weapon = Pistol(self.game)
+
+            # Store the old weapon type before replacing it
+            old_weapon_type = self.game.weapon.name
+
+            # Replace the current weapon with the new one
+            self.game.weapon = new_weapon
+
+            # Play pickup sound
+            self.game.sound.weapon_pickup.play()
+
+            # Show a message
+            self.message = f"Picked up {weapon_type}!"
+            self.message_time = pg.time.get_ticks()
+
+            # Remove the weapon pickup from the game
+            if self.active_object in self.game.object_handler.sprite_list:
+                self.game.object_handler.sprite_list.remove(self.active_object)
+
+            # Remove from interaction objects
+            if self.active_object in self.interaction_objects:
+                self.interaction_objects.remove(self.active_object)
+
+            # Reset active object
+            self.active_object = None
+            self.show_interaction_prompt = False
+
+
 class InteractiveObject(SpriteObject):
     def __init__(self, game, path, pos, interaction_type, door_id=None, code=None,
                  unlocks_door_id=None, requires_code=False, requires_door_id=None,
-                 is_level_exit=False):
+                 is_level_exit=False, weapon_type=None):
         # Add 0.5 to position for proper sprite rendering in the center of the tile
         adjusted_pos = (pos[0] + 0.5, pos[1] + 0.5) if isinstance(pos, tuple) else pos
         super().__init__(game, path, adjusted_pos)
-        self.interaction_type = interaction_type  # "terminal", "door", or "level_door"
+        self.interaction_type = interaction_type  # "terminal", "door", "level_door", or "weapon"
         self.door_id = door_id  # Unique ID for this door
         self.original_pos = pos  # Store original position for map reference
         self.code = code  # Code displayed by terminal or required by door
@@ -215,6 +259,7 @@ class InteractiveObject(SpriteObject):
         self.is_unlocked = False  # Whether this door has been unlocked
         self.is_level_exit = is_level_exit  # Whether this door leads to the next level
         self.is_enabled = False  # Whether this door is enabled (for level exits)
+        self.weapon_type = weapon_type  # Type of weapon ("smg", "pistol", etc.)
 
     @property
     def map_pos(self):

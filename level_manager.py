@@ -37,6 +37,14 @@ class LevelManager:
                     'requires_door_id': 1  # This door requires door 1 to be opened first
                 }
             ],
+            # Weapon pickups for level 1
+            'weapons': [
+                {
+                    'position': (5, 5),
+                    'weapon_type': 'smg',
+                    'path': 'resources/sprites/weapon/smg/0.png'
+                }
+            ],
             # Enemy configuration for level 1
             'enemies': {
                 'count': 4,  # Number of enemies to spawn
@@ -231,6 +239,19 @@ class LevelManager:
             )
             self.game.object_handler.add_sprite(door)
             self.game.interaction.add_object(door)
+
+        # Add weapon pickups if they exist in the level data
+        if 'weapons' in level_data:
+            for weapon_data in level_data['weapons']:
+                weapon_pickup = InteractiveObject(
+                    self.game,
+                    path=weapon_data['path'],
+                    pos=weapon_data['position'],
+                    interaction_type="weapon",
+                    weapon_type=weapon_data['weapon_type']
+                )
+                self.game.object_handler.add_sprite(weapon_pickup)
+                self.game.interaction.add_object(weapon_pickup)
 
         # Add level exit door for each level
         # Define exit door positions for each level
