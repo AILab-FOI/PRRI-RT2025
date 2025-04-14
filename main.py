@@ -14,6 +14,7 @@ from interaction import Interaction
 from level_manager import LevelManager
 from dialogue import DialogueManager
 from menu import Menu
+from font_manager import load_custom_font
 
 
 class Game:
@@ -151,8 +152,8 @@ class Game:
     def next_level(self):
         """Advance to the next level"""
         if self.level_manager.next_level():
-            # Display loading message
-            font = pg.font.SysFont('Arial', 36)
+            # Display loading message with custom font
+            font = load_custom_font(30)
             text_surface = font.render("Loading next level...", True, (255, 255, 255))
             text_rect = text_surface.get_rect(center=(HALF_WIDTH, HALF_HEIGHT))
             self.screen.blit(text_surface, text_rect)

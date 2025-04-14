@@ -3,6 +3,7 @@ import math
 from settings import *
 from sprite_object import SpriteObject
 from weapon import Pistol, SMG
+from font_manager import load_custom_font
 
 class Interaction:
     def __init__(self, game):
@@ -11,8 +12,11 @@ class Interaction:
         self.interaction_distance = 1.5  # Maximum distance for interaction
         self.active_object = None
         self.show_interaction_prompt = False
-        self.font = pg.font.SysFont('Arial', 36)
-        self.small_font = pg.font.SysFont('Arial', 24)
+
+        # Load the custom font for interaction text
+        self.font = load_custom_font(30)
+        self.small_font = load_custom_font(20)
+
         self.input_code = ""  # Code being entered by player
         self.input_active = False
         self.unlocked_doors = set()  # Set of door IDs that have been unlocked
@@ -216,8 +220,8 @@ class Interaction:
                 # Default to pistol if unknown weapon type
                 new_weapon = Pistol(self.game)
 
-            # Store the old weapon type before replacing it
-            old_weapon_type = self.game.weapon.name
+            # Get the old weapon type (for potential future use)
+            # old_weapon_type = self.game.weapon.name
 
             # Replace the current weapon with the new one
             self.game.weapon = new_weapon
