@@ -30,7 +30,7 @@ class Sound:
         self.stakor_smrt = pg.mixer.Sound(self.path + 'stakor_smrt.mp3')
 
         # Weapon pickup sound
-        self.weapon_pickup = pg.mixer.Sound(self.path + 'Pistolj.wav')  # Reuse pistol sound for now
+        self.weapon_pickup = pg.mixer.Sound(self.path + 'podizanje_oruzja.wav')  # Reuse pistol sound for now
         self.weapon_pickup.set_volume(0.7 * self.sfx_volume)
 
         # Player sounds
