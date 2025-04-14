@@ -5,12 +5,29 @@ from collections import deque
 
 
 class SpriteObject:
-    def __init__(self, game, path='resources/sprites/static_sprites/candlebra.png',
+    def __init__(self, game, path=None,
                  pos=(10.5, 3.5), scale=0.7, shift=0.27):
+        # Use a more neutral default or no default at all
+        if path is None:
+            path = 'resources/sprites/static_sprites/ukras1.png'  # Use a different default sprite
         self.game = game
         self.player = game.player
         self.x, self.y = pos
-        self.image = pg.image.load(path).convert_alpha()
+
+        # Add error handling for missing textures
+        try:
+            if os.path.isfile(path):
+                self.image = pg.image.load(path).convert_alpha()
+            else:
+                print(f"Warning: Sprite texture not found at {path}")
+                # Create a small blank/transparent surface instead
+                self.image = pg.Surface((32, 32), pg.SRCALPHA)
+                self.image.fill((0, 0, 0, 0))  # Transparent
+        except Exception as e:
+            print(f"Error loading sprite texture: {e}")
+            # Create a small blank/transparent surface
+            self.image = pg.Surface((32, 32), pg.SRCALPHA)
+            self.image.fill((0, 0, 0, 0))  # Transparent
         self.IMAGE_WIDTH = self.image.get_width()
         self.IMAGE_HALF_WIDTH = self.image.get_width() // 2
         self.IMAGE_RATIO = self.IMAGE_WIDTH / self.image.get_height()
@@ -82,8 +99,32 @@ class AnimatedSprite(SpriteObject):
 
     def get_images(self, path):
         images = deque()
-        for file_name in os.listdir(path):
-            if os.path.isfile(os.path.join(path, file_name)):
-                img = pg.image.load(path + '/' + file_name).convert_alpha()
-                images.append(img)
+        try:
+            if os.path.isdir(path):
+                for file_name in os.listdir(path):
+                    if os.path.isfile(os.path.join(path, file_name)):
+                        try:
+                            img = pg.image.load(path + '/' + file_name).convert_alpha()
+                            images.append(img)
+                        except Exception as e:
+                            print(f"Error loading animation frame {file_name}: {e}")
+            else:
+                print(f"Warning: Animation directory not found at {path}")
+                # Create a blank image if directory doesn't exist
+                blank_img = pg.Surface((32, 32), pg.SRCALPHA)
+                blank_img.fill((0, 0, 0, 0))  # Transparent
+                images.append(blank_img)
+        except Exception as e:
+            print(f"Error loading animation frames: {e}")
+            # Create a blank image if there's an error
+            blank_img = pg.Surface((32, 32), pg.SRCALPHA)
+            blank_img.fill((0, 0, 0, 0))  # Transparent
+            images.append(blank_img)
+
+        # Make sure we have at least one image
+        if not images:
+            blank_img = pg.Surface((32, 32), pg.SRCALPHA)
+            blank_img.fill((0, 0, 0, 0))  # Transparent
+            images.append(blank_img)
+
         return images

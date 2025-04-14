@@ -28,7 +28,33 @@ class ObjectRenderer:
         self.render_game_objects()
         self.draw_player_health()
         self.draw_dash_indicator()
+        self.draw_enemy_counter()
         self.draw_message()
+
+    def draw_enemy_counter(self):
+        """Draw a counter showing the number of remaining enemies"""
+        # Get the number of remaining enemies
+        remaining_enemies = len(self.game.object_handler.npc_positions)
+        total_enemies = self.game.object_handler.enemies
+
+        # Create the counter text
+        counter_text = f"Enemies: {remaining_enemies}/{total_enemies}"
+
+        # Render the text
+        font = pg.font.SysFont('Arial', 24)
+        text_surface = font.render(counter_text, True, (255, 255, 255))
+
+        # Position in bottom right corner
+        text_rect = text_surface.get_rect(bottomright=(WIDTH - 20, HEIGHT - 20))
+
+        # Draw a semi-transparent background
+        bg_rect = text_rect.inflate(20, 10)  # Make background slightly larger
+        bg_surface = pg.Surface((bg_rect.width, bg_rect.height), pg.SRCALPHA)
+        bg_surface.fill((0, 0, 0, 150))  # Semi-transparent black
+        self.screen.blit(bg_surface, bg_rect)
+
+        # Draw the text
+        self.screen.blit(text_surface, text_rect)
 
     def win(self):
         self.screen.blit(self.win_image, (0, 0))

@@ -1,6 +1,6 @@
 from sprite_object import *
 from npc import *
-from random import choices, randrange
+from random import choices
 
 
 class ObjectHandler:
@@ -15,10 +15,8 @@ class ObjectHandler:
         self.npc_positions = {}
         self.win_message_shown = False
 
-        # Load enemy configuration from level manager
-        self.load_enemy_config()
-
         # Spawn enemies based on level configuration
+        # This will also load the enemy configuration from level manager
         self.spawn_npc()
 
         # sprite map
@@ -95,28 +93,39 @@ class ObjectHandler:
         # add_npc(CacoDemonNPC(game, pos=(5.5, 16.5)))
         # add_npc(CyberDemonNPC(game, pos=(14.5, 25.5)))
 
-    def load_enemy_config(self):
-        """Load enemy configuration from level manager"""
-        enemy_config = self.game.level_manager.get_enemy_config()
-        self.enemies = enemy_config['count']
-        self.npc_types = enemy_config['types']
-        self.weights = enemy_config['weights']
-        self.restricted_area = enemy_config['restricted_area']
-
     def spawn_npc(self):
-        """Spawn NPCs based on the current level configuration"""
+        """Load enemy configuration and spawn NPCs based on the current level"""
         # Clear existing NPCs
         self.npc_list = []
         self.npc_positions = {}
         self.win_message_shown = False
 
-        # Spawn new NPCs according to configuration
-        for _ in range(self.enemies):
-            npc = choices(self.npc_types, self.weights)[0]
-            pos = x, y = randrange(self.game.map.cols), randrange(self.game.map.rows)
-            while (pos in self.game.map.world_map) or (pos in self.restricted_area):
-                pos = x, y = randrange(self.game.map.cols), randrange(self.game.map.rows)
-            self.add_npc(npc(self.game, pos=(x + 0.5, y + 0.5)))
+        # Get enemy configuration from level manager
+        enemy_config = self.game.level_manager.get_enemy_config()
+        self.enemies = enemy_config['count']
+        self.npc_types = enemy_config['types']
+        self.weights = enemy_config['weights']
+        self.restricted_area = enemy_config['restricted_area']
+        fixed_positions = enemy_config.get('fixed_positions', [])
+
+        # First spawn enemies at fixed positions
+        for pos in fixed_positions:
+            if len(self.npc_list) >= self.enemies:
+                break  # Don't spawn more than the configured count
+
+            x, y = pos
+            # Skip if position is in a wall or restricted area
+            if (pos in self.game.map.world_map) or (pos in self.restricted_area):
+                continue
+
+            # Choose enemy type based on weights
+            npc_type = choices(self.npc_types, self.weights)[0]
+            self.add_npc(npc_type(self.game, pos=(x + 0.5, y + 0.5)))
+
+        # Then spawn remaining enemies at random positions
+        remaining = self.enemies - len(self.npc_list)
+        if remaining > 0:
+            self._spawn_random_enemies(remaining)
 
     def check_win(self):
         # Check if all enemies are defeated
@@ -150,6 +159,36 @@ class ObjectHandler:
     def add_sprite(self, sprite):
         self.sprite_list.append(sprite)
 
+    def _spawn_random_enemies(self, count):
+        """Helper method to spawn a given number of enemies at random positions"""
+        # Create a list of valid spawn positions
+        valid_positions = []
+        for y in range(self.game.map.rows):
+            for x in range(self.game.map.cols):
+                pos = (x, y)
+                if (pos not in self.game.map.world_map) and (pos not in self.restricted_area):
+                    valid_positions.append(pos)
+
+        # Shuffle the valid positions to randomize spawning
+        from random import shuffle
+        shuffle(valid_positions)
+
+        # Spawn enemies at valid positions
+        spawned = 0
+        for pos in valid_positions:
+            if spawned >= count:
+                break
+
+            x, y = pos
+            # Choose enemy type based on weights
+            npc_type = choices(self.npc_types, self.weights)[0]
+            self.add_npc(npc_type(self.game, pos=(x + 0.5, y + 0.5)))
+            spawned += 1
+
+        # If we couldn't spawn all enemies, log a warning
+        if spawned < count:
+            print(f"Warning: Could only spawn {spawned} of {count} enemies due to map constraints")
+
     def reset(self):
         """Reset the object handler for a new level"""
         # Keep static sprites but clear NPCs
@@ -157,6 +196,5 @@ class ObjectHandler:
         self.npc_positions = {}
         self.win_message_shown = False
 
-        # Load new enemy configuration and spawn NPCs
-        self.load_enemy_config()
+        # Spawn NPCs for the new level
         self.spawn_npc()

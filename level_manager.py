@@ -1,4 +1,5 @@
 import pygame as pg
+import os
 from interaction import InteractiveObject
 from npc import KlonoviNPC, StakorNPC
 
@@ -40,7 +41,8 @@ class LevelManager:
                 'count': 4,  # Number of enemies to spawn
                 'types': [KlonoviNPC, StakorNPC],  # Types of enemies that can spawn
                 'weights': [50, 50],  # Spawn weights for each enemy type
-                'restricted_area': {(i, j) for i in range(10) for j in range(10)}  # Areas where enemies cannot spawn
+                'restricted_area': {(i, j) for i in range(10) for j in range(10)},  # Areas where enemies cannot spawn
+                'fixed_positions': []  # Optional list of fixed positions for enemies: [(x, y), (x, y), ...]
             }
         }
 
@@ -85,7 +87,8 @@ class LevelManager:
                 'count': 6,  # More enemies in level 2
                 'types': [KlonoviNPC, StakorNPC],
                 'weights': [70, 30],  # More KlonoviNPC in level 2
-                'restricted_area': {(i, j) for i in range(5) for j in range(5)}  # Different restricted area
+                'restricted_area': {(i, j) for i in range(5) for j in range(5)},  # Different restricted area
+                'fixed_positions': []  # No fixed positions for this level
             }
         }
 
@@ -111,7 +114,8 @@ class LevelManager:
                 'count': 10,  # Many enemies in level 3
                 'types': [StakorNPC],  # Only StakorNPC in this level
                 'weights': [100],  # 100% StakorNPC
-                'restricted_area': {(i, j) for i in range(3) for j in range(3)}  # Small restricted area
+                'restricted_area': {(i, j) for i in range(3) for j in range(3)},  # Small restricted area
+                'fixed_positions': [(5, 5), (15, 5), (10, 10)]  # Some enemies at fixed positions
             }
         }
 
@@ -138,7 +142,8 @@ class LevelManager:
             'count': 4,
             'types': [KlonoviNPC, StakorNPC],
             'weights': [50, 50],
-            'restricted_area': {(i, j) for i in range(10) for j in range(10)}
+            'restricted_area': {(i, j) for i in range(10) for j in range(10)},
+            'fixed_positions': []
         }
 
     def setup_interactive_objects(self):
@@ -157,20 +162,21 @@ class LevelManager:
         door_path = 'resources/sprites/static_sprites/door.png'
         level_door_path = 'resources/sprites/static_sprites/level_door.png'
 
-        # Use existing textures if terminal.png or door.png don't exist
-        try:
-            pg.image.load(terminal_path)
-        except:
-            terminal_path = 'resources/sprites/static_sprites/candlebra.png'
+        # Comment out fallback textures to avoid unwanted candlebra
+        # Just use the paths as is - if textures don't exist, they'll be invisible
+        # which is better than showing a candlebra
 
-        try:
-            pg.image.load(door_path)
-        except:
-            door_path = 'resources/sprites/static_sprites/candlebra.png'
+        # Make sure the files exist before trying to load them
+        if not os.path.isfile(terminal_path):
+            print(f"Warning: Terminal texture not found at {terminal_path}")
+            # Don't set a fallback - better to have no sprite than wrong sprite
 
-        try:
-            pg.image.load(level_door_path)
-        except:
+        if not os.path.isfile(door_path):
+            print(f"Warning: Door texture not found at {door_path}")
+            # Don't set a fallback
+
+        if not os.path.isfile(level_door_path):
+            print(f"Warning: Level door texture not found at {level_door_path}")
             level_door_path = door_path  # Use regular door texture if level_door.png doesn't exist
 
         # Add terminals
@@ -201,13 +207,21 @@ class LevelManager:
             self.game.object_handler.add_sprite(door)
             self.game.interaction.add_object(door)
 
-        # Add level exit door if this is level 1
-        if self.current_level == 1:
-            # Add level exit door at position (12, 34)
+        # Add level exit door for each level
+        # Define exit door positions for each level
+        exit_positions = {
+            1: (12, 34),  # Level 1 exit at position (12, 34)
+            2: (12, 20),  # Level 2 exit at position (12, 20)
+            3: (12, 20)   # Level 3 exit at position (12, 20)
+        }
+
+        # Add the exit door if we have a position defined for this level
+        if self.current_level in exit_positions:
+            exit_pos = exit_positions[self.current_level]
             level_exit = InteractiveObject(
                 self.game,
                 path=level_door_path,
-                pos=(12, 34),
+                pos=exit_pos,
                 interaction_type="level_door",
                 is_level_exit=True
             )
@@ -223,16 +237,18 @@ class LevelManager:
         terminal_path = 'resources/sprites/static_sprites/terminal.png'
         door_path = 'resources/sprites/static_sprites/door.png'
 
-        # Use existing textures if terminal.png or door.png don't exist
-        try:
-            pg.image.load(terminal_path)
-        except:
-            terminal_path = 'resources/sprites/static_sprites/candlebra.png'
+        # Comment out fallback textures to avoid unwanted candlebra
+        # Just use the paths as is - if textures don't exist, they'll be invisible
+        # which is better than showing a candlebra
 
-        try:
-            pg.image.load(door_path)
-        except:
-            door_path = 'resources/sprites/static_sprites/candlebra.png'
+        # Make sure the files exist before trying to load them
+        if not os.path.isfile(terminal_path):
+            print(f"Warning: Terminal texture not found at {terminal_path}")
+            # Don't set a fallback - better to have no sprite than wrong sprite
+
+        if not os.path.isfile(door_path):
+            print(f"Warning: Door texture not found at {door_path}")
+            # Don't set a fallback
 
         # Scan the map for terminal (14), door (11), and level exit door objects
         terminal_positions = []
@@ -244,11 +260,19 @@ class LevelManager:
                 if value == 14:  # Terminal
                     terminal_positions.append((x, y))
                 elif value == 11:  # Door
-                    # Check if this is the level exit door at position (12, 34)
-                    if x == 12 and y == 34 and self.current_level == 1:
-                        level_exit_positions.append((x, y))
+                    # Define exit door positions for each level
+                    exit_positions = {
+                        1: (12, 34),  # Level 1 exit at position (12, 34)
+                        2: (12, 20),  # Level 2 exit at position (12, 20)
+                        3: (12, 20)   # Level 3 exit at position (12, 20)
+                    }
+
+                    # Check if this is a level exit door
+                    current_pos = (x, y)
+                    if self.current_level in exit_positions and current_pos == exit_positions[self.current_level]:
+                        level_exit_positions.append(current_pos)
                     else:
-                        door_positions.append((x, y))
+                        door_positions.append(current_pos)
 
         # Create a default code
         default_code = "1337"
