@@ -283,9 +283,6 @@ class LevelManager:
         terminal_path = 'resources/sprites/static_sprites/terminal.png'
         door_path = 'resources/sprites/static_sprites/door.png'
 
-        # Comment out fallback textures to avoid unwanted candlebra
-        # Just use the paths as is - if textures don't exist, they'll be invisible
-        # which is better than showing a candlebra
 
         # Make sure the files exist before trying to load them
         if not os.path.isfile(terminal_path):

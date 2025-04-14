@@ -57,39 +57,70 @@ class Interaction:
                         (HALF_WIDTH, HALF_HEIGHT - indicator_size),
                         (HALF_WIDTH, HALF_HEIGHT + indicator_size), 2)
 
-            # Draw the prompt text
-            prompt_text = f"Press E to {self.active_object.interaction_type}"
+            # Draw the prompt text with improved wording
+            if self.active_object.interaction_type == "level_door":
+                prompt_text = "Press 'E' to go to the next level"
+            elif self.active_object.interaction_type == "door":
+                prompt_text = "Press 'E' to open the door"
+            elif self.active_object.interaction_type == "terminal":
+                prompt_text = "Press 'E' to access terminal"
+            elif self.active_object.interaction_type == "weapon":
+                prompt_text = f"Press 'E' to pick up {self.active_object.weapon_type}"
+            else:
+                prompt_text = f"Press 'E' to {self.active_object.interaction_type}"
+
             text_surface = self.font.render(prompt_text, True, (255, 255, 255))
             text_rect = text_surface.get_rect(center=(HALF_WIDTH, HEIGHT - 100))
             self.game.screen.blit(text_surface, text_rect)
 
         # Draw code input interface
         if self.input_active:
-            # Background - create a semi-transparent surface
-            bg_surface = pg.Surface((400, 200), pg.SRCALPHA)
+            # Background - create a semi-transparent surface (make it much wider and taller)
+            bg_width = 600  # Increased from 500
+            bg_height = 300  # Increased from 220
+            bg_surface = pg.Surface((bg_width, bg_height), pg.SRCALPHA)
             bg_surface.fill((0, 0, 0, 180))
-            self.game.screen.blit(bg_surface, (HALF_WIDTH - 200, HALF_HEIGHT - 100))
+            self.game.screen.blit(bg_surface, (HALF_WIDTH - bg_width//2, HALF_HEIGHT - bg_height//2))
 
             # Border
-            pg.draw.rect(self.game.screen, (50, 50, 50), (HALF_WIDTH - 200, HALF_HEIGHT - 100, 400, 200), 2)
+            pg.draw.rect(self.game.screen, (50, 50, 50),
+                        (HALF_WIDTH - bg_width//2, HALF_HEIGHT - bg_height//2, bg_width, bg_height), 2)
 
             # Title
             title_text = "Enter Code:"
             title_surface = self.font.render(title_text, True, (255, 255, 255))
-            title_rect = title_surface.get_rect(center=(HALF_WIDTH, HALF_HEIGHT - 60))
+            title_rect = title_surface.get_rect(center=(HALF_WIDTH, HALF_HEIGHT - 100))
             self.game.screen.blit(title_surface, title_rect)
 
-            # Input field
+            # Input field - split into two lines if needed
             input_text = self.input_code + "_" if len(self.input_code) < 4 else self.input_code
-            input_surface = self.font.render(input_text, True, (255, 255, 255))
+
+            # Make the input text much larger and add a background
+            large_font = load_custom_font(60)  # Much larger font for the code
+
+            # Add a darker background behind the code for better readability
+            code_bg_width = 300
+            code_bg_height = 80
+            code_bg = pg.Surface((code_bg_width, code_bg_height), pg.SRCALPHA)
+            code_bg.fill((0, 0, 0, 120))  # Darker but still semi-transparent
+            self.game.screen.blit(code_bg, (HALF_WIDTH - code_bg_width//2, HALF_HEIGHT - code_bg_height//2))
+
+            # Render the code with the larger font
+            input_surface = large_font.render(input_text, True, (255, 255, 255))
             input_rect = input_surface.get_rect(center=(HALF_WIDTH, HALF_HEIGHT))
             self.game.screen.blit(input_surface, input_rect)
 
-            # Instructions
-            instr_text = "Press Enter to confirm, Escape to cancel"
-            instr_surface = self.small_font.render(instr_text, True, (200, 200, 200))
-            instr_rect = instr_surface.get_rect(center=(HALF_WIDTH, HALF_HEIGHT + 60))
-            self.game.screen.blit(instr_surface, instr_rect)
+            # Instructions - split into two lines
+            instr_text1 = "Press Enter to confirm"
+            instr_text2 = "Press Escape to cancel"
+
+            instr_surface1 = self.small_font.render(instr_text1, True, (200, 200, 200))
+            instr_rect1 = instr_surface1.get_rect(center=(HALF_WIDTH, HALF_HEIGHT + 80))
+            self.game.screen.blit(instr_surface1, instr_rect1)
+
+            instr_surface2 = self.small_font.render(instr_text2, True, (200, 200, 200))
+            instr_rect2 = instr_surface2.get_rect(center=(HALF_WIDTH, HALF_HEIGHT + 110))
+            self.game.screen.blit(instr_surface2, instr_rect2)
 
         # Draw message if there is one
         if self.message:
