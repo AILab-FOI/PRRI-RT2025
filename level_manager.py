@@ -1,5 +1,6 @@
 import pygame as pg
 from interaction import InteractiveObject
+from npc import KlonoviNPC, StakorNPC
 
 class LevelManager:
     def __init__(self, game):
@@ -33,7 +34,14 @@ class LevelManager:
                     'code': '1337',  # Second door also uses code 1337
                     'requires_door_id': 1  # This door requires door 1 to be opened first
                 }
-            ]
+            ],
+            # Enemy configuration for level 1
+            'enemies': {
+                'count': 4,  # Number of enemies to spawn
+                'types': [KlonoviNPC, StakorNPC],  # Types of enemies that can spawn
+                'weights': [50, 50],  # Spawn weights for each enemy type
+                'restricted_area': {(i, j) for i in range(10) for j in range(10)}  # Areas where enemies cannot spawn
+            }
         }
 
         # Level 2 data - Odgovara mapi za level 2
@@ -71,7 +79,40 @@ class LevelManager:
                     'code': '4242',  # Koristi kod iz prvog terminala
                     'requires_door_id': 2  # Zahtijeva da druga vrata budu otvorena
                 }
-            ]
+            ],
+            # Enemy configuration for level 2
+            'enemies': {
+                'count': 6,  # More enemies in level 2
+                'types': [KlonoviNPC, StakorNPC],
+                'weights': [70, 30],  # More KlonoviNPC in level 2
+                'restricted_area': {(i, j) for i in range(5) for j in range(5)}  # Different restricted area
+            }
+        }
+
+        # Level 3 data - Only StakorNPC enemies
+        self.level_data[3] = {
+            'terminals': [
+                {
+                    'position': (5, 5),
+                    'code': '9999',
+                    'unlocks_door_id': None
+                }
+            ],
+            'doors': [
+                {
+                    'position': (11, 10),
+                    'door_id': 1,
+                    'requires_code': True,
+                    'code': '9999'
+                }
+            ],
+            # Enemy configuration for level 3
+            'enemies': {
+                'count': 10,  # Many enemies in level 3
+                'types': [StakorNPC],  # Only StakorNPC in this level
+                'weights': [100],  # 100% StakorNPC
+                'restricted_area': {(i, j) for i in range(3) for j in range(3)}  # Small restricted area
+            }
         }
 
     def load_level(self, level_number):
@@ -86,6 +127,19 @@ class LevelManager:
     def get_current_level_data(self):
         """Get data for the current level"""
         return self.level_data.get(self.current_level, None)
+
+    def get_enemy_config(self):
+        """Get enemy configuration for the current level"""
+        level_data = self.get_current_level_data()
+        if level_data and 'enemies' in level_data:
+            return level_data['enemies']
+        # Default enemy configuration if none is specified
+        return {
+            'count': 4,
+            'types': [KlonoviNPC, StakorNPC],
+            'weights': [50, 50],
+            'restricted_area': {(i, j) for i in range(10) for j in range(10)}
+        }
 
     def setup_interactive_objects(self):
         """Set up all interactive objects for the current level"""

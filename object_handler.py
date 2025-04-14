@@ -12,14 +12,13 @@ class ObjectHandler:
         self.static_sprite_path = 'resources/sprites/static_sprites/'
         self.anim_sprite_path = 'resources/sprites/animated_sprites/'
         add_sprite = self.add_sprite
-        add_npc = self.add_npc
         self.npc_positions = {}
+        self.win_message_shown = False
 
-        # spawn npc
-        self.enemies = 4  # npc count
-        self.npc_types = [KlonoviNPC, StakorNPC]
-        self.weights = [50, 50]
-        self.restricted_area = {(i, j) for i in range(10) for j in range(10)}
+        # Load enemy configuration from level manager
+        self.load_enemy_config()
+
+        # Spawn enemies based on level configuration
         self.spawn_npc()
 
         # sprite map
@@ -96,22 +95,37 @@ class ObjectHandler:
         # add_npc(CacoDemonNPC(game, pos=(5.5, 16.5)))
         # add_npc(CyberDemonNPC(game, pos=(14.5, 25.5)))
 
+    def load_enemy_config(self):
+        """Load enemy configuration from level manager"""
+        enemy_config = self.game.level_manager.get_enemy_config()
+        self.enemies = enemy_config['count']
+        self.npc_types = enemy_config['types']
+        self.weights = enemy_config['weights']
+        self.restricted_area = enemy_config['restricted_area']
+
     def spawn_npc(self):
+        """Spawn NPCs based on the current level configuration"""
+        # Clear existing NPCs
+        self.npc_list = []
+        self.npc_positions = {}
+        self.win_message_shown = False
+
+        # Spawn new NPCs according to configuration
         for _ in range(self.enemies):
-                npc = choices(self.npc_types, self.weights)[0]
+            npc = choices(self.npc_types, self.weights)[0]
+            pos = x, y = randrange(self.game.map.cols), randrange(self.game.map.rows)
+            while (pos in self.game.map.world_map) or (pos in self.restricted_area):
                 pos = x, y = randrange(self.game.map.cols), randrange(self.game.map.rows)
-                while (pos in self.game.map.world_map) or (pos in self.restricted_area):
-                    pos = x, y = randrange(self.game.map.cols), randrange(self.game.map.rows)
-                self.add_npc(npc(self.game, pos=(x + 0.5, y + 0.5)))
+            self.add_npc(npc(self.game, pos=(x + 0.5, y + 0.5)))
 
     def check_win(self):
         # Check if all enemies are defeated
         self.all_enemies_defeated = not len(self.npc_positions)
 
         # If all enemies are defeated, show a message and enable the level exit door
-        if self.all_enemies_defeated and not hasattr(self, 'win_message_shown'):
+        if self.all_enemies_defeated and not self.win_message_shown:
             self.win_message_shown = True
-            self.game.object_renderer.show_message("All enemies defeated! Find the exit door.")
+            self.game.object_renderer.show_message(f"All {self.enemies} enemies defeated! Find the exit door.")
             # Enable the level exit door
             self.enable_level_exit()
 
@@ -135,3 +149,14 @@ class ObjectHandler:
 
     def add_sprite(self, sprite):
         self.sprite_list.append(sprite)
+
+    def reset(self):
+        """Reset the object handler for a new level"""
+        # Keep static sprites but clear NPCs
+        self.npc_list = []
+        self.npc_positions = {}
+        self.win_message_shown = False
+
+        # Load new enemy configuration and spawn NPCs
+        self.load_enemy_config()
+        self.spawn_npc()

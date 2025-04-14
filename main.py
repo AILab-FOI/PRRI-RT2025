@@ -42,7 +42,13 @@ class Game:
         self.player = Player(self)
         self.object_renderer = ObjectRenderer(self)
         self.raycasting = RayCasting(self)
-        self.object_handler = ObjectHandler(self)
+
+        # Initialize object handler if it doesn't exist or reset it for a new level
+        if not hasattr(self, 'object_handler'):
+            self.object_handler = ObjectHandler(self)
+        else:
+            self.object_handler.reset()  # Reset for new level
+
         self.weapon = Weapon(self)
         self.sound = Sound(self)
         self.pathfinding = PathFinding(self)
@@ -59,6 +65,8 @@ class Game:
             self.player.x, self.player.y = PLAYER_POS  # Starting position for level 1
         elif self.level_manager.current_level == 2:
             self.player.x, self.player.y = PLAYER_POS_LEVEL2  # Starting position for level 2
+        elif self.level_manager.current_level == 3:
+            self.player.x, self.player.y = PLAYER_POS_LEVEL3  # Starting position for level 3
 
         pg.mixer.music.play(-1)
 

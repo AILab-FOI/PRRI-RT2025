@@ -10,6 +10,7 @@ FPS = 0
 # Default player positions for each level
 PLAYER_POS = 1.5, 2.5  # Level 1 starting position
 PLAYER_POS_LEVEL2 = 12.5, 2.5  # Level 2 starting position
+PLAYER_POS_LEVEL3 = 12.5, 2.5  # Level 3 starting position
 PLAYER_ANGLE = 0
 PLAYER_SPEED = 0.004
 PLAYER_ROT_SPEED = 0.002
