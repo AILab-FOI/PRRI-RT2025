@@ -14,7 +14,7 @@ class Sound:
         # Weapon sounds
         self.pistolj = pg.mixer.Sound(self.path + 'Pistolj.wav')
         # Use the same sound for SMG for now, but play it faster
-        self.smg = pg.mixer.Sound(self.path + 'Pistolj.wav')
+        self.smg = pg.mixer.Sound(self.path + 'Puska.wav')
         self.smg.set_volume(0.4 * self.sfx_volume)  # Slightly lower volume for SMG
 
         # NPC sounds
