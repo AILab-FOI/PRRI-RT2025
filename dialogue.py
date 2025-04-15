@@ -27,13 +27,13 @@ class DialogueManager:
         self.dialogue_box_padding = 20
         self.line_spacing = 30
 
-        # Speaker colors
+        # Speaker colors - using more vibrant colors
         self.speaker_colors = {
-            'Marvin': (150, 150, 255),  # Light blue for Marvin
-            'Arthur': (255, 200, 100),  # Orange-yellow for Arthur
-            'Officer': (100, 255, 100)  # Green for other characters
+            'Marvin': (100, 100, 255),  # Brighter blue for Marvin
+            'Arthur': (255, 180, 50),   # More orange for Arthur
+            'Officer': (50, 230, 50)    # Brighter green for other characters
         }
-        self.default_speaker_color = (255, 255, 255)  # White for unknown speakers
+        self.default_speaker_color = (200, 200, 200)  # Light gray for unknown speakers
 
         # Load dialogues
         self.load_dialogues()
@@ -189,19 +189,24 @@ class DialogueManager:
         # Draw speaker name with colored background if available
         if current_speaker:
             # Create a background for the speaker name
-            speaker_text = self.speaker_font.render(current_speaker, True, (255, 255, 255))
-            speaker_bg_width = speaker_text.get_width() + 20
-            speaker_bg_height = speaker_text.get_height() + 10
+            speaker_text = self.speaker_font.render(current_speaker, True, (0, 0, 0))  # Black text for better contrast
+            speaker_bg_width = speaker_text.get_width() + 30  # Wider background
+            speaker_bg_height = speaker_text.get_height() + 12  # Taller background
             speaker_bg_x = box_x + self.dialogue_box_padding
-            speaker_bg_y = box_y - speaker_bg_height // 2
+            speaker_bg_y = box_y - speaker_bg_height + 2  # Position it slightly higher
 
-            # Draw speaker background
-            speaker_bg = pg.Surface((speaker_bg_width, speaker_bg_height), pg.SRCALPHA)
-            speaker_bg.fill((speaker_color[0], speaker_color[1], speaker_color[2], 200))
+            # Draw speaker background with full opacity
+            speaker_bg = pg.Surface((speaker_bg_width, speaker_bg_height))
+            speaker_bg.fill(speaker_color)  # Full opacity color
+
+            # Add a black border around the speaker label
+            pg.draw.rect(screen, (0, 0, 0), (speaker_bg_x-2, speaker_bg_y-2, speaker_bg_width+4, speaker_bg_height+4))
             screen.blit(speaker_bg, (speaker_bg_x, speaker_bg_y))
 
-            # Draw speaker name
-            screen.blit(speaker_text, (speaker_bg_x + 10, speaker_bg_y + 5))
+            # Draw speaker name centered in the background
+            text_x = speaker_bg_x + (speaker_bg_width - speaker_text.get_width()) // 2
+            text_y = speaker_bg_y + (speaker_bg_height - speaker_text.get_height()) // 2
+            screen.blit(speaker_text, (text_x, text_y))
 
         # Draw current dialogue line
         if self.current_line_index < len(self.current_dialogue["lines"]):
