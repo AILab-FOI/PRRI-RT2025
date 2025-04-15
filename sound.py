@@ -64,7 +64,7 @@ class Sound:
 
         # Powerup sounds - reusing existing sounds as placeholders
         self.powerup_pickup = self.load_sound('powerup_pickup.wav', self.volume_factors['powerup_pickup'])
-        self.powerup_active = self.load_sound('terminal.wav', self.volume_factors['powerup_active'])
+        self.powerup_active = self.load_sound('powerup1_trajanje.mp3', self.volume_factors['powerup_active'])
         self.powerup_end = self.load_sound('Dash.wav', self.volume_factors['powerup_end'])
 
         # Menu sounds - using existing sounds as placeholders
