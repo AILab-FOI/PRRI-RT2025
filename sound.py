@@ -32,7 +32,7 @@ class Sound:
             'terminal_beep': 0.7,
             'door_open': 0.7,
             'powerup_pickup': 0.7,
-            'powerup_active': 0.4,
+            'powerup_active': 0.7,
             'powerup_end': 0.6,
             'menu_hover': 0.3,
             'menu_click': 0.4
@@ -63,7 +63,7 @@ class Sound:
 
         # Powerup sounds 
         self.powerup_pickup = self.load_sound('powerup_pickup.wav', self.volume_factors['powerup_pickup'])
-        self.powerup_active = self.load_sound('powerup1_trajanje.mp3', self.volume_factors['powerup_active'])
+        self.powerup_active = self.load_sound('powerup1_trajanje.wav', self.volume_factors['powerup_active'])
         self.powerup_end = self.load_sound('powerup_gasenje.wav', self.volume_factors['powerup_end'])
 
         # Menu sounds 
