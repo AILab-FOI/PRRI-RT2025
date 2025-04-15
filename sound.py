@@ -42,6 +42,14 @@ class Sound:
         self.terminal_beep = pg.mixer.Sound(self.path + 'terminal.wav')
         self.door_open = pg.mixer.Sound(self.path + 'vrata.wav')
 
+        # Powerup sounds - reusing existing sounds as placeholders
+        self.powerup_pickup = pg.mixer.Sound(self.path + 'podizanje_oruzja.wav')  # Reuse weapon pickup sound
+        self.powerup_pickup.set_volume(0.7 * self.sfx_volume)
+        self.powerup_active = pg.mixer.Sound(self.path + 'terminal.wav')  # Reuse terminal beep
+        self.powerup_active.set_volume(0.4 * self.sfx_volume)
+        self.powerup_end = pg.mixer.Sound(self.path + 'Dash.wav')  # Reuse dash sound
+        self.powerup_end.set_volume(0.6 * self.sfx_volume)
+
         # Menu sounds - using existing sounds as placeholders
         self.menu_hover = pg.mixer.Sound(self.path + 'menu_hover.mp3')
         self.menu_hover.set_volume(0.3 * self.sfx_volume)
@@ -68,3 +76,7 @@ class Sound:
         self.door_open.set_volume(0.7 * self.sfx_volume)
         self.menu_hover.set_volume(0.3 * self.sfx_volume)
         self.menu_click.set_volume(0.4 * self.sfx_volume)
+        # Update powerup sound volumes
+        self.powerup_pickup.set_volume(0.7 * self.sfx_volume)
+        self.powerup_active.set_volume(0.4 * self.sfx_volume)
+        self.powerup_end.set_volume(0.6 * self.sfx_volume)

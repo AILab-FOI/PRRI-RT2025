@@ -45,6 +45,17 @@ class LevelManager:
                     'path': 'resources/sprites/weapon/smg/0.png'
                 }
             ],
+            # Powerups for level 1
+            'powerups': [
+                {
+                    'position': (2, 3.5),
+                    'powerup_type': 'invulnerability'
+                },
+                {
+                    'position': (18, 18),
+                    'powerup_type': 'invulnerability'
+                }
+            ],
             # Enemy configuration for level 1
             'enemies': {
                 'count': 4,  # Number of enemies to spawn
@@ -252,6 +263,14 @@ class LevelManager:
                 )
                 self.game.object_handler.add_sprite(weapon_pickup)
                 self.game.interaction.add_object(weapon_pickup)
+
+        # Add powerups if they exist in the level data
+        if 'powerups' in level_data:
+            for powerup_data in level_data['powerups']:
+                self.game.object_handler.add_powerup(
+                    pos=powerup_data['position'],
+                    powerup_type=powerup_data['powerup_type']
+                )
 
         # Add level exit door for each level
         # Define exit door positions for each level

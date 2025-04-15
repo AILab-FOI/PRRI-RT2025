@@ -28,6 +28,11 @@ class Player:
         self.auto_fire_delay = 150  # Milliseconds between auto shots (faster for SMG)
         self.last_auto_fire_time = 0  # Last time an auto shot was fired
 
+        # Invulnerability powerup properties
+        self.is_invulnerable = False
+        self.invulnerability_start_time = 0
+        self.invulnerability_time_left = 0  # Time left in milliseconds
+
     def recover_health(self):
         if self.check_health_recovery_delay() and self.health < PLAYER_MAX_HEALTH:
             self.health += 1
@@ -46,6 +51,10 @@ class Player:
             self.game.new_game()
 
     def get_damage(self, damage):
+        # Skip damage if player is invulnerable
+        if self.is_invulnerable:
+            return
+
         self.health -= damage
         self.game.object_renderer.player_damage()
         self.game.sound.igrac_damage.play()
@@ -190,10 +199,40 @@ class Player:
         dash_speed = PLAYER_SPEED * PLAYER_DASH_MULTIPLIER * self.game.delta_time
         self.check_wall_collision(dx * dash_speed, dy * dash_speed)
 
+    def activate_invulnerability(self):
+        """Activate invulnerability powerup"""
+        self.is_invulnerable = True
+        self.invulnerability_start_time = pg.time.get_ticks()
+        self.invulnerability_time_left = POWERUP_INVULNERABILITY_DURATION
+        # Play powerup pickup sound
+        self.game.sound.powerup_pickup.play()
+        # Start the active sound
+        self.game.sound.powerup_active.play(-1)  # Loop the sound
+
+    def update_invulnerability(self):
+        """Update invulnerability state"""
+        if not self.is_invulnerable:
+            return
+
+        current_time = pg.time.get_ticks()
+        elapsed = current_time - self.invulnerability_start_time
+
+        # Calculate time left in seconds (rounded up)
+        self.invulnerability_time_left = max(0, POWERUP_INVULNERABILITY_DURATION - elapsed)
+
+        # Check if invulnerability has expired
+        if self.invulnerability_time_left <= 0:
+            self.is_invulnerable = False
+            # Stop the active sound
+            self.game.sound.powerup_active.stop()
+            # Play the end sound
+            self.game.sound.powerup_end.play()
+
     def update(self):
         if not self.is_dashing:
             self.movement()
         self.update_dash()
+        self.update_invulnerability()
         self.mouse_control()
         self.recover_health()
         self.update_auto_fire()

@@ -22,6 +22,10 @@ PLAYER_DASH_MULTIPLIER = 3.0  # koliko je dash brži od normalnog kretanja
 PLAYER_DASH_DURATION = 200    # trajanje dasha u milisekundama
 PLAYER_DASH_COOLDOWN = 1000   # cooldown dasha u milisekundama
 
+# powerup settings
+POWERUP_INVULNERABILITY_DURATION = 5000  # invulnerability duration in milliseconds
+POWERUP_PICKUP_DISTANCE = 0.5  # distance at which player can pick up powerups
+
 MOUSE_SENSITIVITY = 0.0003
 MOUSE_MAX_REL = 40
 MOUSE_BORDER_LEFT = 100

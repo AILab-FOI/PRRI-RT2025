@@ -31,6 +31,7 @@ class ObjectRenderer:
         self.draw_dash_indicator()
         self.draw_enemy_counter()
         self.draw_message()
+        self.draw_invulnerability_indicator()
 
     def draw_enemy_counter(self):
         """Draw a counter showing the number of remaining enemies"""
@@ -123,6 +124,38 @@ class ObjectRenderer:
             # Dash je spreman - prikaži puni indikator
             pg.draw.rect(self.screen, (0, 255, 0),
                          (indicator_x, indicator_y, indicator_width, indicator_height))
+
+    def draw_invulnerability_indicator(self):
+        """Draw the invulnerability powerup indicator and countdown"""
+        # Only draw if player is invulnerable
+        if not self.game.player.is_invulnerable:
+            return
+
+        # Calculate seconds remaining (1-5)
+        seconds_left = max(1, int(self.game.player.invulnerability_time_left / 1000) + 1)
+
+        # Draw icon (using a placeholder texture)
+        icon_size = 64
+        icon_x = 20
+        icon_y = 100
+
+        # Use a placeholder texture (reusing the digit texture for now)
+        icon = self.digits['1']  # Using the health icon as placeholder
+        self.screen.blit(icon, (icon_x, icon_y))
+
+        # Draw countdown text
+        font = load_custom_font(40)
+        text_surface = font.render(f"{seconds_left}s", True, (255, 255, 255))
+        text_rect = text_surface.get_rect(midleft=(icon_x + icon_size + 10, icon_y + icon_size // 2))
+
+        # Draw a semi-transparent background for the text
+        bg_rect = text_rect.inflate(20, 10)  # Make background slightly larger
+        bg_surface = pg.Surface((bg_rect.width, bg_rect.height), pg.SRCALPHA)
+        bg_surface.fill((0, 0, 0, 150))  # Semi-transparent black
+        self.screen.blit(bg_surface, bg_rect)
+
+        # Draw the text
+        self.screen.blit(text_surface, text_rect)
 
     def draw_background(self):
         self.sky_offset = (self.sky_offset + 4.5 * self.game.player.rel) % WIDTH

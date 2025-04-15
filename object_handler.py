@@ -1,5 +1,6 @@
 from sprite_object import *
 from npc import *
+from powerup import PowerUp
 from random import choices
 
 
@@ -168,6 +169,12 @@ class ObjectHandler:
 
     def add_sprite(self, sprite):
         self.sprite_list.append(sprite)
+
+    def add_powerup(self, pos, powerup_type='invulnerability'):
+        """Add a powerup at the specified position"""
+        powerup = PowerUp(self.game, pos=pos, powerup_type=powerup_type)
+        self.add_sprite(powerup)
+        return powerup
 
     def _spawn_random_enemies(self, count):
         """Helper method to spawn a given number of enemies at random positions"""
