@@ -8,254 +8,33 @@ class LevelManager:
         self.game = game
         self.current_level = 1
         self.level_data = {}
+        self.max_level = 5  # Total number of levels
         self.initialize_levels()
 
     def initialize_levels(self):
-        """Initialize data for all game levels"""
-        # Level 1 data
-        self.level_data[1] = {
-            'terminals': [
-                {
-                    'position': (2, 14),
-                    'code': '1337',
-                    'unlocks_door_id': None  # Terminal doesn't automatically unlock any doors
-                }
-            ],
-            'doors': [
-                {
-                    'position': (15, 9),
-                    'door_id': 1,
-                    'requires_code': True,
-                    'code': '1337'  # First door uses code 1337
-                },
-                {
-                    'position': (15, 24),
-                    'door_id': 2,
-                    'requires_code': True,
-                    'code': '1337',  # Second door also uses code 1337
-                    'requires_door_id': 1  # This door requires door 1 to be opened first
-                }
-            ],
-            # Weapon pickups for level 1
-            'weapons': [
-                {
-                    'position': (5, 5),
-                    'weapon_type': 'smg',
-                    'path': 'resources/sprites/weapon/smg/0.png'
-                }
-            ],
-            # Powerups for level 1
-            'powerups': [
-                {
-                    'position': (2, 3.5),
-                    'powerup_type': 'invulnerability'
-                },
-                {
-                    'position': (18, 18),
-                    'powerup_type': 'invulnerability'
-                }
-            ],
-            # Decorative sprites for level 1
-            'sprites': [
-                # Format: (sprite_type, position)
-                ('ukras1', (12.9, 33.5)),
-                ('ukras1', (12.2, 33.5)),
+        """Initialize data for all game levels by loading from level files"""
+        try:
+            # Import level modules dynamically
+            import importlib
 
-                ('ukras1', (1.5, 26.1)),
-                ('ukras2', (1.9, 26.1)),
-                ('ukras2', (2.3, 26.1)),
-                ('ukras2', (1.1, 26.5)),
-                ('ukras2', (1.1, 27.0)),
-                ('ukras2', (1.1, 27.5)),
-                ('ukras1', (1.1, 28.0)),
-                ('ukras1', (1.1, 28.5)),
-                ('ukras1', (1.1, 29.0)),
-                ('ukras2', (1.1, 29.5)),
-                ('ukras2', (1.1, 30.0)),
-                ('ukras2', (1.1, 30.5)),
-                ('ukras2', (1.1, 31.0)),
-                ('ukras2', (1.1, 31.5)),
-                ('ukras1', (1.1, 32.0)),
-                ('ukras1', (1.1, 32.5)),
-                ('ukras1', (1.5, 32.9)),
-                ('ukras1', (1.9, 32.9)),
-                ('ukras1', (2.3, 32.9)),
+            # Load each level's data
+            for level_num in range(1, self.max_level + 1):
+                try:
+                    # Import the level module
+                    level_module = importlib.import_module(f'levels.level{level_num}')
 
-                ('ukras1', (23.2, 31.2)),
-                ('ukras1', (23.2, 33.5)),
-
-                ('ukras1', (20.2, 31.8)),
-                ('ukras1', (15.2, 32.3)),
-                ('ukras1', (8.9, 32.3)),
-
-                ('ukras1', (20.2, 12.2)),
-                ('ukras1', (20.2, 13.2)),
-                ('ukras1', (20.2, 14.2)),
-
-                ('ukras2', (20.2, 12.7)),
-                ('ukras2', (20.2, 13.7)),
-                ('ukras2', (20.2, 14.7)),
-            ],
-            # Enemy configuration for level 1
-            'enemies': {
-                'count': 4,  # Number of enemies to spawn
-                'types': [KlonoviNPC, StakorNPC],  # Types of enemies that can spawn
-                'weights': [50, 50],  # Spawn weights for each enemy type
-                'restricted_area': {(i, j) for i in range(10) for j in range(10)},  # Areas where enemies cannot spawn
-                'fixed_positions': []  # Optional list of fixed positions for enemies: [(x, y), (x, y), ...]
-            },
-            # Dialogue NPCs for level 1
-            'dialogue_npcs': [
-                {
-                    'pos': (3.5, 2.5),
-                    'dialogue_id': 'guide',
-                    'path': 'resources/sprites/npc/dialogue_npc/0.png'
-                }
-            ]
-        }
-
-        # Level 2 data - Odgovara mapi za level 2
-        self.level_data[2] = {
-            'terminals': [
-                {
-                    'position': (5, 5),
-                    'code': '4242',
-                    'unlocks_door_id': None
-                },
-                {
-                    'position': (16, 5),
-                    'code': '8888',
-                    'unlocks_door_id': None
-                }
-            ],
-            'doors': [
-                {
-                    'position': (11, 10),
-                    'door_id': 1,
-                    'requires_code': True,
-                    'code': '4242'  # Koristi kod iz prvog terminala
-                },
-                {
-                    'position': (5, 21),
-                    'door_id': 2,
-                    'requires_code': True,
-                    'code': '8888',  # Koristi kod iz drugog terminala
-                    'requires_door_id': 1  # Zahtijeva da prva vrata budu otvorena
-                },
-                {
-                    'position': (16, 21),
-                    'door_id': 3,
-                    'requires_code': True,
-                    'code': '4242',  # Koristi kod iz prvog terminala
-                    'requires_door_id': 2  # Zahtijeva da druga vrata budu otvorena
-                }
-            ],
-            # Enemy configuration for level 2
-            'enemies': {
-                'count': 6,  # More enemies in level 2
-                'types': [KlonoviNPC, StakorNPC],
-                'weights': [70, 30],  # More KlonoviNPC in level 2
-                'restricted_area': {(i, j) for i in range(5) for j in range(5)},  # Different restricted area
-                'fixed_positions': []  # No fixed positions for this level
-            },
-            # Dialogue NPCs for level 2
-            'dialogue_npcs': [
-                {
-                    'pos': (12.5, 5.5),
-                    'dialogue_id': 'level2_intro',
-                    'path': 'resources/sprites/npc/dialogue_npc/0.png'
-                }
-            ],
-            # Decorative sprites for level 2
-            'sprites': [
-                # Different decorations for level 2
-                ('ukras2', (3.5, 3.5)),
-                ('ukras2', (4.5, 3.5)),
-                ('ukras2', (5.5, 3.5)),
-
-                ('ukras1', (10.5, 3.5)),
-                ('ukras1', (11.5, 3.5)),
-                ('ukras1', (12.5, 3.5)),
-
-                ('ukras2', (18.5, 3.5)),
-                ('ukras2', (19.5, 3.5)),
-
-                ('ukras1', (3.5, 18.5)),
-                ('ukras1', (4.5, 18.5)),
-
-                ('ukras2', (18.5, 18.5)),
-                ('ukras2', (19.5, 18.5)),
-            ]
-        }
-
-        # Level 3 data - Only StakorNPC enemies
-        self.level_data[3] = {
-            'terminals': [
-                {
-                    'position': (5, 5),
-                    'code': '9999',
-                    'unlocks_door_id': None
-                }
-            ],
-            'doors': [
-                {
-                    'position': (11, 10),
-                    'door_id': 1,
-                    'requires_code': True,
-                    'code': '9999'
-                }
-            ],
-            # Enemy configuration for level 3
-            'enemies': {
-                'count': 10,  # Many enemies in level 3
-                'types': [StakorNPC],  # Only StakorNPC in this level
-                'weights': [100],  # 100% StakorNPC
-                'restricted_area': {(i, j) for i in range(3) for j in range(3)},  # Small restricted area
-                'fixed_positions': [(5, 5), (15, 5), (10, 10)]  # Some enemies at fixed positions
-            },
-            # Dialogue NPCs for level 3
-            'dialogue_npcs': [
-                {
-                    'pos': (12.5, 5.5),
-                    'dialogue_id': 'level3_intro',
-                    'path': 'resources/sprites/npc/dialogue_npc/0.png'
-                }
-            ],
-            # Decorative sprites for level 3
-            'sprites': [
-                # Different decorations for level 3 - more intense
-                ('ukras1', (7.5, 7.5)),
-                ('ukras1', (8.5, 7.5)),
-                ('ukras1', (9.5, 7.5)),
-                ('ukras1', (10.5, 7.5)),
-                ('ukras1', (11.5, 7.5)),
-                ('ukras1', (12.5, 7.5)),
-
-                ('ukras2', (7.5, 12.5)),
-                ('ukras2', (8.5, 12.5)),
-                ('ukras2', (9.5, 12.5)),
-                ('ukras2', (10.5, 12.5)),
-                ('ukras2', (11.5, 12.5)),
-                ('ukras2', (12.5, 12.5)),
-
-                # Create a pattern in the corners
-                ('ukras1', (3.5, 3.5)),
-                ('ukras1', (4.5, 3.5)),
-                ('ukras1', (3.5, 4.5)),
-
-                ('ukras1', (16.5, 3.5)),
-                ('ukras1', (17.5, 3.5)),
-                ('ukras1', (17.5, 4.5)),
-
-                ('ukras1', (3.5, 16.5)),
-                ('ukras1', (3.5, 17.5)),
-                ('ukras1', (4.5, 17.5)),
-
-                ('ukras1', (16.5, 17.5)),
-                ('ukras1', (17.5, 16.5)),
-                ('ukras1', (17.5, 17.5)),
-            ]
-        }
+                    # Get the level data from the module
+                    self.level_data[level_num] = level_module.get_level_data()
+                    print(f"Loaded level {level_num} data successfully")
+                except ImportError as e:
+                    print(f"Error loading level {level_num}: {e}")
+                    # Create an empty level structure as fallback
+                    from levels.base_level import create_base_level_structure
+                    self.level_data[level_num] = create_base_level_structure()
+        except Exception as e:
+            print(f"Error initializing levels: {e}")
+            # Fallback to empty level data
+            self.level_data = {i: {} for i in range(1, self.max_level + 1)}
 
     def load_level(self, level_number):
         """Load a specific level"""
@@ -491,11 +270,16 @@ class LevelManager:
     def next_level(self):
         """Advance to the next level"""
         next_level = self.current_level + 1
-        if next_level in self.level_data:
+        if next_level <= self.max_level and next_level in self.level_data:
             self.current_level = next_level
             # Load the new map for this level
             self.game.map.load_level(next_level)
             # Reset the game with the new level
             self.game.new_game()
             return True
+        elif next_level > self.max_level:
+            # Player has completed all levels
+            print("Congratulations! You have completed all levels!")
+            # Could show a victory screen or credits here
+            return False
         return False
