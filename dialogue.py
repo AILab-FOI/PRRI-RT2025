@@ -18,14 +18,25 @@ class DialogueManager:
         self.current_npc = None
         self.current_line_index = 0
         self.dialogue_active = False
-        self.load_dialogues()
 
         # UI settings
         self.font = load_custom_font(20)
         self.title_font = load_custom_font(24)
+        self.speaker_font = load_custom_font(22)
         self.dialogue_box_height = 200
         self.dialogue_box_padding = 20
         self.line_spacing = 30
+
+        # Speaker colors
+        self.speaker_colors = {
+            'Marvin': (150, 150, 255),  # Light blue for Marvin
+            'Arthur': (255, 200, 100),  # Orange-yellow for Arthur
+            'Officer': (100, 255, 100)  # Green for other characters
+        }
+        self.default_speaker_color = (255, 255, 255)  # White for unknown speakers
+
+        # Load dialogues
+        self.load_dialogues()
 
     def load_dialogues(self):
         """Load all dialogue files from the dialogues directory"""
@@ -54,9 +65,21 @@ class DialogueManager:
             "npc_name": "Marvin",
             "lines": [
                 "Hello, I'm Marvin, the Paranoid Android.",
+                "Who are you?",
                 "Life? Don't talk to me about life.",
+                "That sounds depressing.",
                 "I've been talking to the ship's computer.",
+                "And?",
                 "It hates me."
+            ],
+            "speakers": [
+                "Marvin",
+                "Arthur",
+                "Marvin",
+                "Arthur",
+                "Marvin",
+                "Arthur",
+                "Marvin"
             ]
         }
 
@@ -155,10 +178,30 @@ class DialogueManager:
         # Draw border
         pg.draw.rect(screen, (255, 255, 255), (box_x, box_y, box_width, box_height), 2)
 
-        # Draw NPC name
-        if "npc_name" in self.current_dialogue:
-            name_text = self.title_font.render(self.current_dialogue["npc_name"], True, (255, 255, 255))
-            screen.blit(name_text, (box_x + self.dialogue_box_padding, box_y + self.dialogue_box_padding))
+        # Get current speaker if available
+        current_speaker = None
+        speaker_color = self.default_speaker_color
+
+        if "speakers" in self.current_dialogue and self.current_line_index < len(self.current_dialogue["speakers"]):
+            current_speaker = self.current_dialogue["speakers"][self.current_line_index]
+            speaker_color = self.speaker_colors.get(current_speaker, self.default_speaker_color)
+
+        # Draw speaker name with colored background if available
+        if current_speaker:
+            # Create a background for the speaker name
+            speaker_text = self.speaker_font.render(current_speaker, True, (255, 255, 255))
+            speaker_bg_width = speaker_text.get_width() + 20
+            speaker_bg_height = speaker_text.get_height() + 10
+            speaker_bg_x = box_x + self.dialogue_box_padding
+            speaker_bg_y = box_y - speaker_bg_height // 2
+
+            # Draw speaker background
+            speaker_bg = pg.Surface((speaker_bg_width, speaker_bg_height), pg.SRCALPHA)
+            speaker_bg.fill((speaker_color[0], speaker_color[1], speaker_color[2], 200))
+            screen.blit(speaker_bg, (speaker_bg_x, speaker_bg_y))
+
+            # Draw speaker name
+            screen.blit(speaker_text, (speaker_bg_x + 10, speaker_bg_y + 5))
 
         # Draw current dialogue line
         if self.current_line_index < len(self.current_dialogue["lines"]):
