@@ -42,6 +42,8 @@ class Sound:
         self.pistolj = self.load_sound('Pistolj.wav', self.volume_factors['pistolj'])
         self.smg = self.load_sound('Puska.wav', self.volume_factors['smg'])
 
+        self.weapon_pickup = self.load_sound('podizanje_oruzja.wav', self.volume_factors['weapon_pickup'])
+
         # NPC sounds
         self.npc_pain = self.load_sound('npc_pain.wav', self.volume_factors['npc_pain'])
         self.npc_death = self.load_sound('npc_death.wav', self.volume_factors['npc_death'])
@@ -51,9 +53,6 @@ class Sound:
         self.napad_stakor = self.load_sound('stakor_napad.mp3', self.volume_factors['napad_stakor'])
         self.stakor_smrt = self.load_sound('stakor_smrt.mp3', self.volume_factors['stakor_smrt'])
 
-        # Weapon pickup sound
-        self.weapon_pickup = self.load_sound('podizanje_oruzja.wav', self.volume_factors['weapon_pickup'])
-
         # Player sounds
         self.igrac_damage = self.load_sound('Igrac_damage.wav', self.volume_factors['igrac_damage'])
         self.player_dash = self.load_sound('Dash.wav', self.volume_factors['player_dash'])
@@ -62,12 +61,12 @@ class Sound:
         self.terminal_beep = self.load_sound('terminal.wav', self.volume_factors['terminal_beep'])
         self.door_open = self.load_sound('vrata.wav', self.volume_factors['door_open'])
 
-        # Powerup sounds - reusing existing sounds as placeholders
+        # Powerup sounds 
         self.powerup_pickup = self.load_sound('powerup_pickup.wav', self.volume_factors['powerup_pickup'])
         self.powerup_active = self.load_sound('powerup1_trajanje.mp3', self.volume_factors['powerup_active'])
         self.powerup_end = self.load_sound('powerup_gasenje.wav', self.volume_factors['powerup_end'])
 
-        # Menu sounds - using existing sounds as placeholders
+        # Menu sounds 
         self.menu_hover = self.load_sound('menu_hover.mp3', self.volume_factors['menu_hover'])
         self.menu_click = self.load_sound('menu_klik.wav', self.volume_factors['menu_click'])
 
