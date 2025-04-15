@@ -1,4 +1,3 @@
-import pygame as pg
 import os
 from interaction import InteractiveObject
 from npc import KlonoviNPC, StakorNPC
@@ -55,6 +54,47 @@ class LevelManager:
                     'position': (18, 18),
                     'powerup_type': 'invulnerability'
                 }
+            ],
+            # Decorative sprites for level 1
+            'sprites': [
+                # Format: (sprite_type, position)
+                ('ukras1', (12.9, 33.5)),
+                ('ukras1', (12.2, 33.5)),
+
+                ('ukras1', (1.5, 26.1)),
+                ('ukras2', (1.9, 26.1)),
+                ('ukras2', (2.3, 26.1)),
+                ('ukras2', (1.1, 26.5)),
+                ('ukras2', (1.1, 27.0)),
+                ('ukras2', (1.1, 27.5)),
+                ('ukras1', (1.1, 28.0)),
+                ('ukras1', (1.1, 28.5)),
+                ('ukras1', (1.1, 29.0)),
+                ('ukras2', (1.1, 29.5)),
+                ('ukras2', (1.1, 30.0)),
+                ('ukras2', (1.1, 30.5)),
+                ('ukras2', (1.1, 31.0)),
+                ('ukras2', (1.1, 31.5)),
+                ('ukras1', (1.1, 32.0)),
+                ('ukras1', (1.1, 32.5)),
+                ('ukras1', (1.5, 32.9)),
+                ('ukras1', (1.9, 32.9)),
+                ('ukras1', (2.3, 32.9)),
+
+                ('ukras1', (23.2, 31.2)),
+                ('ukras1', (23.2, 33.5)),
+
+                ('ukras1', (20.2, 31.8)),
+                ('ukras1', (15.2, 32.3)),
+                ('ukras1', (8.9, 32.3)),
+
+                ('ukras1', (20.2, 12.2)),
+                ('ukras1', (20.2, 13.2)),
+                ('ukras1', (20.2, 14.2)),
+
+                ('ukras2', (20.2, 12.7)),
+                ('ukras2', (20.2, 13.7)),
+                ('ukras2', (20.2, 14.7)),
             ],
             # Enemy configuration for level 1
             'enemies': {
@@ -125,6 +165,26 @@ class LevelManager:
                     'dialogue_id': 'level2_intro',
                     'path': 'resources/sprites/npc/dialogue_npc/0.png'
                 }
+            ],
+            # Decorative sprites for level 2
+            'sprites': [
+                # Different decorations for level 2
+                ('ukras2', (3.5, 3.5)),
+                ('ukras2', (4.5, 3.5)),
+                ('ukras2', (5.5, 3.5)),
+
+                ('ukras1', (10.5, 3.5)),
+                ('ukras1', (11.5, 3.5)),
+                ('ukras1', (12.5, 3.5)),
+
+                ('ukras2', (18.5, 3.5)),
+                ('ukras2', (19.5, 3.5)),
+
+                ('ukras1', (3.5, 18.5)),
+                ('ukras1', (4.5, 18.5)),
+
+                ('ukras2', (18.5, 18.5)),
+                ('ukras2', (19.5, 18.5)),
             ]
         }
 
@@ -160,6 +220,40 @@ class LevelManager:
                     'dialogue_id': 'level3_intro',
                     'path': 'resources/sprites/npc/dialogue_npc/0.png'
                 }
+            ],
+            # Decorative sprites for level 3
+            'sprites': [
+                # Different decorations for level 3 - more intense
+                ('ukras1', (7.5, 7.5)),
+                ('ukras1', (8.5, 7.5)),
+                ('ukras1', (9.5, 7.5)),
+                ('ukras1', (10.5, 7.5)),
+                ('ukras1', (11.5, 7.5)),
+                ('ukras1', (12.5, 7.5)),
+
+                ('ukras2', (7.5, 12.5)),
+                ('ukras2', (8.5, 12.5)),
+                ('ukras2', (9.5, 12.5)),
+                ('ukras2', (10.5, 12.5)),
+                ('ukras2', (11.5, 12.5)),
+                ('ukras2', (12.5, 12.5)),
+
+                # Create a pattern in the corners
+                ('ukras1', (3.5, 3.5)),
+                ('ukras1', (4.5, 3.5)),
+                ('ukras1', (3.5, 4.5)),
+
+                ('ukras1', (16.5, 3.5)),
+                ('ukras1', (17.5, 3.5)),
+                ('ukras1', (17.5, 4.5)),
+
+                ('ukras1', (3.5, 16.5)),
+                ('ukras1', (3.5, 17.5)),
+                ('ukras1', (4.5, 17.5)),
+
+                ('ukras1', (16.5, 17.5)),
+                ('ukras1', (17.5, 16.5)),
+                ('ukras1', (17.5, 17.5)),
             ]
         }
 
@@ -189,6 +283,14 @@ class LevelManager:
             'restricted_area': {(i, j) for i in range(10) for j in range(10)},
             'fixed_positions': []
         }
+
+    def get_sprite_data(self):
+        """Get decorative sprite data for the current level"""
+        level_data = self.get_current_level_data()
+        if level_data and 'sprites' in level_data:
+            return level_data['sprites']
+        # Return empty list if no sprites are defined for this level
+        return []
 
     def setup_interactive_objects(self):
         """Set up all interactive objects for the current level"""

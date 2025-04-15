@@ -12,58 +12,13 @@ class ObjectHandler:
         self.npc_sprite_path = 'resources/sprites/npc/'
         self.static_sprite_path = 'resources/sprites/static_sprites/'
         self.anim_sprite_path = 'resources/sprites/animated_sprites/'
-        add_sprite = self.add_sprite
         self.npc_positions = {}
         self.win_message_shown = False
 
         self.spawn_npc()
 
-        # Define sprite data in a more structured way
-        sprite_data = [
-            # Format: (sprite_type, position)
-            ('ukras1', (12.9, 33.5)),
-            ('ukras1', (12.2, 33.5)),
-
-            ('ukras1', (1.5, 26.1)),
-            ('ukras2', (1.9, 26.1)),
-            ('ukras2', (2.3, 26.1)),
-            ('ukras2', (1.1, 26.5)),
-            ('ukras2', (1.1, 27.0)),
-            ('ukras2', (1.1, 27.5)),
-            ('ukras1', (1.1, 28.0)),
-            ('ukras1', (1.1, 28.5)),
-            ('ukras1', (1.1, 29.0)),
-            ('ukras2', (1.1, 29.5)),
-            ('ukras2', (1.1, 30.0)),
-            ('ukras2', (1.1, 30.5)),
-            ('ukras2', (1.1, 31.0)),
-            ('ukras2', (1.1, 31.5)),
-            ('ukras1', (1.1, 32.0)),
-            ('ukras1', (1.1, 32.5)),
-            ('ukras1', (1.5, 32.9)),
-            ('ukras1', (1.9, 32.9)),
-            ('ukras1', (2.3, 32.9)),
-
-            ('ukras1', (23.2, 31.2)),
-            ('ukras1', (23.2, 33.5)),
-
-            ('ukras1', (20.2, 31.8)),
-            ('ukras1', (15.2, 32.3)),
-            ('ukras1', (8.9, 32.3)),
-
-            ('ukras1', (20.2, 12.2)),
-            ('ukras1', (20.2, 13.2)),
-            ('ukras1', (20.2, 14.2)),
-
-            ('ukras2', (20.2, 12.7)),
-            ('ukras2', (20.2, 13.7)),
-            ('ukras2', (20.2, 14.7)),
-        ]
-
-        # Add all sprites using a loop
-        for sprite_type, pos in sprite_data:
-            sprite_path = self.static_sprite_path + sprite_type + '.png'
-            add_sprite(SpriteObject(game, path=sprite_path, pos=pos))
+        # Load decorative sprites for the current level
+        self.load_decorative_sprites()
 
     def spawn_npc(self):
         """Load enemy configuration and spawn NPCs based on the current level"""
@@ -147,6 +102,16 @@ class ObjectHandler:
         self.add_sprite(powerup)
         return powerup
 
+    def load_decorative_sprites(self):
+        """Load decorative sprites for the current level"""
+        # Get sprite data from level manager
+        sprite_data = self.game.level_manager.get_sprite_data()
+
+        # Add all sprites using a loop
+        for sprite_type, pos in sprite_data:
+            sprite_path = self.static_sprite_path + sprite_type + '.png'
+            self.add_sprite(SpriteObject(self.game, path=sprite_path, pos=pos))
+
     def _spawn_random_enemies(self, count):
         """Helper method to spawn a given number of enemies at random positions"""
         # Create a list of valid spawn positions
@@ -179,10 +144,14 @@ class ObjectHandler:
 
     def reset(self):
         """Reset the object handler for a new level"""
-        # Keep static sprites but clear NPCs
+        # Clear all sprites and NPCs
+        self.sprite_list = []
         self.npc_list = []
         self.npc_positions = {}
         self.win_message_shown = False
 
         # Spawn NPCs for the new level
         self.spawn_npc()
+
+        # Load decorative sprites for the new level
+        self.load_decorative_sprites()
