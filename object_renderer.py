@@ -134,28 +134,25 @@ class ObjectRenderer:
         # Calculate seconds remaining (1-5)
         seconds_left = max(1, int(self.game.player.invulnerability_time_left / 1000) + 1)
 
-        # Draw icon (using a placeholder texture)
-        icon_size = 64
-        icon_x = 20
-        icon_y = 100
+        # Set up positions and sizes - center horizontally
+        center_x = HALF_WIDTH
+
+        # Draw "Invincibility" title text at the top of the screen
+        title_font = load_custom_font(24)  # Smaller font size
+        title_surface = title_font.render("INVINCIBILITY", True, (255, 255, 255))
+        title_rect = title_surface.get_rect(center=(center_x, 30))  # Moved to top
+        self.screen.blit(title_surface, title_rect)
 
         # Use a placeholder texture (reusing the digit texture for now)
         icon = self.digits['1']  # Using the health icon as placeholder
-        self.screen.blit(icon, (icon_x, icon_y))
+        icon_rect = icon.get_rect(center=(center_x, 80))  # Centered below text with spacing
+        self.screen.blit(icon, icon_rect)
 
-        # Draw countdown text
-        font = load_custom_font(40)
-        text_surface = font.render(f"{seconds_left}s", True, (255, 255, 255))
-        text_rect = text_surface.get_rect(midleft=(icon_x + icon_size + 10, icon_y + icon_size // 2))
-
-        # Draw a semi-transparent background for the text
-        bg_rect = text_rect.inflate(20, 10)  # Make background slightly larger
-        bg_surface = pg.Surface((bg_rect.width, bg_rect.height), pg.SRCALPHA)
-        bg_surface.fill((0, 0, 0, 150))  # Semi-transparent black
-        self.screen.blit(bg_surface, bg_rect)
-
-        # Draw the text
-        self.screen.blit(text_surface, text_rect)
+        # Draw countdown text below the icon
+        timer_font = load_custom_font(40)
+        timer_surface = timer_font.render(f"{seconds_left}s", True, (255, 255, 255))
+        timer_rect = timer_surface.get_rect(center=(center_x, 140))  # Centered below icon with spacing
+        self.screen.blit(timer_surface, timer_rect)
 
     def draw_background(self):
         self.sky_offset = (self.sky_offset + 4.5 * self.game.player.rel) % WIDTH
