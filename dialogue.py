@@ -51,13 +51,16 @@ class DialogueManager:
     def _create_sample_dialogue(self):
         """Create a sample dialogue file if none exist"""
         sample_dialogue = {
-            "npc_name": "Guide",
+            "npc_name": "Marvin",
             "lines": [
-                "Use .json files for dialogue"
+                "Hello, I'm Marvin, the Paranoid Android.",
+                "Life? Don't talk to me about life.",
+                "I've been talking to the ship's computer.",
+                "It hates me."
             ]
         }
 
-        file_path = os.path.join('resources/dialogues', 'guide.json')
+        file_path = os.path.join('resources/dialogues', 'marvin_intro.json')
         with open(file_path, 'w') as f:
             json.dump(sample_dialogue, f, indent=4)
 
@@ -212,7 +215,7 @@ class DialogueNPC(NPC):
         super().__init__(game, path, pos, scale, shift, animation_time)
 
         # Dialogue properties
-        self.dialogue_id = dialogue_id or "guide"  # Default to guide dialogue
+        self.dialogue_id = dialogue_id or "marvin_intro"  # Default to Marvin's intro dialogue
         self.interaction_radius = interaction_radius
         self.can_interact = True
         self.interaction_cooldown = 1000  # ms
@@ -311,7 +314,7 @@ def create_dialogue_npcs(game, npc_data):
     for data in npc_data:
         # Extract required parameters
         pos = data.get('pos', (10.5, 5.5))
-        dialogue_id = data.get('dialogue_id', 'guide')
+        dialogue_id = data.get('dialogue_id', 'marvin_intro')
 
         # Extract optional parameters with defaults
         path = data.get('path', 'resources/sprites/npc/dialogue_npc/0.png')

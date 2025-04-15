@@ -1,7 +1,7 @@
 """
 Base level module with common functions and structures for all levels
 """
-from npc import KlonoviNPC, StakorNPC
+# No imports needed for the base structure
 
 def create_base_level_structure():
     """
@@ -9,6 +9,11 @@ def create_base_level_structure():
     that all levels should have
     """
     return {
+        'narrative': {
+            'intro': "",
+            'objective': "",
+            'conclusion': ""
+        },
         'terminals': [],
         'doors': [],
         'weapons': [],

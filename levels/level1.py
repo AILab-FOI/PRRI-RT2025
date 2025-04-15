@@ -7,7 +7,13 @@ from levels.base_level import create_base_level_structure
 def get_level_data():
     """Return the complete level 1 data"""
     level_data = create_base_level_structure()
-    
+
+    # Level narrative
+    level_data['narrative'] = {
+        'intro': "Arthur Dent se budi na hladnom metalnom podu svemirskog broda. Vid mu je mutan a glava mu pulsira. Ne sjeća se ničeg te jedina stvar o kojoj može razmišljati je koliko mu se pije čaj. Iznad njega stoji Marvin, depresivan robot, gledajući ga sa svojim zelenim očima punim besmisla.",
+        'objective': "Probij se kroz brod i pronađi izlaz s ovog nivoa."
+    }
+
     # Terminals
     level_data['terminals'] = [
         {
@@ -16,7 +22,7 @@ def get_level_data():
             'unlocks_door_id': None  # Terminal doesn't automatically unlock any doors
         }
     ]
-    
+
     # Doors
     level_data['doors'] = [
         {
@@ -33,7 +39,7 @@ def get_level_data():
             'requires_door_id': 1  # This door requires door 1 to be opened first
         }
     ]
-    
+
     # Weapon pickups
     level_data['weapons'] = [
         {
@@ -42,7 +48,7 @@ def get_level_data():
             'path': 'resources/sprites/weapon/smg/0.png'
         }
     ]
-    
+
     # Powerups
     level_data['powerups'] = [
         {
@@ -54,13 +60,13 @@ def get_level_data():
             'powerup_type': 'invulnerability'
         }
     ]
-    
+
     # Decorative sprites
     level_data['sprites'] = [
         # Format: (sprite_type, position)
         ('ukras1', (12.9, 33.5)),
         ('ukras1', (12.2, 33.5)),
-        
+
         ('ukras1', (1.5, 26.1)),
         ('ukras2', (1.9, 26.1)),
         ('ukras2', (2.3, 26.1)),
@@ -80,23 +86,23 @@ def get_level_data():
         ('ukras1', (1.5, 32.9)),
         ('ukras1', (1.9, 32.9)),
         ('ukras1', (2.3, 32.9)),
-        
+
         ('ukras1', (23.2, 31.2)),
         ('ukras1', (23.2, 33.5)),
-        
+
         ('ukras1', (20.2, 31.8)),
         ('ukras1', (15.2, 32.3)),
         ('ukras1', (8.9, 32.3)),
-        
+
         ('ukras1', (20.2, 12.2)),
         ('ukras1', (20.2, 13.2)),
         ('ukras1', (20.2, 14.2)),
-        
+
         ('ukras2', (20.2, 12.7)),
         ('ukras2', (20.2, 13.7)),
         ('ukras2', (20.2, 14.7)),
     ]
-    
+
     # Enemy configuration
     level_data['enemies'] = {
         'count': 4,  # Number of enemies to spawn
@@ -105,14 +111,14 @@ def get_level_data():
         'restricted_area': {(i, j) for i in range(10) for j in range(10)},  # Areas where enemies cannot spawn
         'fixed_positions': []  # Optional list of fixed positions for enemies: [(x, y), (x, y), ...]
     }
-    
+
     # Dialogue NPCs
     level_data['dialogue_npcs'] = [
         {
             'pos': (3.5, 2.5),
-            'dialogue_id': 'guide',
+            'dialogue_id': 'marvin_intro',
             'path': 'resources/sprites/npc/dialogue_npc/0.png'
         }
     ]
-    
+
     return level_data

@@ -7,7 +7,13 @@ from levels.base_level import create_base_level_structure
 def get_level_data():
     """Return the complete level 5 data"""
     level_data = create_base_level_structure()
-    
+
+    # Level narrative
+    level_data['narrative'] = {
+        'intro': "Ovo je posljednji nivo. Probij se do mosta broda da oslobodiš posadu i završiš svoju misiju.",
+        'conclusion': "Brod je tih i ekrani trepere. Arthur stoji na mostu broda, iscrpljen i pun prašine i osušene krvi, dok kraj njega stoji Marvin gledajući ga pogledom čiste ravnodušnosti. Na ekranu titra poruka: 'IDENTIFIKACIJA POTVRĐENA: VI STE SLUŽBENI KAPETAN SVEMIRSKOG BRODA BESMISLENO BEZNAĐE.'"
+    }
+
     # Terminals
     level_data['terminals'] = [
         {
@@ -26,7 +32,7 @@ def get_level_data():
             'unlocks_door_id': None
         }
     ]
-    
+
     # Doors
     level_data['doors'] = [
         {
@@ -50,7 +56,7 @@ def get_level_data():
             'requires_door_id': 2
         }
     ]
-    
+
     # Weapon pickups
     level_data['weapons'] = [
         {
@@ -59,7 +65,7 @@ def get_level_data():
             'path': 'resources/sprites/weapon/smg/0.png'
         }
     ]
-    
+
     # Powerups - more powerups for the final level
     level_data['powerups'] = [
         {
@@ -79,7 +85,7 @@ def get_level_data():
             'powerup_type': 'invulnerability'
         }
     ]
-    
+
     # Decorative sprites - grand finale design
     level_data['sprites'] = [
         # Create an X pattern across the level
@@ -93,7 +99,7 @@ def get_level_data():
         ('ukras2', (12.5, 12.5)),
         ('ukras2', (13.5, 13.5)),
         ('ukras2', (14.5, 14.5)),
-        
+
         ('ukras2', (5.5, 14.5)),
         ('ukras2', (6.5, 13.5)),
         ('ukras2', (7.5, 12.5)),
@@ -104,25 +110,25 @@ def get_level_data():
         ('ukras2', (12.5, 7.5)),
         ('ukras2', (13.5, 6.5)),
         ('ukras2', (14.5, 5.5)),
-        
+
         # Add decorations in each corner
         ('ukras1', (3.5, 3.5)),
         ('ukras1', (4.5, 3.5)),
         ('ukras1', (3.5, 4.5)),
-        
+
         ('ukras1', (15.5, 3.5)),
         ('ukras1', (16.5, 3.5)),
         ('ukras1', (16.5, 4.5)),
-        
+
         ('ukras1', (3.5, 15.5)),
         ('ukras1', (3.5, 16.5)),
         ('ukras1', (4.5, 16.5)),
-        
+
         ('ukras1', (15.5, 16.5)),
         ('ukras1', (16.5, 15.5)),
         ('ukras1', (16.5, 16.5)),
     ]
-    
+
     # Enemy configuration - challenging final level
     level_data['enemies'] = {
         'count': 15,  # Many enemies in final level
@@ -131,14 +137,14 @@ def get_level_data():
         'restricted_area': {(i, j) for i in range(9, 12) for j in range(9, 12)},  # Keep center area clear
         'fixed_positions': [(5, 5), (15, 5), (5, 15), (15, 15), (10, 10)]  # Strategic enemy positions
     }
-    
+
     # Dialogue NPCs
     level_data['dialogue_npcs'] = [
         {
             'pos': (10.5, 3.5),
-            'dialogue_id': 'level5_intro',
+            'dialogue_id': 'marvin_ending',
             'path': 'resources/sprites/npc/dialogue_npc/0.png'
         }
     ]
-    
+
     return level_data
