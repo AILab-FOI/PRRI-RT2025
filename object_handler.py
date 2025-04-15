@@ -16,50 +16,54 @@ class ObjectHandler:
         self.npc_positions = {}
         self.win_message_shown = False
 
-        # Spawn enemies based on level configuration
-        # This will also load the enemy configuration from level manager
         self.spawn_npc()
 
-        # sprite map
-        add_sprite(SpriteObject(game, path=self.static_sprite_path + 'ukras1.png', pos=(12.9, 33.5)))
-        add_sprite(SpriteObject(game, path=self.static_sprite_path + 'ukras1.png', pos=(12.2, 33.5)))
+        # Define sprite data in a more structured way
+        sprite_data = [
+            # Format: (sprite_type, position)
+            ('ukras1', (12.9, 33.5)),
+            ('ukras1', (12.2, 33.5)),
 
-        add_sprite(SpriteObject(game, path=self.static_sprite_path + 'ukras1.png', pos=(1.5, 26.1)))
-        add_sprite(SpriteObject(game, path=self.static_sprite_path + 'ukras2.png', pos=(1.9, 26.1)))
-        add_sprite(SpriteObject(game, path=self.static_sprite_path + 'ukras2.png', pos=(2.3, 26.1)))
-        add_sprite(SpriteObject(game, path=self.static_sprite_path + 'ukras2.png', pos=(1.1, 26.5)))
-        add_sprite(SpriteObject(game, path=self.static_sprite_path + 'ukras2.png', pos=(1.1, 27)))
-        add_sprite(SpriteObject(game, path=self.static_sprite_path + 'ukras2.png', pos=(1.1, 27.5)))
-        add_sprite(SpriteObject(game, path=self.static_sprite_path + 'ukras1.png', pos=(1.1, 28)))
-        add_sprite(SpriteObject(game, path=self.static_sprite_path + 'ukras1.png', pos=(1.1, 28.5)))
-        add_sprite(SpriteObject(game, path=self.static_sprite_path + 'ukras1.png', pos=(1.1, 29)))
-        add_sprite(SpriteObject(game, path=self.static_sprite_path + 'ukras2.png', pos=(1.1, 29.5)))
-        add_sprite(SpriteObject(game, path=self.static_sprite_path + 'ukras2.png', pos=(1.1, 30)))
-        add_sprite(SpriteObject(game, path=self.static_sprite_path + 'ukras2.png', pos=(1.1, 30.5)))
-        add_sprite(SpriteObject(game, path=self.static_sprite_path + 'ukras2.png', pos=(1.1, 31)))
-        add_sprite(SpriteObject(game, path=self.static_sprite_path + 'ukras2.png', pos=(1.1, 31.5)))
-        add_sprite(SpriteObject(game, path=self.static_sprite_path + 'ukras1.png', pos=(1.1, 32)))
-        add_sprite(SpriteObject(game, path=self.static_sprite_path + 'ukras1.png', pos=(1.1, 32.5)))
-        add_sprite(SpriteObject(game, path=self.static_sprite_path + 'ukras1.png', pos=(1.5, 32.9)))
-        add_sprite(SpriteObject(game, path=self.static_sprite_path + 'ukras1.png', pos=(1.9, 32.9)))
-        add_sprite(SpriteObject(game, path=self.static_sprite_path + 'ukras1.png', pos=(2.3, 32.9)))
+            ('ukras1', (1.5, 26.1)),
+            ('ukras2', (1.9, 26.1)),
+            ('ukras2', (2.3, 26.1)),
+            ('ukras2', (1.1, 26.5)),
+            ('ukras2', (1.1, 27.0)),
+            ('ukras2', (1.1, 27.5)),
+            ('ukras1', (1.1, 28.0)),
+            ('ukras1', (1.1, 28.5)),
+            ('ukras1', (1.1, 29.0)),
+            ('ukras2', (1.1, 29.5)),
+            ('ukras2', (1.1, 30.0)),
+            ('ukras2', (1.1, 30.5)),
+            ('ukras2', (1.1, 31.0)),
+            ('ukras2', (1.1, 31.5)),
+            ('ukras1', (1.1, 32.0)),
+            ('ukras1', (1.1, 32.5)),
+            ('ukras1', (1.5, 32.9)),
+            ('ukras1', (1.9, 32.9)),
+            ('ukras1', (2.3, 32.9)),
 
-        add_sprite(SpriteObject(game, path=self.static_sprite_path + 'ukras1.png', pos=(23.2, 31.2)))
-        add_sprite(SpriteObject(game, path=self.static_sprite_path + 'ukras1.png', pos=(23.2, 33.5)))
+            ('ukras1', (23.2, 31.2)),
+            ('ukras1', (23.2, 33.5)),
 
-        add_sprite(SpriteObject(game, path=self.static_sprite_path + 'ukras1.png', pos=(20.2, 31.8)))
-        add_sprite(SpriteObject(game, path=self.static_sprite_path + 'ukras1.png', pos=(15.2, 32.3)))
-        add_sprite(SpriteObject(game, path=self.static_sprite_path + 'ukras1.png', pos=(8.9, 32.3)))
+            ('ukras1', (20.2, 31.8)),
+            ('ukras1', (15.2, 32.3)),
+            ('ukras1', (8.9, 32.3)),
 
-        add_sprite(SpriteObject(game, path=self.static_sprite_path + 'ukras1.png', pos=(20.2, 12.2)))
-        add_sprite(SpriteObject(game, path=self.static_sprite_path + 'ukras1.png', pos=(20.2, 13.2)))
-        add_sprite(SpriteObject(game, path=self.static_sprite_path + 'ukras1.png', pos=(20.2, 14.2)))
+            ('ukras1', (20.2, 12.2)),
+            ('ukras1', (20.2, 13.2)),
+            ('ukras1', (20.2, 14.2)),
 
-        add_sprite(SpriteObject(game, path=self.static_sprite_path + 'ukras2.png', pos=(20.2, 12.7)))
-        add_sprite(SpriteObject(game, path=self.static_sprite_path + 'ukras2.png', pos=(20.2, 13.7)))
-        add_sprite(SpriteObject(game, path=self.static_sprite_path + 'ukras2.png', pos=(20.2, 14.7)))
-        # add_sprite(SpriteObject(game, path=self.static_sprite_path + 'konzola.jpg', pos=(2, 14.5)))
+            ('ukras2', (20.2, 12.7)),
+            ('ukras2', (20.2, 13.7)),
+            ('ukras2', (20.2, 14.7)),
+        ]
 
+        # Add all sprites using a loop
+        for sprite_type, pos in sprite_data:
+            sprite_path = self.static_sprite_path + sprite_type + '.png'
+            add_sprite(SpriteObject(game, path=sprite_path, pos=pos))
 
     def spawn_npc(self):
         """Load enemy configuration and spawn NPCs based on the current level"""

@@ -4,6 +4,27 @@ from font_manager import load_custom_font
 
 
 class ObjectRenderer:
+    def draw_text_with_background(self, text, font, color, position, center=False, bg_color=(0, 0, 0, 150), padding=(20, 10)):
+        """Helper method to draw text with a semi-transparent background"""
+        text_surface = font.render(text, True, color)
+
+        # Position the text
+        if center:
+            text_rect = text_surface.get_rect(center=position)
+        else:
+            text_rect = text_surface.get_rect(topleft=position)
+
+        # Create background
+        bg_rect = text_rect.inflate(padding[0], padding[1])
+        bg_surface = pg.Surface((bg_rect.width, bg_rect.height), pg.SRCALPHA)
+        bg_surface.fill(bg_color)
+
+        # Draw background and text
+        self.screen.blit(bg_surface, bg_rect)
+        self.screen.blit(text_surface, text_rect)
+
+        return text_rect
+
     def __init__(self, game):
         self.game = game
         self.screen = game.screen
@@ -46,20 +67,17 @@ class ObjectRenderer:
         # Create the counter text
         counter_text = f"Enemies: {remaining_enemies}/{total_enemies}"
 
-        # Render the text with the custom font
+        # Use helper method to draw text with background
         font = load_custom_font(20)
+        position = (WIDTH - 20, HEIGHT - 20)
+
+        # Custom positioning for bottom right
         text_surface = font.render(counter_text, True, (255, 255, 255))
-
-        # Position in bottom right corner
-        text_rect = text_surface.get_rect(bottomright=(WIDTH - 20, HEIGHT - 20))
-
-        # Draw a semi-transparent background
+        text_rect = text_surface.get_rect(bottomright=position)
         bg_rect = text_rect.inflate(20, 10)
         bg_surface = pg.Surface((bg_rect.width, bg_rect.height), pg.SRCALPHA)
         bg_surface.fill((0, 0, 0, 150))
         self.screen.blit(bg_surface, bg_rect)
-
-        # Draw the text
         self.screen.blit(text_surface, text_rect)
 
     def win(self):
@@ -85,14 +103,15 @@ class ObjectRenderer:
     def draw_message(self):
         """Draw the current message if it's active"""
         if self.message and pg.time.get_ticks() - self.message_time < self.message_duration:
-            # Create a semi-transparent background
+            # Use a full-width background for messages
             bg_surface = pg.Surface((WIDTH, 80), pg.SRCALPHA)
             bg_surface.fill((0, 0, 0, 180))
-            self.screen.blit(bg_surface, (0, self.digit_size + 10)) 
+            self.screen.blit(bg_surface, (0, self.digit_size + 10))
 
-            # Render the message text
+            # Draw the message text centered
+            position = (HALF_WIDTH, self.digit_size + 50)
             text_surface = self.message_font.render(self.message, True, (255, 255, 255))
-            text_rect = text_surface.get_rect(center=(HALF_WIDTH, self.digit_size + 50))
+            text_rect = text_surface.get_rect(center=position)
             self.screen.blit(text_surface, text_rect)
 
     def draw_dash_indicator(self):
@@ -126,31 +145,29 @@ class ObjectRenderer:
 
     def draw_invulnerability_indicator(self):
         """Draw the invulnerability powerup indicator and countdown"""
-        # Only draw if player is invulnerable
         if not self.game.player.is_invulnerable:
             return
 
-        # Calculate seconds remaining (1-5)
         seconds_left = max(1, int(self.game.player.invulnerability_time_left / 1000) + 1)
-
-        # Set up positions and sizes - center horizontally
         center_x = HALF_WIDTH
 
-        # Draw "Invincibility" title text at the top of the screen
+        # Draw title text
         title_font = load_custom_font(24)
+        title_position = (center_x, 30)
         title_surface = title_font.render("INVINCIBILITY", True, (255, 255, 255))
-        title_rect = title_surface.get_rect(center=(center_x, 30)) 
+        title_rect = title_surface.get_rect(center=title_position)
         self.screen.blit(title_surface, title_rect)
 
-        # Use a placeholder texture (reusing the digit texture for now)
-        icon = self.digits['1']  # Using the health icon as placeholder
+        # Draw icon
+        icon = self.digits['1']
         icon_rect = icon.get_rect(center=(center_x, 80))
         self.screen.blit(icon, icon_rect)
 
-        # Draw countdown text below the icon
+        # Draw timer
         timer_font = load_custom_font(40)
+        timer_position = (center_x, 140)
         timer_surface = timer_font.render(f"{seconds_left}s", True, (255, 255, 255))
-        timer_rect = timer_surface.get_rect(center=(center_x, 140)) 
+        timer_rect = timer_surface.get_rect(center=timer_position)
         self.screen.blit(timer_surface, timer_rect)
 
     def draw_background(self):

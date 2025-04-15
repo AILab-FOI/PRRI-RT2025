@@ -101,7 +101,7 @@ class Game:
 
             elif event.type == pg.KEYDOWN and event.key == pg.K_ESCAPE and not self.interaction.input_active:
                 self.show_menu()
-                return  
+                return
             elif event.type == self.global_event:
                 self.global_trigger = True
 

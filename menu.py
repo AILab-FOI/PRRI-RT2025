@@ -1,6 +1,5 @@
 import pygame as pg
 from settings import *
-from random import randint, random
 
 # Helper function to load futuristic font
 def load_futuristic_font(size):
