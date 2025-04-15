@@ -63,7 +63,7 @@ class Sound:
         self.door_open = self.load_sound('vrata.wav', self.volume_factors['door_open'])
 
         # Powerup sounds - reusing existing sounds as placeholders
-        self.powerup_pickup = self.load_sound('podizanje_oruzja.wav', self.volume_factors['powerup_pickup'])
+        self.powerup_pickup = self.load_sound('powerup_pickup.wav', self.volume_factors['powerup_pickup'])
         self.powerup_active = self.load_sound('terminal.wav', self.volume_factors['powerup_active'])
         self.powerup_end = self.load_sound('Dash.wav', self.volume_factors['powerup_end'])
 
