@@ -21,7 +21,7 @@ class ObjectRenderer:
         # Message display
         self.message = ""
         self.message_time = 0
-        self.message_duration = 5000  # 5 seconds
+        self.message_duration = 5000
         self.message_font = load_custom_font(30)
 
     def draw(self):
@@ -54,9 +54,9 @@ class ObjectRenderer:
         text_rect = text_surface.get_rect(bottomright=(WIDTH - 20, HEIGHT - 20))
 
         # Draw a semi-transparent background
-        bg_rect = text_rect.inflate(20, 10)  # Make background slightly larger
+        bg_rect = text_rect.inflate(20, 10)
         bg_surface = pg.Surface((bg_rect.width, bg_rect.height), pg.SRCALPHA)
-        bg_surface.fill((0, 0, 0, 150))  # Semi-transparent black
+        bg_surface.fill((0, 0, 0, 150))
         self.screen.blit(bg_surface, bg_rect)
 
         # Draw the text
@@ -88,15 +88,14 @@ class ObjectRenderer:
             # Create a semi-transparent background
             bg_surface = pg.Surface((WIDTH, 80), pg.SRCALPHA)
             bg_surface.fill((0, 0, 0, 180))
-            self.screen.blit(bg_surface, (0, self.digit_size + 10))  # Position below the health display
+            self.screen.blit(bg_surface, (0, self.digit_size + 10)) 
 
             # Render the message text
             text_surface = self.message_font.render(self.message, True, (255, 255, 255))
-            text_rect = text_surface.get_rect(center=(HALF_WIDTH, self.digit_size + 50))  # Center text in the background
+            text_rect = text_surface.get_rect(center=(HALF_WIDTH, self.digit_size + 50))
             self.screen.blit(text_surface, text_rect)
 
     def draw_dash_indicator(self):
-        # Izračunaj preostalo vrijeme cooldowna
         current_time = pg.time.get_ticks()
         dash_cooldown_remaining = 0
 
@@ -138,20 +137,20 @@ class ObjectRenderer:
         center_x = HALF_WIDTH
 
         # Draw "Invincibility" title text at the top of the screen
-        title_font = load_custom_font(24)  # Smaller font size
+        title_font = load_custom_font(24)
         title_surface = title_font.render("INVINCIBILITY", True, (255, 255, 255))
-        title_rect = title_surface.get_rect(center=(center_x, 30))  # Moved to top
+        title_rect = title_surface.get_rect(center=(center_x, 30)) 
         self.screen.blit(title_surface, title_rect)
 
         # Use a placeholder texture (reusing the digit texture for now)
         icon = self.digits['1']  # Using the health icon as placeholder
-        icon_rect = icon.get_rect(center=(center_x, 80))  # Centered below text with spacing
+        icon_rect = icon.get_rect(center=(center_x, 80))
         self.screen.blit(icon, icon_rect)
 
         # Draw countdown text below the icon
         timer_font = load_custom_font(40)
         timer_surface = timer_font.render(f"{seconds_left}s", True, (255, 255, 255))
-        timer_rect = timer_surface.get_rect(center=(center_x, 140))  # Centered below icon with spacing
+        timer_rect = timer_surface.get_rect(center=(center_x, 140)) 
         self.screen.blit(timer_surface, timer_rect)
 
     def draw_background(self):
@@ -163,7 +162,7 @@ class ObjectRenderer:
 
     def render_game_objects(self):
         list_objects = sorted(self.game.raycasting.objects_to_render, key=lambda t: t[0], reverse=True)
-        for _, image, pos in list_objects:  # Use _ to indicate unused variable
+        for _, image, pos in list_objects:
             self.screen.blit(image, pos)
 
     @staticmethod

@@ -22,7 +22,7 @@ class DialogueManager:
         self.load_dialogues()
 
         # UI settings
-        self.font = load_custom_font(20)  # Slightly smaller for readability
+        self.font = load_custom_font(20)
         self.title_font = load_custom_font(24)
         self.dialogue_box_height = 200
         self.dialogue_box_padding = 20
@@ -41,7 +41,7 @@ class DialogueManager:
         # Load all JSON files in the dialogues directory
         for filename in os.listdir(dialogue_dir):
             if filename.endswith('.json'):
-                dialogue_id = filename[:-5]  # Remove .json extension
+                dialogue_id = filename[:-5]
                 file_path = os.path.join(dialogue_dir, filename)
                 try:
                     with open(file_path, 'r') as f:
@@ -91,8 +91,8 @@ class DialogueManager:
         self.current_line_index += 1
         if self.current_line_index >= len(self.current_dialogue["lines"]):
             self.end_dialogue()
-            return True  # Indicate that dialogue has ended
-        return False  # Indicate that dialogue is continuing
+            return True
+        return False
 
     def end_dialogue(self):
         """End the current dialogue"""
@@ -101,17 +101,12 @@ class DialogueManager:
         self.current_npc = None
         self.current_line_index = 0
 
-        # Reset mouse position to center of screen before re-enabling player movement
-        # This prevents the camera from jumping when exiting dialogue
         pg.mouse.set_pos([HALF_WIDTH, HALF_HEIGHT])
-        pg.mouse.get_rel()  # Clear any accumulated mouse movement
-
-        # Re-enable player movement
+        pg.mouse.get_rel()
         self.game.player.dialogue_mode = False
 
     def handle_key_press(self):
         """Handle key press for dialogue advancement"""
-        # If no dialogue is active, nothing to do
         if not self.dialogue_active:
             return
 
@@ -134,7 +129,6 @@ class DialogueManager:
 
     def update(self):
         """Update the dialogue system"""
-        # If no dialogue is active, nothing to update
         if not self.dialogue_active:
             return
 
@@ -153,7 +147,7 @@ class DialogueManager:
 
         # Draw semi-transparent background
         dialogue_surface = pg.Surface((box_width, box_height), pg.SRCALPHA)
-        dialogue_surface.fill((0, 0, 0, 200))  # Semi-transparent black
+        dialogue_surface.fill((0, 0, 0, 200))
         screen.blit(dialogue_surface, (box_x, box_y))
 
         # Draw border
@@ -226,10 +220,10 @@ class DialogueNPC(NPC):
         self.last_interaction_time = 0
 
         # Override NPC properties to make it non-hostile
-        self.attack_dist = 0  # Will not attack
+        self.attack_dist = 0
         self.health = 100
         self.attack_damage = 0
-        self.speed = 0  # Stationary
+        self.speed = 0
         self.accuracy = 0
 
         # Mark as friendly NPC - this will be used to exclude it from enemy counts
@@ -253,9 +247,6 @@ class DialogueNPC(NPC):
         # Show interaction indicator if player is close enough
         self.interaction_indicator_visible = player_dist <= self.interaction_radius
 
-        # Interaction is now handled in the main event loop
-        # Just update the interaction indicator visibility
-
     def start_dialogue(self):
         """Start dialogue with this NPC"""
         if not self.game.dialogue_manager.dialogue_active:
@@ -271,23 +262,9 @@ class DialogueNPC(NPC):
 
         # Calculate screen position
         screen_x = self.screen_x
-        screen_y = HALF_HEIGHT - 100  # Position above the NPC
+        screen_y = HALF_HEIGHT - 100
 
-        # Draw animated indicator (pulsing circle)
-        current_time = pg.time.get_ticks()
-        pulse = abs(math.sin(current_time * 0.005)) * 5 + 10  # Pulsing effect
-
-        # Draw outer glow
-        for radius in range(int(pulse) + 5, int(pulse), -1):
-            alpha = 255 - (radius - pulse) * 50
-            if alpha < 0:
-                alpha = 0
-            s = pg.Surface((radius * 2, radius * 2), pg.SRCALPHA)
-            pg.draw.circle(s, (255, 255, 255, alpha), (radius, radius), radius)
-            self.game.screen.blit(s, (int(screen_x) - radius, int(screen_y) - radius))
-
-        # Draw main circle
-        pg.draw.circle(self.game.screen, (255, 255, 255), (int(screen_x), int(screen_y)), int(pulse))
+        # Circular indicator removed
 
         # Draw "Press E to talk" text with background
         font = load_custom_font(16)  # Smaller size for this text

@@ -13,7 +13,7 @@ class PowerUp(SpriteObject):
         # Add 0.5 to position for proper sprite rendering in the center of the tile
         adjusted_pos = (pos[0] + 0.5, pos[1] + 0.5) if isinstance(pos, tuple) else pos
 
-        super().__init__(game, path, adjusted_pos, scale=0.5, shift=0.4)  # Smaller scale for powerups
+        super().__init__(game, path, adjusted_pos, scale=0.5, shift=0.4)
 
         self.powerup_type = powerup_type
         self.pickup_distance = POWERUP_PICKUP_DISTANCE

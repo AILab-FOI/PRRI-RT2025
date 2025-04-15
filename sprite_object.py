@@ -9,7 +9,7 @@ class SpriteObject:
                  pos=(10.5, 3.5), scale=0.7, shift=0.27):
         # Use a more neutral default or no default at all
         if path is None:
-            path = 'resources/sprites/static_sprites/ukras1.png'  # Use a different default sprite
+            path = 'resources/sprites/static_sprites/ukras1.png'
         self.game = game
         self.player = game.player
         self.x, self.y = pos

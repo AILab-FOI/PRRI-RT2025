@@ -9,26 +9,12 @@ def load_futuristic_font(size):
     except:
         return pg.font.Font(None, size)
 
-# Helper function to calculate pulse color
-def calculate_pulse_color(base_color, pulse_value, intensity_factor=1.0):
-    r = base_color[0] + int(20 * pulse_value * intensity_factor)
-    g = base_color[1] + int(20 * pulse_value * intensity_factor)
-    b = base_color[2] + int(40 * pulse_value * intensity_factor)
-    return (min(r, 255), min(g, 255), min(b, 255))
+# Helper functions removed
 
 class UIElement:
     """Base class for UI elements with common functionality"""
     def __init__(self):
-        self.pulse = 0  # For pulsing effect
-        self.pulse_dir = 1  # Direction of pulse animation
-        self.pulse_speed = 0.05  # Speed of pulse animation
-
-    def update_pulse(self):
-        """Update pulse animation"""
-        self.pulse += self.pulse_speed * self.pulse_dir
-        if self.pulse >= 1.0 or self.pulse <= 0.0:
-            self.pulse_dir *= -1
-            self.pulse = max(0.0, min(1.0, self.pulse))
+        pass  # Simplified - no pulse animation
 
 class Button(UIElement):
     def __init__(self, x, y, width, height, text, font_size=36, text_color=(220, 220, 255),
@@ -41,8 +27,8 @@ class Button(UIElement):
         self.bg_color = bg_color
         self.hover_color = hover_color
         self.hovered = False
-        self.was_hovered = False  # Track previous hover state for sound
-        self.glow_size = 0  # For glow effect when hovered
+        self.was_hovered = False
+        self.glow_size = 0
 
         # Load font and render text
         self.font = load_futuristic_font(self.font_size)
@@ -65,55 +51,26 @@ class Button(UIElement):
         if game and self.hovered and not self.was_hovered:
             game.sound.menu_hover.play()
 
-        # Update pulse animation
-        self.update_pulse()
+        # Pulse animation removed
 
         # Update glow effect when hovered
         if self.hovered:
-            self.glow_size = min(self.glow_size + 0.5, 8)  # Increase glow up to max size
+            self.glow_size = min(self.glow_size + 0.5, 8)
         else:
-            self.glow_size = max(self.glow_size - 0.5, 0)  # Decrease glow
+            self.glow_size = max(self.glow_size - 0.5, 0)
 
     def draw(self, screen):
-        # Calculate base color with pulse effect
-        if self.hovered:
-            color = calculate_pulse_color(self.hover_color, self.pulse, 1.0)
-        else:
-            color = calculate_pulse_color(self.bg_color, self.pulse, 0.5)
+        # Simplified button drawing
+        # Use hover color if hovered, otherwise use background color
+        color = self.hover_color if self.hovered else self.bg_color
 
-        # Draw glow effect if hovered
-        if self.glow_size > 0:
-            glow_rect = self.rect.inflate(self.glow_size * 2, self.glow_size * 2)
-            pg.draw.rect(screen, (80, 100, 180, 100), glow_rect, border_radius=15)
-
-        # Draw main button with gradient-like effect
+        # Draw main button
         pg.draw.rect(screen, color, self.rect, border_radius=12)
 
-        # Draw futuristic border with accent lines
-        pg.draw.rect(screen, (120, 160, 255), self.rect, 2, border_radius=12)  # Main border
+        # Draw border
+        pg.draw.rect(screen, (120, 160, 255), self.rect, 2, border_radius=12)
 
-        # Draw accent lines on left and right sides
-        accent_length = int(self.rect.height * 0.4)
-        accent_y = self.rect.centery - accent_length // 2
-
-        # Left accent
-        pg.draw.line(screen, (100, 200, 255),
-                     (self.rect.left - 1, accent_y),
-                     (self.rect.left - 1, accent_y + accent_length),
-                     2)
-
-        # Right accent
-        pg.draw.line(screen, (100, 200, 255),
-                     (self.rect.right + 1, accent_y),
-                     (self.rect.right + 1, accent_y + accent_length),
-                     2)
-
-        # Draw text with slight shadow for depth
-        shadow_offset = 2
-        shadow_surface = self.font.render(self.text, True, (20, 20, 40))
-        shadow_rect = shadow_surface.get_rect(center=(self.text_rect.centerx + shadow_offset,
-                                                     self.text_rect.centery + shadow_offset))
-        screen.blit(shadow_surface, shadow_rect)
+        # Draw text
         screen.blit(self.text_surface, self.text_rect)
 
     def is_clicked(self, event, game=None):
@@ -134,7 +91,6 @@ class Slider(UIElement):
         self.text = text
         self.font_size = font_size
         self.dragging = False
-        self.pulse_speed = 0.03  # Slower pulse for sliders
 
         # Load font
         self.font = load_futuristic_font(self.font_size)
@@ -160,8 +116,7 @@ class Slider(UIElement):
         self.handle_rect.y = self.rect.y - 7
 
     def update(self, mouse_pos, mouse_pressed):
-        # Update pulse animation
-        self.update_pulse()
+        # Pulse animation removed
 
         if mouse_pressed[0]:
             if self.handle_rect.collidepoint(mouse_pos):
@@ -177,42 +132,29 @@ class Slider(UIElement):
             self.dragging = False
 
     def draw(self, screen):
-        # Draw slider track background with gradient
-        track_color = (30, 35, 60)  # Dark blue base color
+        # Simplified slider drawing
+        # Draw slider track background
+        track_color = (30, 35, 60)
         pg.draw.rect(screen, track_color, self.rect, border_radius=5)
 
-        # Draw filled portion of the track with a glowing effect
+        # Draw filled portion of the track
         fill_width = int((self.value - self.min_val) / (self.max_val - self.min_val) * self.rect.width)
         if fill_width > 0:
             fill_rect = pg.Rect(self.rect.x, self.rect.y, fill_width, self.rect.height)
-
-            # Base fill color with pulse effect
-            fill_color = calculate_pulse_color((60, 100, 200), self.pulse, 1.0)
+            fill_color = (60, 100, 200)
             pg.draw.rect(screen, fill_color, fill_rect, border_radius=5)
 
         # Draw track border
         pg.draw.rect(screen, (100, 140, 240), self.rect, 1, border_radius=5)
 
-        # Draw handle with glowing effect
+        # Draw handle
         handle_color = (80, 120, 220) if self.dragging else (60, 90, 180)
         pg.draw.rect(screen, handle_color, self.handle_rect, border_radius=8)
 
         # Draw handle border
         pg.draw.rect(screen, (140, 180, 255), self.handle_rect, 1, border_radius=8)
 
-        # Draw handle accent lines
-        line_y1 = self.handle_rect.y + self.handle_rect.height * 0.3
-        line_y2 = self.handle_rect.y + self.handle_rect.height * 0.7
-        line_x = self.handle_rect.centerx
-
-        pg.draw.line(screen, (180, 220, 255), (line_x, line_y1), (line_x, line_y2), 2)
-
-        # Draw text with slight shadow for depth
-        shadow_offset = 1
-        shadow_surface = self.font.render(f"{self.text}: {int(self.value * 100)}%", True, (20, 20, 40))
-        shadow_rect = shadow_surface.get_rect(center=(self.text_rect.centerx + shadow_offset,
-                                                    self.text_rect.centery + shadow_offset))
-        screen.blit(shadow_surface, shadow_rect)
+        # Draw text
         screen.blit(self.text_surface, self.text_rect)
 
 class Menu:
@@ -220,13 +162,9 @@ class Menu:
         self.game = game
         self.screen = game.screen
         self.running = True
-        self.state = 'main'  # 'main', 'settings', 'game'
+        self.state = 'main'
 
-        # Background animation elements
-        self.particles = []
-        self.create_particles()
-        self.last_particle_time = pg.time.get_ticks()
-        self.particle_spawn_delay = 200  # ms between particle spawns
+        # Background animation elements removed
 
         # Create buttons for main menu
         button_height = 60
@@ -245,7 +183,7 @@ class Menu:
 
             text_width = font.size(text)[0]
             # Add padding to the text width
-            button_width = max(300, text_width + 100)  # At least 300px wide or text width + padding
+            button_width = max(300, text_width + 100)
             button_widths.append(button_width)
 
         # Use the maximum width for all buttons for consistency
@@ -266,7 +204,7 @@ class Menu:
         ]
 
         # Create sliders for settings - center them properly
-        slider_width = max_button_width  # Use same width as buttons for consistency
+        slider_width = max_button_width
         slider_center_x = HALF_WIDTH - slider_width // 2
         self.sliders = [
             Slider(slider_center_x, HALF_HEIGHT - 100, slider_width, 10, 0, 1,
@@ -297,9 +235,7 @@ class Menu:
             3
         )
 
-        # Animation variables for title effects
-        self.title_pulse = 0
-        self.title_pulse_dir = 1
+        # Animation variables for title effects removed
 
         # Version and credits
         self.version = "v1.0"
@@ -317,48 +253,7 @@ class Menu:
         self.credits_text = self.small_font.render(self.credits, True, (180, 180, 220))
         self.credits_rect = self.credits_text.get_rect(bottomleft=(20, HEIGHT - 10))
 
-    def create_particles(self, count=15):
-        """Create initial background particles"""
-        for _ in range(count):
-            # Random position, size, speed and color
-            x = randint(0, WIDTH)
-            y = randint(0, HEIGHT)
-            size = randint(1, 3)
-            speed = random() * 0.5 + 0.2
-            color = (randint(40, 100), randint(80, 150), randint(180, 255), randint(20, 100))
-            self.particles.append({'x': x, 'y': y, 'size': size, 'speed': speed, 'color': color})
-
-    def update_particles(self):
-        """Update particle positions and create new ones as needed"""
-        # Move existing particles
-        for particle in self.particles[:]:  # Use a copy to allow removal
-            particle['y'] -= particle['speed']  # Move upward
-
-            # Remove particles that have moved off screen
-            if particle['y'] < -10:
-                self.particles.remove(particle)
-
-        # Add new particles occasionally
-        current_time = pg.time.get_ticks()
-        if current_time - self.last_particle_time > self.particle_spawn_delay:
-            self.last_particle_time = current_time
-            # Add 1-3 new particles
-            for _ in range(randint(1, 3)):
-                x = randint(0, WIDTH)
-                y = HEIGHT + 5  # Start just below the screen
-                size = randint(1, 3)
-                speed = random() * 0.5 + 0.2
-                color = (randint(40, 100), randint(80, 150), randint(180, 255), randint(20, 100))
-                self.particles.append({'x': x, 'y': y, 'size': size, 'speed': speed, 'color': color})
-
-    def draw_particles(self):
-        """Draw background particles"""
-        for particle in self.particles:
-            # Create a small surface with alpha for the particle
-            particle_surface = pg.Surface((particle['size'] * 2, particle['size'] * 2), pg.SRCALPHA)
-            pg.draw.circle(particle_surface, particle['color'],
-                          (particle['size'], particle['size']), particle['size'])
-            self.screen.blit(particle_surface, (particle['x'], particle['y']))
+    # Particle system removed to simplify code
 
     def update_start_button_text(self):
         """Update the text of the start button based on game state"""
@@ -411,7 +306,7 @@ class Menu:
                         if button.text == "Start Game" or button.text == "Continue Game":
                             self.state = 'game'
                             pg.mouse.set_visible(False)
-                            return True  # Start or continue the game
+                            return True
                         elif button.text == "Settings":
                             self.state = 'settings'
                         elif button.text == "Exit":
@@ -443,10 +338,8 @@ class Menu:
         self.game.sound.sfx_volume = self.sliders[1].value
         self.game.sound.update_sfx_volume()
 
-        # No mouse sensitivity setting anymore
-
     def draw_title(self, title_text, y_pos=150):
-        """Draw a title with decorative elements"""
+        """Draw a simplified title"""
         # Render title text if it's a string, otherwise use the provided surface
         if isinstance(title_text, str):
             title_surface = self.title_font.render(title_text, True, (220, 220, 255))
@@ -455,27 +348,10 @@ class Menu:
             title_surface = title_text
             title_rect = self.title_rect
 
-        # Calculate pulse color for accents
-        underline_color = (100 + int(80 * self.title_pulse),
-                          140 + int(60 * self.title_pulse),
-                          240)
-
-        # Draw title with glow effect
-        glow_size = 2 + int(self.title_pulse * 3)
-        glow_color = (80, 100, 200, 150)  # Blue glow
-        glow_rect = title_rect.inflate(glow_size * 2, glow_size * 2)
-
-        # Create a temporary surface for the glow effect
-        glow_surface = pg.Surface((glow_rect.width, glow_rect.height), pg.SRCALPHA)
-        pg.draw.rect(glow_surface, glow_color, (0, 0, glow_rect.width, glow_rect.height), border_radius=15)
-
-        # Apply the glow effect
-        self.screen.blit(glow_surface, glow_rect)
-
         # Draw the title text
         self.screen.blit(title_surface, title_rect)
 
-        # Draw decorative underline
+        # Draw simple underline
         underline_width = title_rect.width * 0.8
         underline_rect = pg.Rect(
             HALF_WIDTH - underline_width // 2,
@@ -483,23 +359,7 @@ class Menu:
             underline_width,
             3
         )
-        pg.draw.rect(self.screen, underline_color, underline_rect)
-
-        # Set up common variables for accent lines
-        accent_length = 20
-        accent_gap = 5
-
-        # Left accent
-        pg.draw.line(self.screen, underline_color,
-                    (underline_rect.left - accent_gap, underline_rect.centery),
-                    (underline_rect.left - accent_gap - accent_length, underline_rect.centery),
-                    3)
-
-        # Right accent
-        pg.draw.line(self.screen, underline_color,
-                    (underline_rect.right + accent_gap, underline_rect.centery),
-                    (underline_rect.right + accent_gap + accent_length, underline_rect.centery),
-                    3)
+        pg.draw.rect(self.screen, (140, 180, 240), underline_rect)
 
         return underline_rect
 
@@ -507,15 +367,7 @@ class Menu:
         # Draw background
         self.screen.blit(self.bg_image, (0, 0))
 
-        # Update and draw particles
-        self.update_particles()
-        self.draw_particles()
-
-        # Update title pulse effect
-        self.title_pulse += 0.02 * self.title_pulse_dir
-        if self.title_pulse >= 1.0 or self.title_pulse <= 0.0:
-            self.title_pulse_dir *= -1
-            self.title_pulse = max(0.0, min(1.0, self.title_pulse))
+        # Title pulse effect removed
 
         if self.state == 'main':
             # Draw main title

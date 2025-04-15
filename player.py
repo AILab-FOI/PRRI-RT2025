@@ -16,7 +16,7 @@ class Player:
 
         # Dash svojstva
         self.is_dashing = False
-        self.dash_direction = (0, 0)  # smjer dasha (dx, dy)
+        self.dash_direction = (0, 0)
         self.dash_start_time = 0
         self.last_dash_time = 0
 
@@ -24,14 +24,14 @@ class Player:
         self.dialogue_mode = False
 
         # Automatic weapon firing properties
-        self.auto_fire = False  # Whether auto-firing is active
-        self.auto_fire_delay = 150  # Milliseconds between auto shots (faster for SMG)
-        self.last_auto_fire_time = 0  # Last time an auto shot was fired
+        self.auto_fire = False 
+        self.auto_fire_delay = 150 
+        self.last_auto_fire_time = 0 
 
         # Invulnerability powerup properties
         self.is_invulnerable = False
         self.invulnerability_start_time = 0
-        self.invulnerability_time_left = 0  # Time left in milliseconds
+        self.invulnerability_time_left = 0
 
     def recover_health(self):
         if self.check_health_recovery_delay() and self.health < PLAYER_MAX_HEALTH:
@@ -51,7 +51,6 @@ class Player:
             self.game.new_game()
 
     def get_damage(self, damage):
-        # Skip damage if player is invulnerable
         if self.is_invulnerable:
             return
 
@@ -61,7 +60,7 @@ class Player:
         self.check_game_over()
 
     def single_fire_event(self, event):
-        # Skip firing if in dialogue mode
+
         if self.dialogue_mode:
             return
 
@@ -84,14 +83,13 @@ class Player:
         # Play the appropriate sound based on weapon type
         if self.game.weapon.name == 'smg':
             self.game.sound.smg.play()
-        else:  # Default to pistol sound
+        else: 
             self.game.sound.pistolj.play()
         self.shot = True
         self.game.weapon.reloading = True
         self.last_auto_fire_time = pg.time.get_ticks()
 
     def movement(self):
-        # Skip movement if in dialogue mode
         if self.dialogue_mode:
             return
 
@@ -118,23 +116,15 @@ class Player:
 
         # Spremi normalizirani smjer kretanja za dash
         if dx != 0 or dy != 0:
-            # Normaliziraj vektor smjera
             length = math.sqrt(dx * dx + dy * dy)
             self.dash_direction = (dx / length, dy / length)
         else:
-            # Ako nema kretanja, koristi smjer pogleda
             self.dash_direction = (cos_a, sin_a)
 
-        # Provjeri tipku za dash
         if keys[pg.K_SPACE] and not self.is_dashing:
             self.dash()
 
         self.check_wall_collision(dx, dy)
-
-        # if keys[pg.K_LEFT]:
-        #     self.angle -= PLAYER_ROT_SPEED * self.game.delta_time
-        # if keys[pg.K_RIGHT]:
-        #     self.angle += PLAYER_ROT_SPEED * self.game.delta_time
         self.angle %= math.tau
 
     def check_wall(self, x, y):
@@ -147,19 +137,11 @@ class Player:
         if self.check_wall(int(self.x), int(self.y + dy * scale)):
             self.y += dy
 
-    # Debug method for visualizing player position - not used in production
-    # def draw(self):
-    #     pg.draw.line(self.game.screen, 'yellow', (self.x * 100, self.y * 100),
-    #                 (self.x * 100 + WIDTH * math.cos(self.angle),
-    #                  self.y * 100 + WIDTH * math. sin(self.angle)), 2)
-    #     pg.draw.circle(self.game.screen, 'green', (self.x * 100, self.y * 100), 15)
-
     def mouse_control(self):
-        # Skip mouse control if in dialogue mode
         if self.dialogue_mode:
             return
 
-        mx, _ = pg.mouse.get_pos()  # We only need the x-coordinate
+        mx, _ = pg.mouse.get_pos()
         if mx < MOUSE_BORDER_LEFT or mx > MOUSE_BORDER_RIGHT:
             pg.mouse.set_pos([HALF_WIDTH, HALF_HEIGHT])
         self.rel = pg.mouse.get_rel()[0]
@@ -180,7 +162,7 @@ class Player:
         self.is_dashing = True
         self.dash_start_time = current_time
         self.last_dash_time = current_time
-        # Treba zvuk
+
         self.game.sound.player_dash.play()
         return True
 
@@ -204,10 +186,8 @@ class Player:
         self.is_invulnerable = True
         self.invulnerability_start_time = pg.time.get_ticks()
         self.invulnerability_time_left = POWERUP_INVULNERABILITY_DURATION
-        # Play powerup pickup sound
         self.game.sound.powerup_pickup.play()
-        # Start the active sound
-        self.game.sound.powerup_active.play(-1)  # Loop the sound
+        self.game.sound.powerup_active.play(-1)
 
     def update_invulnerability(self):
         """Update invulnerability state"""

@@ -35,37 +35,26 @@ class Weapon(AnimatedSprite):
 
 class SMG(Weapon):
     def __init__(self, game):
-        # SMG has faster animation time (40 vs 90) and lower damage (15 vs 50)
-        # Animation time is very fast to support automatic firing
         super().__init__(game=game,
                          path='resources/sprites/weapon/smg/0.png',
-                         scale=0.5,  # Slightly larger than original but smaller than pistol
+                         scale=0.5,
                          animation_time=40,
                          damage=15,
                          name='smg')
 
-        # Override the weapon position to move it more to the right
-        # Calculate new position based on the image size
-        right_offset = 100  # Same offset as pistol for consistency
+        right_offset = 100  
         self.weapon_pos = (HALF_WIDTH - self.images[0].get_width() // 2 + right_offset,
                           HEIGHT - self.images[0].get_height())
 
-        # Play SMG sound instead of pistol sound when firing
-        # Note: You'll need to add this sound to the Sound class
-
-
 class Pistol(Weapon):
     def __init__(self, game):
-        # Larger scale (0.6 instead of 0.4) for the pistol
         super().__init__(game=game,
                          path='resources/sprites/weapon/pistol/0.png',
-                         scale=1.2,  # Increased from 0.4
+                         scale=1.2,
                          animation_time=90,
                          damage=50,
                          name='pistol')
 
-        # Override the weapon position to move it more to the right
-        # Calculate new position based on the image size
-        right_offset = 230  # Pixels to move right
+        right_offset = 230
         self.weapon_pos = (HALF_WIDTH - self.images[0].get_width() // 2 + right_offset,
                           HEIGHT - self.images[0].get_height())

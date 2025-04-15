@@ -8,9 +8,9 @@ HALF_HEIGHT = HEIGHT // 2
 FPS = 0
 
 # Default player positions for each level
-PLAYER_POS = 1.5, 2.5  # Level 1 starting position
-PLAYER_POS_LEVEL2 = 12.5, 2.5  # Level 2 starting position
-PLAYER_POS_LEVEL3 = 12.5, 2.5  # Level 3 starting position
+PLAYER_POS = 1.5, 2.5  #lvl 1
+PLAYER_POS_LEVEL2 = 12.5, 2.5
+PLAYER_POS_LEVEL3 = 12.5, 2.5
 PLAYER_ANGLE = 0
 PLAYER_SPEED = 0.004
 PLAYER_ROT_SPEED = 0.002
@@ -18,13 +18,13 @@ PLAYER_SIZE_SCALE = 60
 PLAYER_MAX_HEALTH = 100
 
 # dash settings
-PLAYER_DASH_MULTIPLIER = 3.0  # koliko je dash brži od normalnog kretanja
-PLAYER_DASH_DURATION = 200    # trajanje dasha u milisekundama
-PLAYER_DASH_COOLDOWN = 1000   # cooldown dasha u milisekundama
+PLAYER_DASH_MULTIPLIER = 3.0
+PLAYER_DASH_DURATION = 200
+PLAYER_DASH_COOLDOWN = 1000
 
 # powerup settings
-POWERUP_INVULNERABILITY_DURATION = 5000  # invulnerability duration in milliseconds
-POWERUP_PICKUP_DISTANCE = 0.5  # distance at which player can pick up powerups
+POWERUP_INVULNERABILITY_DURATION = 5000
+POWERUP_PICKUP_DISTANCE = 0.5
 
 MOUSE_SENSITIVITY = 0.0003
 MOUSE_MAX_REL = 40

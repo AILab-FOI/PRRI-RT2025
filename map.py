@@ -44,7 +44,7 @@ MAPS = {
         [9, 9, 9, 9, 9, 3, 3, 3, 3, 3, 3, 3, 11, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3]  # 34 (12, 34) vrata koja se otvraju kada su svi neprijatelji porazeni na levelu)
     ],
 
-    # Level 2 map - Drugačija mapa za drugi level
+    # Level 2 map
     2: [
         #0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24
         [8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8], # 0
@@ -74,7 +74,7 @@ MAPS = {
         [8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8]  # 24
     ],
 
-    # Level 3 map - StakorNPC only level
+    # Level 3 map
     3: [
         #0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24
         [7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7], # 0
@@ -109,7 +109,7 @@ MAPS = {
 class Map:
     def __init__(self, game):
         self.game = game
-        self.level = 1  # Default level
+        self.level = 1
         self.load_level(self.level)
 
     def load_level(self, level):
@@ -133,8 +133,3 @@ class Map:
             for i, value in enumerate(row):
                 if value:
                     self.world_map[(i, j)] = value
-
-    # Debug method for visualizing the map - not used in production
-    # def draw(self):
-    #     [pg.draw.rect(self.game.screen, 'darkgray', (pos[0] * 100, pos[1] * 100, 100, 100), 2)
-    #      for pos in self.world_map]

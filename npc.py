@@ -21,14 +21,13 @@ class NPC(AnimatedSprite):
         self.alive = True
         self.pain = False
         self.ray_cast_value = False
-        self.death_frame = 0  # Use a consistent name for death animation frame counter
+        self.death_frame = 0 
         self.player_search_trigger = False
 
     def update(self):
         self.check_animation_time()
         self.get_sprite()
         self.run_logic()
-        # self.draw_ray_cast()
 
     def check_wall(self, x, y):
         return (x, y) not in self.game.map.world_map
@@ -43,7 +42,6 @@ class NPC(AnimatedSprite):
         next_pos = self.game.pathfinding.get_path(self.map_pos, self.game.player.map_pos)
         next_x, next_y = next_pos
 
-        # pg.draw.rect(self.game.screen, 'blue', (100 * next_x, 100 * next_y, 100, 100))
         if next_pos not in self.game.object_handler.npc_positions:
             angle = math.atan2(next_y + 0.5 - self.y, next_x + 0.5 - self.x)
             dx = math.cos(angle) * self.speed
@@ -80,7 +78,7 @@ class NPC(AnimatedSprite):
                 self.check_health()
 
     def check_health(self):
-        if self.health < 1 and self.alive:  # Check if the enemy is already dead
+        if self.health < 1 and self.alive:
             self.alive = False
 
             if type(self) is NPC:
@@ -92,7 +90,7 @@ class NPC(AnimatedSprite):
             if hasattr(self, 'death_height_shift'):
                 self.SPRITE_HEIGHT_SHIFT = self.death_height_shift
             else:
-                self.SPRITE_HEIGHT_SHIFT = 0.5  # Default value
+                self.SPRITE_HEIGHT_SHIFT = 0.5
             if len(self.death_images) > 0:
                 self.image = self.death_images[0]
 
@@ -233,17 +231,14 @@ class KlonoviNPC(NPC):
     def __init__(self, game, path='resources/sprites/npc/klonovi/0.png', pos=(10.5, 5.5),
                  scale=0.6, shift=0.38, animation_time=180):
         super().__init__(game, path, pos, scale, shift, animation_time)
-        # No need to reload death images as they're already loaded in the parent class
-        # Store original height shift for restoration when needed
         self.original_height_shift = self.SPRITE_HEIGHT_SHIFT
-        # Set death height shift (will be applied when enemy dies)
-        self.death_height_shift = 0.7  # Specific value for KlonoviNPC
+        self.death_height_shift = 0.7 
 
 class StakorNPC(NPC):
     def __init__(self, game, path='resources/sprites/npc/stakor/0.png', pos=(10.5, 5.5),
                  scale=0.5, shift=0.4, animation_time=200):
         super().__init__(game, path, pos, scale, shift, animation_time)
-        # Posebno učitamo slike za smrt jer imamo drugačiju strukturu direktorija
+
         self.death_images = deque()
         death_path = self.path + '/death'
         for file_name in ['0.png', '1.png']:
@@ -252,7 +247,7 @@ class StakorNPC(NPC):
                 self.death_images.append(img)
         # Death height shift will be applied when enemy dies
         self.death_height_shift = 0.8
-        # Koristimo walk slike za hodanje
+
         self.walk_images = self.get_images(self.path + '/walk')
 
         # Karakteristike štakora
