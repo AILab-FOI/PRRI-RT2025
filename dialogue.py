@@ -42,12 +42,6 @@ class DialogueManager:
         """Load all dialogue files from the dialogues directory"""
         dialogue_dir = 'resources/dialogues'
 
-        # Create directory if it doesn't exist
-        if not os.path.exists(dialogue_dir):
-            os.makedirs(dialogue_dir)
-            # Create a sample dialogue file
-            self._create_sample_dialogue()
-
         # Load all JSON files in the dialogues directory
         for filename in os.listdir(dialogue_dir):
             if filename.endswith('.json'):
@@ -58,34 +52,6 @@ class DialogueManager:
                         self.dialogues[dialogue_id] = json.load(f)
                 except Exception as e:
                     print(f"Error loading dialogue {filename}: {e}")
-
-    def _create_sample_dialogue(self):
-        """Create a sample dialogue file if none exist"""
-        sample_dialogue = {
-            "npc_name": "Marvin",
-            "lines": [
-                "Hello, I'm Marvin, the Paranoid Android.",
-                "Who are you?",
-                "Life? Don't talk to me about life.",
-                "That sounds depressing.",
-                "I've been talking to the ship's computer.",
-                "And?",
-                "It hates me."
-            ],
-            "speakers": [
-                "Marvin",
-                "Arthur",
-                "Marvin",
-                "Arthur",
-                "Marvin",
-                "Arthur",
-                "Marvin"
-            ]
-        }
-
-        file_path = os.path.join('resources/dialogues', 'marvin_intro.json')
-        with open(file_path, 'w') as f:
-            json.dump(sample_dialogue, f, indent=4)
 
     def start_dialogue(self, dialogue_id, npc):
         """Start a dialogue with the given ID"""
