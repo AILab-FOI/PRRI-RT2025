@@ -16,13 +16,77 @@ def get_level_data():
     # Doors
     level_data['doors'] = [
         
-        ##{
-        ##    'position': (16, 21),
-        ##    'door_id': 3,
-        ##    'requires_code': True,
-        ##    'code': '4242',  # Uses code from first terminal
-        ##    'requires_door_id': 2  # Requires second door to be opened
-        ##}
+        {
+            #početna
+            'position': (5, 3),
+            'door_id': 1,
+            'requires_code': False,
+            #'code': '4242',  # Uses code from first terminal
+            #'requires_door_id': 2  # Requires second door to be opened
+
+            #soba blizu početka
+            'position': (3, 7),
+            'door_id': 2,
+            'requires_code': False,
+            #'code': '4242',  # Uses code from first terminal
+            #'requires_door_id': 2  # Requires second door to be opened
+
+            #srednja soba gornja
+            'position': (25, 13),
+            'door_id': 3,
+            'requires_code': False,
+            #'code': '4242',  # Uses code from first terminal
+            #'requires_door_id': 2  # Requires second door to be opened
+
+            #unutarnja soba lijeve sobe
+            'position': (7, 17),
+            'door_id': 4,
+            'requires_code': False,
+            #'code': '4242',  # Uses code from first terminal
+            #'requires_door_id': 2  # Requires second door to be opened
+
+            #lijeva soba
+            'position': (10, 17),
+            'door_id': 5,
+            'requires_code': False,
+            #'code': '4242',  # Uses code from first terminal
+            #'requires_door_id': 2  # Requires second door to be opened
+
+            #srednja soba lijeva
+            'position': (15, 17),
+            'door_id': 6,
+            'requires_code': False,
+            #'code': '4242',  # Uses code from first terminal
+            #'requires_door_id': 2  # Requires second door to be opened
+
+            #srednja soba desna
+            'position': (34, 17),
+            'door_id': 7,
+            'requires_code': False,
+            #'code': '4242',  # Uses code from first terminal
+            #'requires_door_id': 2  # Requires second door to be opened
+
+            #desna soba
+            'position': (41, 17),
+            'door_id': 8,
+            'requires_code': False,
+            #'code': '4242',  # Uses code from first terminal
+            #'requires_door_id': 2  # Requires second door to be opened
+
+            #unutarnja soba desne sobe
+            'position': (47, 16),
+            'door_id': 9,
+            'requires_code': False,
+            #'code': '4242',  # Uses code from first terminal
+            #'requires_door_id': 2  # Requires second door to be opened
+
+            #srednja soba donja
+            'position': (25, 21),
+            'door_id': 10,
+            'requires_code': False,
+            #'code': '4242',  # Uses code from first terminal
+            #'requires_door_id': 2  # Requires second door to be opened
+        }
     ]
     
     # Decorative sprites
