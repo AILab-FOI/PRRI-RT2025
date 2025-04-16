@@ -24,9 +24,9 @@ class Player:
         self.dialogue_mode = False
 
         # Automatic weapon firing properties
-        self.auto_fire = False 
-        self.auto_fire_delay = 150 
-        self.last_auto_fire_time = 0 
+        self.auto_fire = False
+        self.auto_fire_delay = 150
+        self.last_auto_fire_time = 0
 
         # Invulnerability powerup properties
         self.is_invulnerable = False
@@ -60,8 +60,8 @@ class Player:
         self.check_game_over()
 
     def single_fire_event(self, event):
-
-        if self.dialogue_mode:
+        # Prevent shooting during dialogue or intro sequence
+        if self.dialogue_mode or (hasattr(self.game, 'intro_sequence') and self.game.intro_sequence.active):
             return
 
         # Handle mouse button down - start firing
@@ -83,14 +83,15 @@ class Player:
         # Play the appropriate sound based on weapon type
         if self.game.weapon.name == 'smg':
             self.game.sound.smg.play()
-        else: 
+        else:
             self.game.sound.pistolj.play()
         self.shot = True
         self.game.weapon.reloading = True
         self.last_auto_fire_time = pg.time.get_ticks()
 
     def movement(self):
-        if self.dialogue_mode:
+        # Prevent movement during dialogue or intro sequence
+        if self.dialogue_mode or (hasattr(self.game, 'intro_sequence') and self.game.intro_sequence.active):
             return
 
         sin_a = math.sin(self.angle)
@@ -138,7 +139,8 @@ class Player:
             self.y += dy
 
     def mouse_control(self):
-        if self.dialogue_mode:
+        # Prevent camera movement during dialogue or intro sequence
+        if self.dialogue_mode or (hasattr(self.game, 'intro_sequence') and self.game.intro_sequence.active):
             return
 
         mx, _ = pg.mouse.get_pos()
@@ -149,6 +151,10 @@ class Player:
         self.angle += self.rel * MOUSE_SENSITIVITY * self.game.delta_time
 
     def dash(self):
+        # Prevent dashing during intro sequence
+        if hasattr(self.game, 'intro_sequence') and self.game.intro_sequence.active:
+            return False
+
         # Provjeri je li dash na cooldownu
         current_time = pg.time.get_ticks()
         if current_time - self.last_dash_time < PLAYER_DASH_COOLDOWN:

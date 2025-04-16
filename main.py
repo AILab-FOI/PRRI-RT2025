@@ -15,6 +15,7 @@ from level_manager import LevelManager
 from dialogue import DialogueManager
 from menu import Menu
 from font_manager import load_custom_font
+from intro_sequence import IntroSequence
 
 
 class Game:
@@ -31,6 +32,7 @@ class Game:
 
         self.sound = Sound(self)
         self.menu = Menu(self)
+        self.intro_sequence = IntroSequence(self)
         self.game_initialized = False
         self.show_menu()
 
@@ -68,29 +70,37 @@ class Game:
         if self.level_manager.current_level == 1:
             self.player.x, self.player.y = PLAYER_POS
         elif self.level_manager.current_level == 2:
-            self.player.x, self.player.y = PLAYER_POS_LEVEL2 
+            self.player.x, self.player.y = PLAYER_POS_LEVEL2
         elif self.level_manager.current_level == 3:
-            self.player.x, self.player.y = PLAYER_POS_LEVEL3 
+            self.player.x, self.player.y = PLAYER_POS_LEVEL3
 
         if not pg.mixer.music.get_busy():
             pg.mixer.music.play(-1)
+        self.intro_sequence.start()
 
     def update(self):
+        # Update game components
         self.player.update()
         self.raycasting.update()
         self.object_handler.update()
         self.weapon.update()
         self.interaction.update()
         self.dialogue_manager.update()
+
+        self.intro_sequence.update()
+        self.intro_sequence.update_music_fade()
+
         pg.display.flip()
         self.delta_time = self.clock.tick(FPS)
         pg.display.set_caption(f'{self.clock.get_fps() :.1f}')
 
     def draw(self):
+        # Draw game components
         self.object_renderer.draw()
         self.weapon.draw()
         self.interaction.draw()
         self.dialogue_manager.draw()
+        self.intro_sequence.draw()
 
     def check_events(self):
         self.global_trigger = False
@@ -105,11 +115,14 @@ class Game:
             elif event.type == self.global_event:
                 self.global_trigger = True
 
+            elif event.type == pg.USEREVENT:
+                self.intro_sequence.start_music_with_fade()
+
             # Debug key to advance to next level (N key)
             elif event.type == pg.KEYDOWN and event.key == pg.K_n:
                 self.next_level()
 
-           
+
             elif event.type == pg.KEYDOWN and event.key == pg.K_e:
                 if self.dialogue_manager.dialogue_active:
                     self.dialogue_manager.handle_key_press()
