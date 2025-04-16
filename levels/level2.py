@@ -128,7 +128,7 @@ def get_level_data():
     #Dialogue NPCs
     level_data['dialogue_npcs'] = [
        {
-            'pos': (48.2, 15),
+            'pos': (48.2, 15.5),
             'dialogue_id': 'level2_puzzle',
             'path': 'resources/sprites/npc/dialogue_npc/0.png'
        }

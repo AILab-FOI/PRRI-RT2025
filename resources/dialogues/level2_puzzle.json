@@ -6,10 +6,11 @@
         "Depressed? A door? Seriously? Well, can you ask it nicely to open?",
         "Unlikely to be effective. It has initiated a security protocol. A rather mundane one, actually. You must input the two-digit numerical form of the 'Answer to the Great Question of Life, the Universe, and Everything'",
         "The Answer? You mean... Forty-t... right. But where do I find that number? It's not just written here, is it?",
-        "Observe your surroundings. The components required to deduce the number are displayed nearby, probably scrawled on the walls... (gestures vaguely towards the 'BY' fragment beside him) ...like this pointless piece here. Find all such fragments, perform the implied calculation",
-        "Scrawled on the walls... right. Okay, like that 'BY' thing next to you? I need to find more pieces then? What happens if I type in the wrong number? Does an alarm go off? Laser beams?",
+        "Observe your surroundings. The components required to deduce the number are displayed nearby, probably scrawled on the walls...",
+        "(gestures vaguely towards the 'Ultimate' fragment beside him) ...like this fragment referring to the Question itself. You still need to locate the specific parts that calculate the actual numerical Answer.",
+        "Scrawled on the walls... right. Like this 'Ultimate' thing here? So, I need to find the actual numbers and... whatever connects them? Got it. What happens if I type in the wrong number? Does an alarm go off? Laser beams?",
         "Worse. The system warns of a potential 'spontaneous appearance of a teapot'. It also advises: 'Please DO NOT PANIC'. Futile, I imagine.",
-        "A teapot. Of course. Right then. Walls, numbers, like 'BY', find the rest, don't panic about teapots. Got it. Where's the keypad?",
+        "A teapot. Of course. Right then. Walls, find the calculation bits, don't panic about teapots. Got it. Where's the keypad?",
         "(Gestures vaguely towards an input panel) Enter digits: [__]"
     ],
     "speakers": [
@@ -18,6 +19,7 @@
         "Arthur",
         "Marvin",
         "Arthur",
+        "Marvin",
         "Marvin",
         "Arthur",
         "Marvin",
