@@ -63,11 +63,18 @@ def get_level_data():
 
     # Decorative sprites
     level_data['sprites'] = [
-        # Format: (sprite_type, position)
+        # Format: (sprite_info, position) where sprite_info can be:
+        # - A string (sprite_type) for backward compatibility, using static_sprites folder
+        # - A tuple (folder, sprite_type) to specify a folder
+
+        # Using static sprites folder (default)
         ('ukras1', (12.9, 33.5)),
         ('ukras1', (12.2, 33.5)),
 
-        ('ukras1', (1.5, 26.1)),
+        # Using level1 folder
+        (('level1', 'powerup'), (1.5, 26.1)),
+
+        # Using static sprites folder
         ('ukras2', (1.9, 26.1)),
         ('ukras2', (2.3, 26.1)),
         ('ukras2', (1.1, 26.5)),
@@ -87,9 +94,11 @@ def get_level_data():
         ('ukras1', (1.9, 32.9)),
         ('ukras1', (2.3, 32.9)),
 
-        ('ukras1', (23.2, 31.2)),
-        ('ukras1', (23.2, 33.5)),
+        # Using teksture folder (main texture folder)
+        (('teksture', 'ukras1'), (23.2, 31.2)),
+        (('teksture', 'ukras1'), (23.2, 33.5)),
 
+        # Using static sprites folder
         ('ukras1', (20.2, 31.8)),
         ('ukras1', (15.2, 32.3)),
         ('ukras1', (8.9, 32.3)),
