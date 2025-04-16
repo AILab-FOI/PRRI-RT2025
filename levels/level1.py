@@ -19,7 +19,8 @@ def get_level_data():
         {
             'position': (2, 14),
             'code': '1337',
-            'unlocks_door_id': None  # Terminal doesn't automatically unlock any doors
+            'unlocks_door_id': None,  # Terminal doesn't automatically unlock any doors
+            #W'dialogue_id': None
         }
     ]
 
@@ -68,8 +69,9 @@ def get_level_data():
         # - A tuple (folder, sprite_type) to specify a folder
 
         # Using static sprites folder (default)
-        ('ukras1', (12.9, 33.5)),
-        ('ukras1', (12.2, 33.5)),
+        ## pored vrata 
+        (('level2', 'ukras2'), (12.9, 33.5)),
+        (('level2', 'ukras2'), (12.1, 33.5)),
 
         # Using level1 folder
         (('level1', 'powerup'), (1.5, 26.1)),
@@ -116,14 +118,15 @@ def get_level_data():
         ('ukras2', (3, 30.5)),
         ('ukras2', (3, 31.0)),
         ('ukras2', (3, 31.5)),
-        ('ukras1', (3, 32.0)),
+        ('ukras1', (3, 32.0)), 
 
-        ('ukras1', (23.2, 31.2)),
-        ('ukras1', (23.2, 33.5)),
-        # Using static sprites folder
-        ('ukras1', (20.2, 31.8)),
-        ('ukras1', (15.2, 32.3)),
-        ('ukras1', (8.9, 32.3)),
+        ## donji desni kut
+        (('level2', 'ukras2'), (23.2, 33.5)),
+        
+        # po mapi 3. sektor
+
+  
+        (('level2', 'ukras2'), (8.9, 33.8)), 
 
         ('ukras1', (20.2, 12.2)),
         ('ukras2', (20.2, 12.7)),
@@ -146,6 +149,7 @@ def get_level_data():
         ('ukras1', (21.4, 14.7)),
         ('ukras2', (22, 14.7)),
         ('ukras1', (22.6, 14.7)),
+
 
     ]
 
