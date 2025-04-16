@@ -1,0 +1,13 @@
+{
+    "npc_name": "Terminal",
+    "lines": [
+        "DOOR STATUS: Slightly Depressed.",
+        "SECURITY MEASURE: To pass, you must enter the two-digit numerical equivalent of the answer to the Great Question of Life, the Universe, and Everything.",
+        "WARNING: Entering an incorrect answer may result in the spontaneous appearance of a teapot... Please DO NOT PANIC. Enter digits: [__]"
+    ],
+    "speakers": [
+        "Terminal",
+        "Terminal",
+        "Terminal"
+    ]
+}

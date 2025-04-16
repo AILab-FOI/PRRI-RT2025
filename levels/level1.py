@@ -19,7 +19,8 @@ def get_level_data():
         {
             'position': (2, 14),
             'code': '1337',
-            'unlocks_door_id': None  # Terminal doesn't automatically unlock any doors
+            'unlocks_door_id': None,  # Terminal doesn't automatically unlock any doors
+            #W'dialogue_id': None
         }
     ]
 
