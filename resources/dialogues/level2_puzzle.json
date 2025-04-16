@@ -1,13 +1,27 @@
 {
-    "npc_name": "Terminal",
+    "npc_name": "Marvin",
     "lines": [
-        "DOOR STATUS: Slightly Depressed.",
-        "SECURITY MEASURE: To pass, you must enter the two-digit numerical equivalent of the answer to the Great Question of Life, the Universe, and Everything.",
-        "WARNING: Entering an incorrect answer may result in the spontaneous appearance of a teapot... Please DO NOT PANIC. Enter digits: [__]"
+        "Oh, brilliant. Locked tight. Is anything ever straightforward? I could really use a cup of tea after all this... running.",
+        "Tea is irrelevant to accessing sublifts. This door isn't merely locked. Its current state is classified as 'Slightly Depressed'.",
+        "Depressed? A door? Seriously? Well, can you ask it nicely to open?",
+        "Unlikely to be effective. It has initiated a security protocol. A rather mundane one, actually. You must input the two-digit numerical form of the 'Answer to the Great Question of Life, the Universe, and Everything'",
+        "The Answer? You mean... Forty-t... right. But where do I find that number? It's not just written here, is it?",
+        "Observe your surroundings. The components required to deduce the number are displayed nearby, probably scrawled on the walls... (gestures vaguely towards the 'BY' fragment beside him) ...like this pointless piece here. Find all such fragments, perform the implied calculation",
+        "Scrawled on the walls... right. Okay, like that 'BY' thing next to you? I need to find more pieces then? What happens if I type in the wrong number? Does an alarm go off? Laser beams?",
+        "Worse. The system warns of a potential 'spontaneous appearance of a teapot'. It also advises: 'Please DO NOT PANIC'. Futile, I imagine.",
+        "A teapot. Of course. Right then. Walls, numbers, like 'BY', find the rest, don't panic about teapots. Got it. Where's the keypad?",
+        "(Gestures vaguely towards an input panel) Enter digits: [__]"
     ],
     "speakers": [
-        "Terminal",
-        "Terminal",
-        "Terminal"
+        "Arthur",
+        "Marvin",
+        "Arthur",
+        "Marvin",
+        "Arthur",
+        "Marvin",
+        "Arthur",
+        "Marvin",
+        "Arthur",
+        "Marvin"
     ]
 }

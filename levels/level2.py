@@ -102,7 +102,15 @@ def get_level_data():
             'requires_door_id': None  # Requires second door to be opened
         }
     ]
-    
+
+    level_data['weapons'] = [
+        {
+            'position': (44, 16),
+            'weapon_type': 'smg',
+            'path': 'resources/sprites/weapon/puska_stand.png'
+        }
+    ]
+
     # Decorative sprites
     level_data['sprites'] = [
         
@@ -117,13 +125,13 @@ def get_level_data():
         'fixed_positions': []  # No fixed positions for this level
     }
     
-    # Dialogue NPCs
-   ## level_data['dialogue_npcs'] = [
-     ##   {
-       ##     'pos': (12.5, 5.5),
-         ##   'dialogue_id': 'level2_intro',
-           ## 'path': 'resources/sprites/npc/dialogue_npc/0.png'
-        ##}
-    ##]
+    #Dialogue NPCs
+    level_data['dialogue_npcs'] = [
+       {
+            'pos': (48.2, 15),
+            'dialogue_id': 'level2_puzzle',
+            'path': 'resources/sprites/npc/dialogue_npc/0.png'
+       }
+    ]
     
     return level_data

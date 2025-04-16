@@ -215,5 +215,10 @@ class ObjectRenderer:
             16: self.get_texture('resources/teksture/level2/vrata1.png'), ##vrata bijela zatvorena
             17: self.get_texture('resources/teksture/uvod/zid5.jpg'), ## zid sa malo krvi (manje od uvod/zid1)
             18: self.get_texture('resources/teksture/level2/zid3.png'), ##zid s kockama sobe
-            19: self.get_texture('resources/teksture/level2/panel.png') ## bijeli panel
+            19: self.get_texture('resources/teksture/level2/panel.png'), ## bijeli panel
+
+            20: self.get_texture('resources/teksture/level2/zagonetka1.png'), ## Zid sa Ultimate
+            21: self.get_texture('resources/teksture/level2/zagonetka2.png'), ## Zid sa Six 6
+            22: self.get_texture('resources/teksture/level2/zagonetka3.png'), ## Zid sa BY
+            23: self.get_texture('resources/teksture/level2/zagonetka4.png') ## Zid sa Seven 7
         }
