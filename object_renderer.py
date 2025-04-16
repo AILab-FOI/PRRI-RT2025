@@ -220,5 +220,7 @@ class ObjectRenderer:
             20: self.get_texture('resources/teksture/level2/zagonetka1.png'), ## Zid sa Ultimate
             21: self.get_texture('resources/teksture/level2/zagonetka2.png'), ## Zid sa Six 6
             22: self.get_texture('resources/teksture/level2/zagonetka3.png'), ## Zid sa BY
-            23: self.get_texture('resources/teksture/level2/zagonetka4.png') ## Zid sa Seven 7
+            23: self.get_texture('resources/teksture/level2/zagonetka4.png'), ## Zid sa Seven 7
+
+            24: self.get_texture('resources/teksture/level2/zid4.png') ## bijeli zid s drugacijim paternom
         }

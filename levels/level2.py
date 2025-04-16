@@ -118,8 +118,8 @@ def get_level_data():
         (('level2', 'ukras2'), (6.1, 4.1)),
 
         #vrata pored početne sobe
-        (('level2', 'ukras2'), (2.1, 8.1)),
-        (('level2', 'ukras2'), (4.9, 8.1)),
+        (('level2', 'ukras2'), (2.9, 8.1)),
+        (('level2', 'ukras2'), (4.1, 8.1)),
 
         #srednja soba 4 stupa
         (('level2', 'ukras2'), (24.9, 16.9)),
