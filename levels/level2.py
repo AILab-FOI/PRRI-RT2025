@@ -113,6 +113,69 @@ def get_level_data():
 
     # Decorative sprites
     level_data['sprites'] = [
+        #početna vrata
+        (('level2', 'ukras2'), (6.1, 2.9)),
+        (('level2', 'ukras2'), (6.1, 4.1)),
+
+        #vrata pored početne sobe
+        (('level2', 'ukras2'), (2.1, 8.1)),
+        (('level2', 'ukras2'), (4.9, 8.1)),
+
+        #srednja soba 4 stupa
+        (('level2', 'ukras2'), (24.9, 16.9)),
+        (('level2', 'ukras2'), (26.1, 16.9)),
+        (('level2', 'ukras2'), (24.9, 18.1)),
+        (('level2', 'ukras2'), (26.1, 18.1)),
+
+        #srednja soba pored gornja vrata
+        (('level2', 'ukras2'), (24.9, 14.1)),
+        (('level2', 'ukras2'), (26.1, 14.1)),
+        #srednja soba pored gornji vrata vanjsko
+        (('level2', 'ukras2'), (24.9, 12.9)),
+        (('level2', 'ukras2'), (26.1, 12.9)),
+
+        #srednja soba pored desnih vrata
+        (('level2', 'ukras2'), (16.1, 16.9)),
+        (('level2', 'ukras2'), (16.1, 18.1)),
+        #srednja soba pored desnih vrata vanjsko
+        (('level2', 'ukras2'), (14.9, 16.9)),
+        (('level2', 'ukras2'), (14.9, 18.1)),
+
+        #srednja soba pored lijevih vrata
+        (('level2', 'ukras2'), (33.9, 16.9)),
+        (('level2', 'ukras2'), (33.9, 18.1)),
+        #srednja soba pored lijevih vrata vanjsko
+        (('level2', 'ukras2'), (35.1, 16.9)),
+        (('level2', 'ukras2'), (35.1, 18.1)),
+
+        #srednja soba donja vrata
+        (('level2', 'ukras2'), (24.9, 20.9)),
+        (('level2', 'ukras2'), (26.1, 20.9)),
+        #srednja soba donja vrata vanjsko
+        (('level2', 'ukras2'), (24.9, 22.1)),
+        (('level2', 'ukras2'), (26.1, 22.1)),
+
+        #lijeva soba vanjska vrata vanjsko
+        (('level2', 'ukras2'), (12.1, 16.9)),
+        (('level2', 'ukras2'), (12.1, 18.1)),
+        #lijeva soba vanjska vrata
+        (('level2', 'ukras2'), (10.9, 16.9)),
+        (('level2', 'ukras2'), (10.9, 18.1)),
+
+        #lijeva soba unutarnja vrata vanjsko
+        (('level2', 'ukras2'), (8.1, 16.9)),
+        (('level2', 'ukras2'), (8.1, 18.1)),
+        #lijeva soba unutarnja vrata
+        (('level2', 'ukras2'), (6.9, 16.9)),
+        (('level2', 'ukras2'), (6.9, 18.1)),
+
+        #desna soba vanjska vrata vanjsko
+        (('level2', 'ukras2'), (40.9, 16.9)),
+        (('level2', 'ukras2'), (40.9, 18.1)),
+        #desna soba vanjska vrata
+        (('level2', 'ukras2'), (42.1, 16.9)),
+        (('level2', 'ukras2'), (42.1, 18.1)),
+
         
     ]
     
