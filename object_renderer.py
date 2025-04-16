@@ -202,7 +202,8 @@ class ObjectRenderer:
             7: self.get_texture('resources/teksture/11.png'),
             8: self.get_texture('resources/teksture/8.png'),
             9: self.get_texture('resources/teksture/9.png'),
-            10: self.get_texture('resources/teksture/10.png'),
+            10: self.get_texture('resources/teksture/level2/zid1.png'),
+            13: self.get_texture('resources/teksture/level2/zid2.png'),
 
             11: self.get_texture('resources/teksture/vrata1.png'), ## vrata crna zatvorena
             12: self.get_texture('resources/teksture/ukras4.png'), ## ne korišteno warning terminal
@@ -213,4 +214,5 @@ class ObjectRenderer:
             4: self.get_texture('resources/teksture/level2/zid2.png'), ## bijeli zid level 1 / level 2 - prijelaz/vanjski
             16: self.get_texture('resources/teksture/level2/vrata1.png'), ##vrata bijela zatvorena
             17: self.get_texture('resources/teksture/uvod/zid5.jpg'), ## zid sa malo krvi (manje od uvod/zid1)
+            18: self. get_texture('resources/teksture/level2/zid3.png'), ##zid s kockama sobe
         }
