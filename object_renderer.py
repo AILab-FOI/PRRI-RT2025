@@ -39,11 +39,19 @@ class ObjectRenderer:
         self.game_over_image = self.get_texture('resources/textures/game_over.png', RES)
         self.win_image = self.get_texture('resources/textures/win.png', RES)
 
+        # Preload powerup icon to improve performance
+        self.powerup_icon = self.get_texture('resources/teksture/level1/powerup.png', (100, 100))
+
+        # Preload fonts for better performance
+        self.message_font = load_custom_font(30)
+        self.invulnerability_title_font = load_custom_font(24)
+        self.invulnerability_timer_font = load_custom_font(40)
+        self.enemy_counter_font = load_custom_font(20)
+
         # Message display
         self.message = ""
         self.message_time = 0
         self.message_duration = 5000
-        self.message_font = load_custom_font(30)
 
     def draw(self):
         self.draw_background()
@@ -67,12 +75,11 @@ class ObjectRenderer:
         # Create the counter text
         counter_text = f"Enemies: {remaining_enemies}/{total_enemies}"
 
-        # Use helper method to draw text with background
-        font = load_custom_font(20)
+        # Use preloaded font
         position = (WIDTH - 20, HEIGHT - 20)
 
         # Custom positioning for bottom right
-        text_surface = font.render(counter_text, True, (255, 255, 255))
+        text_surface = self.enemy_counter_font.render(counter_text, True, (255, 255, 255))
         text_rect = text_surface.get_rect(bottomright=position)
         bg_rect = text_rect.inflate(20, 10)
         bg_surface = pg.Surface((bg_rect.width, bg_rect.height), pg.SRCALPHA)
@@ -151,22 +158,19 @@ class ObjectRenderer:
         seconds_left = max(1, int(self.game.player.invulnerability_time_left / 1000) + 1)
         center_x = HALF_WIDTH
 
-        # Draw title text
-        title_font = load_custom_font(24)
+        # Draw title text (using preloaded font)
         title_position = (center_x, 30)
-        title_surface = title_font.render("INVINCIBILITY", True, (255, 255, 255))
+        title_surface = self.invulnerability_title_font.render("INVINCIBILITY", True, (255, 255, 255))
         title_rect = title_surface.get_rect(center=title_position)
         self.screen.blit(title_surface, title_rect)
 
-        # Draw icon
-        icon = self.digits['1']
-        icon_rect = icon.get_rect(center=(center_x, 80))
-        self.screen.blit(icon, icon_rect)
+        # Draw icon (using preloaded texture)
+        icon_rect = self.powerup_icon.get_rect(center=(center_x, 80))
+        self.screen.blit(self.powerup_icon, icon_rect)
 
-        # Draw timer
-        timer_font = load_custom_font(40)
+        # Draw timer (using preloaded font)
         timer_position = (center_x, 140)
-        timer_surface = timer_font.render(f"{seconds_left}s", True, (255, 255, 255))
+        timer_surface = self.invulnerability_timer_font.render(f"{seconds_left}s", True, (255, 255, 255))
         timer_rect = timer_surface.get_rect(center=timer_position)
         self.screen.blit(timer_surface, timer_rect)
 

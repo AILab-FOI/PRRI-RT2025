@@ -1,12 +1,6 @@
 import pygame as pg
 from settings import *
-
-# Helper function to load futuristic font
-def load_futuristic_font(size):
-    try:
-        return pg.font.Font('resources/fonts/kenvector_future.ttf', size)
-    except:
-        return pg.font.Font(None, size)
+from font_manager import load_custom_font
 
 # Helper functions removed
 
@@ -30,7 +24,7 @@ class Button(UIElement):
         self.glow_size = 0
 
         # Load font and render text
-        self.font = load_futuristic_font(self.font_size)
+        self.font = load_custom_font(self.font_size)
         self.update_text(text)
 
     def update_text(self, new_text):
@@ -92,7 +86,7 @@ class Slider(UIElement):
         self.dragging = False
 
         # Load font
-        self.font = load_futuristic_font(self.font_size)
+        self.font = load_custom_font(self.font_size)
 
         # Update text and position
         self.update_text()
@@ -174,11 +168,8 @@ class Menu:
         # Calculate widths based on text length
         button_widths = []
         for text in button_texts:
-            # Try to load the font to measure text width
-            try:
-                font = pg.font.Font('resources/fonts/kenvector_future.ttf', 36)
-            except:
-                font = pg.font.Font(None, 36)
+            # Load the font to measure text width
+            font = load_custom_font(36)
 
             text_width = font.size(text)[0]
             # Add padding to the text width
@@ -216,11 +207,8 @@ class Menu:
         self.bg_image = pg.image.load('resources/textures/menu_bg.png')
         self.bg_image = pg.transform.scale(self.bg_image, RES)
 
-        # Font for title - try to use futuristic font
-        try:
-            self.title_font = pg.font.Font('resources/fonts/kenvector_future.ttf', 72)
-        except:
-            self.title_font = pg.font.Font(None, 72)
+        # Font for title
+        self.title_font = load_custom_font(72)
 
         self.title_text = self.title_font.render("Galaxy's Doom", True, (220, 220, 255))
         self.title_rect = self.title_text.get_rect(center=(HALF_WIDTH, 150))
@@ -241,10 +229,7 @@ class Menu:
         self.credits = "© 2025 PRRI-RT Team"
 
         # Create font for version and credits
-        try:
-            self.small_font = pg.font.Font('resources/fonts/kenvector_future.ttf', 16)
-        except:
-            self.small_font = pg.font.Font(None, 16)
+        self.small_font = load_custom_font(16)
 
         self.version_text = self.small_font.render(self.version, True, (180, 180, 220))
         self.version_rect = self.version_text.get_rect(bottomright=(WIDTH - 20, HEIGHT - 10))

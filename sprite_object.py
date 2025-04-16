@@ -40,7 +40,28 @@ class SpriteObject:
         proj = SCREEN_DIST / self.norm_dist * self.SPRITE_SCALE
         proj_width, proj_height = proj * self.IMAGE_RATIO, proj
 
-        image = pg.transform.scale(self.image, (proj_width, proj_height))
+        # Round the dimensions to reduce the number of unique scaled images
+        proj_width = round(proj_width)
+        proj_height = round(proj_height)
+
+        # We'll use a simple caching mechanism based on the dimensions
+        cache_key = (proj_width, proj_height)
+
+        # Create the cache attribute if it doesn't exist
+        if not hasattr(self, '_scaled_image_cache'):
+            self._scaled_image_cache = {}
+
+        # Get the scaled image from cache or create a new one
+        if cache_key not in self._scaled_image_cache:
+            self._scaled_image_cache[cache_key] = pg.transform.scale(self.image, (proj_width, proj_height))
+
+            # Limit cache size to prevent memory issues (keep only the 10 most recent sizes)
+            if len(self._scaled_image_cache) > 10:
+                # Remove the oldest entry
+                oldest_key = next(iter(self._scaled_image_cache))
+                del self._scaled_image_cache[oldest_key]
+
+        image = self._scaled_image_cache[cache_key]
 
         self.sprite_half_width = proj_width // 2
         height_shift = proj_height * self.SPRITE_HEIGHT_SHIFT

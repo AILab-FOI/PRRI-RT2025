@@ -108,8 +108,31 @@ class ObjectHandler:
         sprite_data = self.game.level_manager.get_sprite_data()
 
         # Add all sprites using a loop
-        for sprite_type, pos in sprite_data:
-            sprite_path = self.static_sprite_path + sprite_type + '.png'
+        for sprite_info, pos in sprite_data:
+            # Check if sprite_info is a tuple (folder, sprite_type) or just a string (sprite_type)
+            if isinstance(sprite_info, tuple) and len(sprite_info) == 2:
+                folder, sprite_type = sprite_info
+                # Use the specified folder
+                if folder == 'static':
+                    sprite_path = self.static_sprite_path + sprite_type + '.png'
+                elif folder == 'level1':
+                    sprite_path = 'resources/teksture/level1/' + sprite_type + '.png'
+                elif folder == 'level2':
+                    sprite_path = 'resources/teksture/level2/' + sprite_type + '.png'
+                elif folder == 'level3':
+                    sprite_path = 'resources/teksture/level3/' + sprite_type + '.png'
+                elif folder == 'level4':
+                    sprite_path = 'resources/teksture/level4/' + sprite_type + '.png'
+                elif folder == 'teksture':
+                    sprite_path = 'resources/teksture/' + sprite_type + '.png'
+                else:
+                    # Default to static sprites if folder is unknown
+                    sprite_path = self.static_sprite_path + sprite_type + '.png'
+            else:
+                # Backward compatibility: if sprite_info is just a string, use the static sprites folder
+                sprite_type = sprite_info
+                sprite_path = self.static_sprite_path + sprite_type + '.png'
+
             self.add_sprite(SpriteObject(self.game, path=sprite_path, pos=pos))
 
     def _spawn_random_enemies(self, count):

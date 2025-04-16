@@ -5,15 +5,12 @@ from sprite_object import SpriteObject
 
 
 class PowerUp(SpriteObject):
-    def __init__(self, game, path=None, pos=(10.5, 3.5), powerup_type='invulnerability'):
-        # Use a placeholder sprite if none is provided
-        if path is None:
-            path = 'resources/sprites/static_sprites/ukras2.png'  # Using an existing sprite as placeholder
+    def __init__(self, game, path='resources/teksture/level1/powerup.png', pos=(10.5, 3.5), powerup_type='invulnerability'):
 
         # Add 0.5 to position for proper sprite rendering in the center of the tile
         adjusted_pos = (pos[0] + 0.5, pos[1] + 0.5) if isinstance(pos, tuple) else pos
 
-        super().__init__(game, path, adjusted_pos, scale=0.5, shift=0.4)
+        super().__init__(game, path, adjusted_pos, scale=0.35, shift=1)
 
         self.powerup_type = powerup_type
         self.pickup_distance = POWERUP_PICKUP_DISTANCE
