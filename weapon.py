@@ -41,12 +41,12 @@ class SMG(Weapon):
     def __init__(self, game):
         super().__init__(game=game,
                          path='resources/sprites/weapon/smg/0.png',
-                         scale=0.5,
+                         scale=1.2,
                          animation_time=40,
                          damage=15,
                          name='smg')
 
-        right_offset = 100
+        right_offset = 230
         self.weapon_pos = (HALF_WIDTH - self.images[0].get_width() // 2 + right_offset,
                           HEIGHT - self.images[0].get_height())
 

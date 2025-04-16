@@ -76,7 +76,10 @@ class Game:
 
         if not pg.mixer.music.get_busy():
             pg.mixer.music.play(-1)
-        self.intro_sequence.start()
+
+        # Only play intro sequence on level 1
+        if self.level_manager.current_level == 1:
+            self.intro_sequence.start()
 
     def update(self):
         # Update game components
