@@ -159,6 +159,10 @@ class DialogueManager:
 
     def draw(self):
         """Draw the dialogue UI"""
+        # Don't draw dialogue if intro sequence is active
+        if hasattr(self.game, 'intro_sequence') and self.game.intro_sequence.active:
+            return
+
         if not self.dialogue_active or not self.current_dialogue:
             return
 
@@ -307,6 +311,10 @@ class DialogueNPC(NPC):
 
     def draw_interaction_indicator(self):
         """Draw an indicator showing the player can interact with this NPC"""
+        # Don't draw indicator if intro sequence is active
+        if hasattr(self.game, 'intro_sequence') and self.game.intro_sequence.active:
+            return
+
         if not self.interaction_indicator_visible:
             return
 

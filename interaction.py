@@ -45,6 +45,10 @@ class Interaction:
             self.message = ""
 
     def draw(self):
+        # Don't draw any text if intro sequence is active
+        if hasattr(self.game, 'intro_sequence') and self.game.intro_sequence.active:
+            return
+
         # Draw interaction prompt if player is near an interactive object
         if self.show_interaction_prompt and not self.input_active:
             # Draw a crosshair/indicator in the center of the screen

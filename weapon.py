@@ -26,6 +26,10 @@ class Weapon(AnimatedSprite):
                     self.frame_counter = 0
 
     def draw(self):
+        # Don't draw weapon if intro sequence is active
+        if hasattr(self.game, 'intro_sequence') and self.game.intro_sequence.active:
+            return
+
         self.game.screen.blit(self.images[0], self.weapon_pos)
 
     def update(self):
@@ -42,7 +46,7 @@ class SMG(Weapon):
                          damage=15,
                          name='smg')
 
-        right_offset = 100  
+        right_offset = 100
         self.weapon_pos = (HALF_WIDTH - self.images[0].get_width() // 2 + right_offset,
                           HEIGHT - self.images[0].get_height())
 
