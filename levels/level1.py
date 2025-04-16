@@ -45,7 +45,7 @@ def get_level_data():
         {
             'position': (5, 5),
             'weapon_type': 'smg',
-            'path': 'resources/sprites/weapon/smg/0.png'
+            'path': 'resources/sprites/weapon/puska_stand.png'
         }
     ]
 
