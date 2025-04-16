@@ -193,8 +193,7 @@ class ObjectRenderer:
             1: self.get_texture('resources/teksture/1.jpg'),
             2: self.get_texture('resources/teksture/2.jpg'),
             3: self.get_texture('resources/teksture/3.jpg'),
-            4: self.get_texture('resources/teksture/4.jpg'),
-            5: self.get_texture('resources/teksture/5.jpg'),
+
             6: self.get_texture('resources/teksture/6.jpg'),
             7: self.get_texture('resources/teksture/11.png'),
             8: self.get_texture('resources/teksture/8.png'),
@@ -206,4 +205,6 @@ class ObjectRenderer:
 
             14: self.get_texture('resources/teksture/ukras1.png'),
             15: self.get_texture('resources/teksture/prozor.jpg'),
+
+            
         }
