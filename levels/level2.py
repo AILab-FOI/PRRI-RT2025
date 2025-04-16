@@ -14,7 +14,7 @@ def get_level_data():
             'position': (47, 17), # Neka pozicija blizu vrata sobe s oružjem (16)
             'code': None,
             'unlocks_door_id': None,
-            #'dialogue_id': 'level2_puzzle'
+            
         }
     ]
     
@@ -122,10 +122,10 @@ def get_level_data():
         (('level2', 'ukras2'), (4.1, 8.1)),
 
         #srednja soba 4 stupa
-        (('level2', 'ukras2'), (24.9, 16.9)),
-        (('level2', 'ukras2'), (26.1, 16.9)),
-        (('level2', 'ukras2'), (24.9, 18.1)),
-        (('level2', 'ukras2'), (26.1, 18.1)),
+        (('level2', 'ukras1'), (24.9, 16.9)),
+        (('level2', 'ukras1'), (26.1, 16.9)),
+        (('level2', 'ukras1'), (24.9, 18.1)),
+        (('level2', 'ukras1'), (26.1, 18.1)),
 
         #srednja soba pored gornja vrata
         (('level2', 'ukras2'), (24.9, 14.1)),
@@ -176,6 +176,107 @@ def get_level_data():
         (('level2', 'ukras2'), (42.1, 16.9)),
         (('level2', 'ukras2'), (42.1, 18.1)),
 
+        #ukrasi u srednjoj sobi
+        (('level2', 'ukras3'), (20.1, 16.1)),
+        (('level2', 'ukras3'), (29.9, 16.1)),
+        (('level2', 'ukras3'), (20.1, 18.9)),
+        (('level2', 'ukras3'), (29.9, 18.9)),
+
+        #hangar
+        (('level2', 'ukras1'), (26.9, 43.9)),
+        (('level2', 'ukras1'), (26.9, 46.1)),
+        (('level2', 'ukras1'), (30.1, 43.9)),
+        (('level2', 'ukras1'), (30.1, 46.1)),
+
+        (('level2', 'ukras3'), (18.5, 45.2)),
+        (('level2', 'ukras3'), (38.5, 45.2)),
+        (('level2', 'ukras3'), (18.5, 45.8)),
+        (('level2', 'ukras3'), (38.5, 45.8)),
+
+        (('level2', 'ukras3'), (23.5, 44.5)),
+        (('level2', 'ukras3'), (23.5, 45.5)),
+        (('level2', 'ukras3'), (33.5, 44.5)),
+        (('level2', 'ukras3'), (33.5, 45.5)),
+
+        (('level2', 'ukras3'), (13.5, 44.5)),
+        (('level2', 'ukras3'), (13.5, 45.5)),
+        (('level2', 'ukras3'), (43.5, 44.5)),
+        (('level2', 'ukras3'), (43.5, 45.5)),
+
+        (('level2', 'ukras3'), (8.5, 44.1)),
+        (('level2', 'ukras3'), (8.5, 45.9)),
+        (('level2', 'ukras3'), (46.5, 44.1)),
+        (('level2', 'ukras3'), (46.5, 45.9)),
+
+        #dio nakon početnih vrata
+        (('level2', 'ukras3'), (12.5, 6.1)),
+
+        (('level2', 'ukras3'), (11.5, 9.9)),
+        (('level2', 'ukras3'), (15.5, 9.9)),
+
+        (('level2', 'ukras3'), (34.5, 9.9)),
+        (('level2', 'ukras3'), (41.5, 9.9)),
+
+        (('level2', 'ukras3'), (22.5, 11.1)),
+        (('level2', 'ukras3'), (28.5, 11.1)),
+
+        (('level2', 'ukras1'), (43.5, 5.5)),
+        (('level2', 'ukras1'), (43.5, 8.5)),
+        (('level2', 'ukras1'), (47.5, 5.5)),
+        (('level2', 'ukras1'), (47.5, 8.5)),
+        (('level2', 'ukras3'), (45.5, 7)),
+
+        #lijevi hodnik
+        (('level2', 'ukras3'), (12.1, 12.9)),
+        (('level2', 'ukras3'), (14.9, 12.9)),
+        (('level2', 'ukras3'), (12.1, 22.1)),
+        (('level2', 'ukras3'), (14.9, 22.1)),
+        #desni hodnik
+        (('level2', 'ukras3'), (35.1, 12.9)),
+        (('level2', 'ukras3'), (40.9, 12.9)),
+        (('level2', 'ukras3'), (35.1, 22.1)),
+        (('level2', 'ukras3'), (40.9, 22.1)),
+
+        #dugi hodnik nakon srednje sobe
+        (('level2', 'ukras2'), (5.1, 23.9)),
+        (('level2', 'ukras2'), (7.1, 23.9)),
+        (('level2', 'ukras2'), (9.1, 23.9)),
+        (('level2', 'ukras2'), (11.1, 23.9)),
+        (('level2', 'ukras2'), (13.1, 23.9)),
+        (('level2', 'ukras2'), (15.1, 23.9)),
+        (('level2', 'ukras2'), (17.1, 23.9)),
+        (('level2', 'ukras2'), (19.1, 23.9)),
+        (('level2', 'ukras2'), (21.1, 23.9)),
+
+        (('level2', 'ukras2'), (29.9, 23.9)),
+        (('level2', 'ukras2'), (31.9, 23.9)),
+        (('level2', 'ukras2'), (33.9, 23.9)),
+        (('level2', 'ukras2'), (35.9, 23.9)),
+        (('level2', 'ukras2'), (37.9, 23.9)),
+        (('level2', 'ukras2'), (39.9, 23.9)),
+        (('level2', 'ukras2'), (41.9, 23.9)),
+        (('level2', 'ukras2'), (43.9, 23.9)),
+
+        (('level2', 'ukras2'), (5.1, 25.1)),
+        (('level2', 'ukras2'), (7.1, 25.1)),
+        (('level2', 'ukras2'), (9.1, 25.1)),
+        (('level2', 'ukras2'), (11.1, 25.1)),
+        (('level2', 'ukras2'), (13.1, 25.1)),
+        (('level2', 'ukras2'), (15.1, 25.1)),
+        (('level2', 'ukras2'), (17.1, 25.1)),
+        (('level2', 'ukras2'), (19.1, 25.1)),
+        (('level2', 'ukras2'), (21.1, 25.1)),
+
+        (('level2', 'ukras2'), (29.9, 25.1)),
+        (('level2', 'ukras2'), (31.9, 25.1)),
+        (('level2', 'ukras2'), (33.9, 25.1)),
+        (('level2', 'ukras2'), (35.9, 25.1)),
+        (('level2', 'ukras2'), (37.9, 25.1)),
+        (('level2', 'ukras2'), (39.9, 25.1)),
+        (('level2', 'ukras2'), (41.9, 25.1)),
+        (('level2', 'ukras2'), (43.9, 25.1)),
+
+        #hodnik nakon artificijalnih vrata
         
     ]
     
@@ -191,7 +292,7 @@ def get_level_data():
     #Dialogue NPCs
     level_data['dialogue_npcs'] = [
        {
-            'pos': (48.2, 15.5),
+            'pos': (48.8, 14.3),
             'dialogue_id': 'level2_puzzle',
             'path': 'resources/sprites/npc/dialogue_npc/0.png'
        }
