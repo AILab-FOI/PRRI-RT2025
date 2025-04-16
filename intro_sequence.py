@@ -22,7 +22,7 @@ class IntroSequence:
         self.total_duration = self.black_screen_duration + self.blur_duration  # Total duration in seconds
 
         # Sound timing parameters
-        self.high_pitch_delay = self.black_screen_duration  # High pitch starts at the end of black screen
+        self.high_pitch_delay = self.black_screen_duration 
         self.music_delay = self.total_duration + 1.0  # Music starts 1 second AFTER the entire sequence ends
 
         # Music fade-in parameters
@@ -48,7 +48,7 @@ class IntroSequence:
         self.blur_surface = pg.Surface((self.screen_width, self.screen_height), pg.SRCALPHA)
 
         # Pulsing effect parameters
-        self.pulse_frequency = 0.8  # Pulses per second (slower)
+        self.pulse_frequency = 0.8  # Pulses per second 
         self.pulse_amplitude = 1.0  # Maximum pulse intensity
 
     def start(self):
@@ -63,11 +63,18 @@ class IntroSequence:
 
         # Store the original music volume and stop the music
         self.original_music_volume = pg.mixer.music.get_volume()
-        pg.mixer.music.stop()  # Stop background music during intro sequence
+        pg.mixer.music.stop()
 
     def update(self):
         """Update the intro sequence"""
         if not self.active:
+            return
+
+        # Check for spacebar press to skip intro sequence
+        keys = pg.key.get_pressed()
+        if keys[pg.K_SPACE]:
+            print("Intro sequence skipped")
+            self._end_sequence()
             return
 
         # Calculate elapsed time
@@ -80,7 +87,7 @@ class IntroSequence:
             self.crash_sound.play()
 
         # Fade out crash sound as we approach the transition to blur phase
-        transition_point = self.black_screen_duration - 0.5  # Same as high pitch transition point
+        transition_point = self.black_screen_duration - 0.5
         if self.crash_sound_started and elapsed >= transition_point and elapsed < self.black_screen_duration:
             # Calculate fade-out progress (0.0 to 1.0)
             progress = (elapsed - transition_point) / (self.black_screen_duration - transition_point)
@@ -112,8 +119,6 @@ class IntroSequence:
 
             self.high_pitch_sound.set_volume(min(1.0, volume))
 
-        # We'll handle music separately since it starts after the sequence ends
-
         # Start fading out high pitch sound near the end of the sequence
         high_pitch_fade_start = self.total_duration - 1.5  # Start fading 1.5 seconds before end
 
@@ -126,23 +131,27 @@ class IntroSequence:
 
         # Check if sequence is complete
         if elapsed >= self.total_duration:
-            self.active = False
-            # Stop sounds if they're still playing
-            if self.sounds_loaded:
-                self.crash_sound.stop()
-                self.high_pitch_sound.stop()
-
-            # Start music immediately after sequence ends
-            if not self.music_started:
-                self.music_started = True
-                # Start the music with fade-in directly
-                self.start_music_with_fade()
-
-            # Reset mouse position and clear accumulated movement to prevent jerking
-            pg.mouse.set_pos([HALF_WIDTH, HALF_HEIGHT])
-            pg.mouse.get_rel()  # Clear any accumulated mouse movement
-
+            self._end_sequence()
             return
+
+    def _end_sequence(self):
+        """End the intro sequence and transition to normal gameplay"""
+        self.active = False
+
+        # Stop sounds if they're still playing
+        if self.sounds_loaded:
+            self.crash_sound.stop()
+            self.high_pitch_sound.stop()
+
+        # Start music immediately after sequence ends
+        if not self.music_started:
+            self.music_started = True
+            # Start the music with fade-in directly
+            self.start_music_with_fade()
+
+        # Reset mouse position and clear accumulated movement to prevent jerking
+        pg.mouse.set_pos([HALF_WIDTH, HALF_HEIGHT])
+        pg.mouse.get_rel()
 
     def draw(self):
         """Draw the intro sequence effects"""
@@ -219,14 +228,14 @@ class IntroSequence:
 
         # Create a black overlay with the pulse intensity as alpha
         pulse_overlay = pg.Surface((self.screen_width, self.screen_height), pg.SRCALPHA)
-        pulse_overlay.fill((0, 0, 0, int(intensity * 150)))  # Black with higher alpha for more noticeable effect
+        pulse_overlay.fill((0, 0, 0, int(intensity * 150)))
         self.screen.blit(pulse_overlay, (0, 0))
 
     def start_music_with_fade(self):
         """Start the background music with fade-in effect"""
         # Start music at zero volume
         pg.mixer.music.set_volume(0.0)
-        pg.mixer.music.play(-1)  # Play on loop
+        pg.mixer.music.play(-1)
 
         # Create a timer for the fade-in effect
         self.fade_start_time = time.time()
