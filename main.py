@@ -50,74 +50,99 @@ class Game:
 
         # Initialize level manager if it doesn't exist
         if not hasattr(self, 'level_manager'):
+            self.loading_screen.update(10, "Initializing level manager...")
+            self.loading_screen.draw()
             self.level_manager = LevelManager(self)
-            self.loading_screen.update(20)
+            self.loading_screen.update(20, "Level manager initialized")
             self.loading_screen.draw()
 
         # Initialize map if it doesn't exist or reset it for a new game
+        self.loading_screen.update(25, "Loading map data...")
+        self.loading_screen.draw()
         if not hasattr(self, 'map'):
             self.map = Map(self)
         # Otherwise, make sure the map is loaded for the current level
         else:
             self.map.load_level(self.level_manager.current_level)
-        self.loading_screen.update(30)
+        self.loading_screen.update(30, "Map data loaded")
         self.loading_screen.draw()
 
         # Initialize or reset other game components
-        self.player = Player(self)
-        self.object_renderer = ObjectRenderer(self)
-        self.raycasting = RayCasting(self)
-        self.loading_screen.update(40)
+        self.loading_screen.update(35, "Initializing player...")
         self.loading_screen.draw()
+        self.player = Player(self)
+
+        self.loading_screen.update(40, "Loading textures...")
+        self.loading_screen.draw()
+        self.object_renderer = ObjectRenderer(self)
+
+        self.loading_screen.update(45, "Setting up raycasting...")
+        self.loading_screen.draw()
+        self.raycasting = RayCasting(self)
 
         # Initialize object handler if it doesn't exist or reset it for a new level
+        self.loading_screen.update(50, "Loading game objects...")
+        self.loading_screen.draw()
         if not hasattr(self, 'object_handler'):
             self.object_handler = ObjectHandler(self)
         else:
             self.object_handler.reset()  # Reset for new level
-        self.loading_screen.update(50)
+        self.loading_screen.update(55, "Game objects loaded")
         self.loading_screen.draw()
 
-        self.weapon = Weapon(self)
-        self.sound = Sound(self)
-        self.pathfinding = PathFinding(self)
-        self.interaction = Interaction(self)
-        self.loading_screen.update(60)
+        self.loading_screen.update(60, "Loading weapons...")
         self.loading_screen.draw()
+        self.weapon = Weapon(self)
+
+        self.loading_screen.update(65, "Initializing sound system...")
+        self.loading_screen.draw()
+        self.sound = Sound(self)
+
+        self.loading_screen.update(70, "Setting up pathfinding...")
+        self.loading_screen.draw()
+        self.pathfinding = PathFinding(self)
+
+        self.loading_screen.update(75, "Initializing interaction system...")
+        self.loading_screen.draw()
+        self.interaction = Interaction(self)
 
         # Initialize dialogue manager
+        self.loading_screen.update(80, "Loading dialogue system...")
+        self.loading_screen.draw()
         if not hasattr(self, 'dialogue_manager'):
             self.dialogue_manager = DialogueManager(self)
-        self.loading_screen.update(70)
-        self.loading_screen.draw()
 
         # Set up dialogue NPCs for the current level
-        self.level_manager.setup_dialogue_npcs()
-        self.loading_screen.update(80)
+        self.loading_screen.update(85, "Setting up NPCs...")
         self.loading_screen.draw()
+        self.level_manager.setup_dialogue_npcs()
 
         # Set up interactive objects for the current level
-        self.level_manager.setup_interactive_objects()
-        self.loading_screen.update(90)
+        self.loading_screen.update(90, "Setting up interactive objects...")
         self.loading_screen.draw()
+        self.level_manager.setup_interactive_objects()
 
         # Update pathfinding graph
+        self.loading_screen.update(92, "Calculating pathfinding graph...")
+        self.loading_screen.draw()
         self.pathfinding.update_graph()
 
         # Set player position based on level
+        self.loading_screen.update(95, "Finalizing level setup...")
+        self.loading_screen.draw()
         if self.level_manager.current_level == 1:
             self.player.x, self.player.y = PLAYER_POS  # Starting position for level 1
         elif self.level_manager.current_level == 2:
             self.player.x, self.player.y = PLAYER_POS_LEVEL2  # Starting position for level 2
         elif self.level_manager.current_level == 3:
             self.player.x, self.player.y = PLAYER_POS_LEVEL3  # Starting position for level 3
-        self.loading_screen.update(95)
-        self.loading_screen.draw()
 
+        self.loading_screen.update(97, "Starting background music...")
+        self.loading_screen.draw()
         pg.mixer.music.play(-1)
 
         # Complete loading and wait for minimum time
-        self.loading_screen.update(100)
+        self.loading_screen.update(100, "Loading complete!")
         self.loading_screen.draw()
         self.loading_screen.wait_for_minimum_time()
 
@@ -174,13 +199,20 @@ class Game:
             # Show loading screen for next level
             next_level = self.level_manager.current_level
 
+            # Start fade out transition
+            self.loading_screen.fade_out()
+
+            # Wait for fade to complete
+            fade_start = pg.time.get_ticks()
+            while not self.loading_screen.fade_complete and pg.time.get_ticks() - fade_start < LOADING_FADE_DURATION * 1.2:
+                self.loading_screen.update()
+                self.loading_screen.draw()
+                pg.time.delay(10)  # Small delay to not hog CPU
+
             # Reset loading screen progress and start loading
             self.loading_screen.progress = 0
             self.loading_screen.start_loading(f"Loading Level {next_level}...", next_level)
             self.loading_screen.draw()
-
-            # Wait a moment to show the loading screen with 0% progress
-            pg.time.delay(500)
 
             # Now initialize the new level
             self.new_game(skip_loading_screen=True)

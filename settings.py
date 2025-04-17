@@ -43,4 +43,8 @@ TEXTURE_SIZE = 256
 HALF_TEXTURE_SIZE = TEXTURE_SIZE // 2
 
 # UI settings
-LOADING_BACKGROUND_IMAGE = 'resources/textures/loading_bg.png'  # Path to the loading screen background image
+LOADING_BACKGROUND_IMAGE = 'resources/textures/sky.png'  # Path to the loading screen background image
+LOADING_DURATION = 2000  # Minimum loading time in milliseconds
+LOADING_FADE_DURATION = 500  # Fade transition duration in milliseconds
+LOADING_TIP_CHANGE_INTERVAL = 3000  # Time between tip changes in milliseconds
+LOADING_PARTICLE_COUNT = 30  # Number of background particles
