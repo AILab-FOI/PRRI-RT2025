@@ -188,8 +188,8 @@ def get_level_data():
         (('level2', 'ukras1'), (30.1, 43.9)),
         (('level2', 'ukras1'), (30.1, 46.1)),
 
-        (('level2', 'ukras3'), (18.5, 45.2)),
-        (('level2', 'ukras3'), (38.5, 45.2)),
+        (('level2', 'ukras3'), (18.5, 44.2)),
+        (('level2', 'ukras3'), (38.5, 44.2)),
         (('level2', 'ukras3'), (18.5, 45.8)),
         (('level2', 'ukras3'), (38.5, 45.8)),
 
