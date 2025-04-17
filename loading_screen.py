@@ -22,10 +22,11 @@ class LoadingScreen:
         ]
         self.current_tip = 0
 
-        # Try to load a background image, use a black screen if not available
+        # Use a direct image as background from settings
         try:
-            self.background = self.game.texture_manager.get_texture('resources/textures/loading_bg.png', RES)
-        except:
+            self.background = self.game.texture_manager.get_texture(LOADING_BACKGROUND_IMAGE, RES)
+        except Exception as e:
+            print(f"Error loading background image: {e}")
             self.background = None
 
     def start_loading(self, loading_text="Loading...", level=None):

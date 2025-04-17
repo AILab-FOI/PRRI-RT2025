@@ -41,3 +41,6 @@ SCALE = WIDTH // NUM_RAYS
 
 TEXTURE_SIZE = 256
 HALF_TEXTURE_SIZE = TEXTURE_SIZE // 2
+
+# UI settings
+LOADING_BACKGROUND_IMAGE = 'resources/textures/loading_bg.png'  # Path to the loading screen background image
