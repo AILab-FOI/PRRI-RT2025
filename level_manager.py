@@ -87,14 +87,9 @@ class LevelManager:
         door_path = 'resources/sprites/static_sprites/door.png'
         level_door_path = 'resources/sprites/static_sprites/level_door.png'
 
-        # Comment out fallback textures to avoid unwanted candlebra
-        # Just use the paths as is - if textures don't exist, they'll be invisible
-        # which is better than showing a candlebra
-
         # Make sure the files exist before trying to load them
         if not os.path.isfile(terminal_path):
             print(f"Warning: Terminal texture not found at {terminal_path}")
-            # Don't set a fallback - better to have no sprite than wrong sprite
 
         if not os.path.isfile(door_path):
             print(f"Warning: Door texture not found at {door_path}")
@@ -102,7 +97,7 @@ class LevelManager:
 
         if not os.path.isfile(level_door_path):
             print(f"Warning: Level door texture not found at {level_door_path}")
-            level_door_path = door_path  # Use regular door texture if level_door.png doesn't exist
+            level_door_path = door_path
 
         # Add terminals
         for terminal_data in level_data['terminals']:
@@ -127,7 +122,7 @@ class LevelManager:
                 door_id=door_data['door_id'],
                 requires_code=door_data.get('requires_code', False),
                 requires_door_id=door_data.get('requires_door_id'),
-                code=door_data.get('code')  # Add code for the door
+                code=door_data.get('code')
             )
             self.game.object_handler.add_sprite(door)
             self.game.interaction.add_object(door)
@@ -153,7 +148,6 @@ class LevelManager:
                     powerup_type=powerup_data['powerup_type']
                 )
 
-        # Add level exit door for each level
         # Define exit door positions for each level
         exit_positions = {
             1: (12, 34),  # Level 1 exit at position (12, 34)
@@ -228,7 +222,7 @@ class LevelManager:
                 pos=pos,
                 interaction_type="terminal",
                 code=default_code,
-                unlocks_door_id=i+1  # Each terminal unlocks a door with ID i+1
+                unlocks_door_id=i+1
             )
             self.game.object_handler.add_sprite(terminal)
             self.game.interaction.add_object(terminal)
@@ -240,10 +234,10 @@ class LevelManager:
                 path=door_path,
                 pos=pos,
                 interaction_type="door",
-                door_id=i+1,  # Door ID i+1
+                door_id=i+1,
                 requires_code=True,
-                code=default_code,  # Use the same code for all doors
-                requires_door_id=i if i > 0 else None  # Each door (except first) requires previous door
+                code=default_code,
+                requires_door_id=i if i > 0 else None
             )
             self.game.object_handler.add_sprite(door)
             self.game.interaction.add_object(door)
@@ -252,7 +246,7 @@ class LevelManager:
         for pos in level_exit_positions:
             level_exit = InteractiveObject(
                 self.game,
-                path=door_path,  # Use door texture for level exit
+                path=door_path,
                 pos=pos,
                 interaction_type="level_door",
                 is_level_exit=True
@@ -272,14 +266,10 @@ class LevelManager:
         next_level = self.current_level + 1
         if next_level <= self.max_level and next_level in self.level_data:
             self.current_level = next_level
-            # Load the new map for this level
             self.game.map.load_level(next_level)
-            # Reset the game with the new level
             self.game.new_game()
             return True
         elif next_level > self.max_level:
-            # Player has completed all levels
             print("Congratulations! You have completed all levels!")
-            # Could show a victory screen or credits here
             return False
         return False

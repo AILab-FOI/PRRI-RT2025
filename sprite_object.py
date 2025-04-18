@@ -7,7 +7,6 @@ from collections import deque
 class SpriteObject:
     def __init__(self, game, path=None,
                  pos=(10.5, 3.5), scale=0.7, shift=0.27):
-        # Use a more neutral default or no default at all
         if path is None:
             path = 'resources/sprites/static_sprites/ukras1.png'
         self.game = game
@@ -40,24 +39,22 @@ class SpriteObject:
         proj = SCREEN_DIST / self.norm_dist * self.SPRITE_SCALE
         proj_width, proj_height = proj * self.IMAGE_RATIO, proj
 
-        # Round the dimensions to reduce the number of unique scaled images
         proj_width = round(proj_width)
         proj_height = round(proj_height)
 
-        # We'll use a simple caching mechanism based on the dimensions
-        cache_key = (proj_width, proj_height)
+        if not hasattr(self, '_current_image_id'):
+            self._current_image_id = 0
 
-        # Create the cache attribute if it doesn't exist
+        cache_key = (proj_width, proj_height, self._current_image_id)
+
         if not hasattr(self, '_scaled_image_cache'):
             self._scaled_image_cache = {}
 
-        # Get the scaled image from cache or create a new one
         if cache_key not in self._scaled_image_cache:
+            self._scaled_image_cache = {}
             self._scaled_image_cache[cache_key] = pg.transform.scale(self.image, (proj_width, proj_height))
 
-            # Limit cache size to prevent memory issues (keep only the 10 most recent sizes)
             if len(self._scaled_image_cache) > 10:
-                # Remove the oldest entry
                 oldest_key = next(iter(self._scaled_image_cache))
                 del self._scaled_image_cache[oldest_key]
 
@@ -110,6 +107,12 @@ class AnimatedSprite(SpriteObject):
         if self.animation_trigger:
             images.rotate(-1)
             self.image = images[0]
+            if hasattr(self, '_current_image_id'):
+                self._current_image_id += 1
+            else:
+                self._current_image_id = 0
+            if hasattr(self, '_scaled_image_cache'):
+                self._scaled_image_cache = {}
 
     def check_animation_time(self):
         self.animation_trigger = False
@@ -131,21 +134,18 @@ class AnimatedSprite(SpriteObject):
                             print(f"Error loading animation frame {file_name}: {e}")
             else:
                 print(f"Warning: Animation directory not found at {path}")
-                # Create a blank image if directory doesn't exist
                 blank_img = pg.Surface((32, 32), pg.SRCALPHA)
-                blank_img.fill((0, 0, 0, 0))  # Transparent
+                blank_img.fill((0, 0, 0, 0))
                 images.append(blank_img)
         except Exception as e:
             print(f"Error loading animation frames: {e}")
-            # Create a blank image if there's an error
             blank_img = pg.Surface((32, 32), pg.SRCALPHA)
-            blank_img.fill((0, 0, 0, 0))  # Transparent
+            blank_img.fill((0, 0, 0, 0))
             images.append(blank_img)
 
-        # Make sure we have at least one image
         if not images:
             blank_img = pg.Surface((32, 32), pg.SRCALPHA)
-            blank_img.fill((0, 0, 0, 0))  # Transparent
+            blank_img.fill((0, 0, 0, 0))
             images.append(blank_img)
 
         return images

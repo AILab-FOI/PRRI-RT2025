@@ -39,10 +39,10 @@ class ObjectRenderer:
         self.game_over_image = self.get_texture('resources/textures/game_over.png', RES)
         self.win_image = self.get_texture('resources/textures/win.png', RES)
 
-        # Preload powerup icon to improve performance
+        # Preload powerup icon
         self.powerup_icon = self.get_texture('resources/teksture/level1/powerup.png', (100, 100))
 
-        # Preload fonts for better performance
+        # Preload fonts
         self.message_font = load_custom_font(30)
         self.invulnerability_title_font = load_custom_font(24)
         self.invulnerability_timer_font = load_custom_font(40)

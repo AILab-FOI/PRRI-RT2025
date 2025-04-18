@@ -10,12 +10,9 @@ class PathFinding:
         self.get_graph()
 
     def get_path(self, start, goal):
-        # Make sure both start and goal are valid positions in the graph
         if start not in self.graph:
-            # If start position is not in graph, find the closest valid position
             start = self.find_closest_valid_position(start)
         if goal not in self.graph:
-            # If goal position is not in graph, find the closest valid position
             goal = self.find_closest_valid_position(goal)
 
         self.visited = self.bfs(start, goal, self.graph)
@@ -28,14 +25,12 @@ class PathFinding:
         return path[-1]
 
     def find_closest_valid_position(self, pos):
-        # Find the closest position that exists in the graph
         x, y = pos
         for dx in range(-1, 2):
             for dy in range(-1, 2):
                 new_pos = (x + dx, y + dy)
                 if new_pos in self.graph:
                     return new_pos
-        # If no close position found, return a default position
         return next(iter(self.graph))
 
     def bfs(self, start, goal, graph):
@@ -58,16 +53,11 @@ class PathFinding:
         return [(x + dx, y + dy) for dx, dy in self.ways if (x + dx, y + dy) not in self.game.map.world_map]
 
     def get_graph(self):
-        # Clear existing graph
         self.graph = {}
-
-        # Build graph based on current world map
         for y in range(len(self.map)):
             for x in range(len(self.map[0])):
-                # Check if position is walkable (not in world_map)
                 if (x, y) not in self.game.map.world_map:
                     self.graph[(x, y)] = self.graph.get((x, y), []) + self.get_next_nodes(x, y)
 
     def update_graph(self):
-        # Update the graph when the world map changes (e.g., doors open)
         self.get_graph()

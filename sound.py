@@ -13,7 +13,6 @@ class Sound:
         pg.mixer.init()
         self.path = 'resources/sound/'
 
-        # Volume settings
         self.music_volume = 0.3
         self.sfx_volume = 0.7
 
@@ -97,6 +96,5 @@ class Sound:
             'powerup_end': self.powerup_end
         }
 
-        # Update volume for each sound
         for sound_name, sound in sounds.items():
             sound.set_volume(self.volume_factors[sound_name] * self.sfx_volume)

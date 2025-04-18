@@ -4,30 +4,22 @@ from settings import *
 import math
 
 class IntroSequence:
-    """
-    Handles the intro sequence when starting a new level.
-    Creates an immersive effect with black screen, blurry vision, and sound effects.
 
-    Sequence:
-    - First 5 seconds: Black screen with crash sound
-    - Next 6 seconds: Blurry, pulsing screen with high-pitched noise
-    - Total duration: 11 seconds
-    """
     def __init__(self, game):
         self.game = game
         self.active = False
         self.start_time = 0
-        self.black_screen_duration = 9.5  # Duration of black screen in seconds
-        self.blur_duration = 6.0  # Duration of blur effect in seconds
-        self.total_duration = self.black_screen_duration + self.blur_duration  # Total duration in seconds
+        self.black_screen_duration = 9.5
+        self.blur_duration = 6.0
+        self.total_duration = self.black_screen_duration + self.blur_duration
 
         # Sound timing parameters
-        self.high_pitch_delay = self.black_screen_duration 
-        self.music_delay = self.total_duration + 1.0  # Music starts 1 second AFTER the entire sequence ends
+        self.high_pitch_delay = self.black_screen_duration
+        self.music_delay = self.total_duration + 1.0
 
         # Music fade-in parameters
-        self.music_fade_duration = 8.0  # Duration of music fade-in in seconds (slower fade)
-        self.original_music_volume = 0.3  # Store the original music volume
+        self.music_fade_duration = 8.0
+        self.original_music_volume = 0.3
 
         # Load sounds
         try:
@@ -83,25 +75,20 @@ class IntroSequence:
         # PHASE 1: Start crash sound immediately
         if not self.crash_sound_started and self.sounds_loaded:
             self.crash_sound_started = True
-            self.crash_sound.set_volume(1.0)  # Start at full volume
+            self.crash_sound.set_volume(1.0)
             self.crash_sound.play()
 
         # Fade out crash sound as we approach the transition to blur phase
         transition_point = self.black_screen_duration - 0.5
         if self.crash_sound_started and elapsed >= transition_point and elapsed < self.black_screen_duration:
-            # Calculate fade-out progress (0.0 to 1.0)
             progress = (elapsed - transition_point) / (self.black_screen_duration - transition_point)
-            # Fade from full volume to 20% volume
             volume = 1.0 - (progress * 0.8)
             self.crash_sound.set_volume(max(0.2, volume))
 
-        # PHASE 2: Start high pitch sound when black screen ends with a smooth transition
-        # Start the high pitch sound slightly before the black screen ends for a smooth transition
-        transition_point = self.black_screen_duration - 0.5  # Start 0.5 seconds before black screen ends
+        transition_point = self.black_screen_duration - 0.5
 
         if not self.high_pitch_sound_started and elapsed >= transition_point and self.sounds_loaded:
             self.high_pitch_sound_started = True
-            # Start high pitch at low volume
             self.high_pitch_sound.set_volume(0.1)
             self.high_pitch_sound.play()
 
@@ -111,21 +98,20 @@ class IntroSequence:
             if elapsed < self.black_screen_duration:
                 # Ramping up during black screen
                 progress = (elapsed - transition_point) / (self.black_screen_duration - transition_point)
-                volume = 0.1 + (progress * 0.4)  # Increase to 50% volume by end of black screen
+                volume = 0.1 + (progress * 0.4)
             else:
                 # Continue ramping up during first second of blur
                 progress = (elapsed - self.black_screen_duration) / 1.0
-                volume = 0.5 + (progress * 0.5)  # Increase to 100% volume
+                volume = 0.5 + (progress * 0.5)
 
             self.high_pitch_sound.set_volume(min(1.0, volume))
 
         # Start fading out high pitch sound near the end of the sequence
-        high_pitch_fade_start = self.total_duration - 1.5  # Start fading 1.5 seconds before end
+        high_pitch_fade_start = self.total_duration - 1.5
 
         if self.high_pitch_sound_started and elapsed >= high_pitch_fade_start and elapsed < self.total_duration:
             # Calculate fade-out progress (0.0 to 1.0)
             fade_progress = (elapsed - high_pitch_fade_start) / 1.5
-            # Fade from full volume to zero
             volume = 1.0 - fade_progress
             self.high_pitch_sound.set_volume(max(0.0, volume))
 
@@ -135,7 +121,6 @@ class IntroSequence:
             return
 
     def _end_sequence(self):
-        """End the intro sequence and transition to normal gameplay"""
         self.active = False
 
         # Stop sounds if they're still playing
@@ -161,14 +146,10 @@ class IntroSequence:
         # Calculate elapsed time
         elapsed = time.time() - self.start_time
 
-        # Phase 1: Black screen (first 5 seconds)
         if elapsed < self.black_screen_duration:
-            # Complete black screen for the first phase
             self.screen.blit(self.black_overlay, (0, 0))
             return
 
-        # Phase 2: Blurry, pulsing vision (next 6 seconds)
-        # Calculate progress for the blur phase (0.0 to 1.0)
         blur_elapsed = elapsed - self.black_screen_duration
         blur_progress = min(blur_elapsed / self.blur_duration, 1.0)
 
@@ -188,7 +169,7 @@ class IntroSequence:
         if intensity <= 0:
             return
 
-        # Simple blur implementation - can be improved for better performance
+        # Simple blur implementation
         blur_size = int(intensity * 10)
         if blur_size <= 0:
             return
@@ -211,7 +192,6 @@ class IntroSequence:
         self.screen.blit(blurred, (0, 0))
 
     def _calculate_pulse(self, elapsed, progress):
-        """Calculate the current pulse intensity"""
         # Maintain strong pulse throughout the blur phase, only slightly decreasing
         max_pulse = self.pulse_amplitude * (1.0 - (progress * 0.3))
 
@@ -233,7 +213,6 @@ class IntroSequence:
 
     def start_music_with_fade(self):
         """Start the background music with fade-in effect"""
-        # Start music at zero volume
         pg.mixer.music.set_volume(0.0)
         pg.mixer.music.play(-1)
 
@@ -249,25 +228,18 @@ class IntroSequence:
         # Calculate elapsed time since fade started
         elapsed = time.time() - self.fade_start_time
 
-        # Calculate fade progress (0.0 to 1.0)
         fade_progress = min(1.0, elapsed / self.music_fade_duration)
 
-        # Apply a non-linear curve to make the fade-in start more gradually
-        # Using a quadratic curve: progress^2 for the first half, then blend to linear
         if fade_progress < 0.5:
-            # First half: quadratic curve (very gradual start)
-            curve_progress = fade_progress * fade_progress * 2  # progress^2 * 2
+            curve_progress = fade_progress * fade_progress * 2
         else:
-            # Second half: blend from quadratic to linear for a smoother finish
             quadratic = fade_progress * fade_progress * 2
             linear = fade_progress
-            blend_factor = (fade_progress - 0.5) * 2  # 0 to 1 over second half
+            blend_factor = (fade_progress - 0.5) * 2
             curve_progress = quadratic * (1 - blend_factor) + linear * blend_factor
 
-        # Set music volume based on curved progress
         current_volume = curve_progress * self.original_music_volume
         pg.mixer.music.set_volume(current_volume)
 
-        # Check if fade is complete
         if fade_progress >= 1.0:
             self.fading_music = False

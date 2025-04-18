@@ -7,7 +7,7 @@ from font_manager import load_custom_font
 class UIElement:
     """Base class for UI elements with common functionality"""
     def __init__(self):
-        pass  # Simplified - no pulse animation
+        pass
 
 class Button(UIElement):
     def __init__(self, x, y, width, height, text, font_size=36, text_color=(220, 220, 255),
@@ -44,8 +44,6 @@ class Button(UIElement):
         if game and self.hovered and not self.was_hovered:
             game.sound.menu_hover.play()
 
-        # Pulse animation removed
-
         # Update glow effect when hovered
         if self.hovered:
             self.glow_size = min(self.glow_size + 0.5, 8)
@@ -53,22 +51,16 @@ class Button(UIElement):
             self.glow_size = max(self.glow_size - 0.5, 0)
 
     def draw(self, screen):
-        # Simplified button drawing
-        # Use hover color if hovered, otherwise use background color
         color = self.hover_color if self.hovered else self.bg_color
 
-        # Draw main button
         pg.draw.rect(screen, color, self.rect, border_radius=12)
 
-        # Draw border
         pg.draw.rect(screen, (120, 160, 255), self.rect, 2, border_radius=12)
 
-        # Draw text
         screen.blit(self.text_surface, self.text_rect)
 
     def is_clicked(self, event, game=None):
         if event.type == pg.MOUSEBUTTONDOWN and event.button == 1 and self.hovered:
-            # Play click sound if game is provided
             if game:
                 game.sound.menu_click.play()
             return True
@@ -109,13 +101,10 @@ class Slider(UIElement):
         self.handle_rect.y = self.rect.y - 7
 
     def update(self, mouse_pos, mouse_pressed):
-        # Pulse animation removed
-
         if mouse_pressed[0]:
             if self.handle_rect.collidepoint(mouse_pos):
                 self.dragging = True
             elif self.dragging:
-                # Calculate new value based on mouse position
                 normalized_pos = (mouse_pos[0] - self.rect.x) / self.rect.width
                 normalized_pos = max(0, min(1, normalized_pos))
                 self.value = self.min_val + normalized_pos * (self.max_val - self.min_val)
@@ -125,12 +114,9 @@ class Slider(UIElement):
             self.dragging = False
 
     def draw(self, screen):
-        # Simplified slider drawing
-        # Draw slider track background
         track_color = (30, 35, 60)
         pg.draw.rect(screen, track_color, self.rect, border_radius=5)
 
-        # Draw filled portion of the track
         fill_width = int((self.value - self.min_val) / (self.max_val - self.min_val) * self.rect.width)
         if fill_width > 0:
             fill_rect = pg.Rect(self.rect.x, self.rect.y, fill_width, self.rect.height)
@@ -156,8 +142,6 @@ class Menu:
         self.screen = game.screen
         self.running = True
         self.state = 'main'
-
-        # Background animation elements removed
 
         # Create buttons for main menu
         button_height = 60
@@ -222,8 +206,6 @@ class Menu:
             3
         )
 
-        # Animation variables for title effects removed
-
         # Version and credits
         self.version = "v1.0"
         self.credits = "© 2025 PRRI-RT Team"
@@ -236,8 +218,6 @@ class Menu:
 
         self.credits_text = self.small_font.render(self.credits, True, (180, 180, 220))
         self.credits_rect = self.credits_text.get_rect(bottomleft=(20, HEIGHT - 10))
-
-    # Particle system removed to simplify code
 
     def update_start_button_text(self):
         """Update the text of the start button based on game state"""
@@ -311,7 +291,7 @@ class Menu:
             for slider in self.sliders:
                 slider.update(mouse_pos, mouse_pressed)
 
-        return False  # Don't start the game yet
+        return False
 
     def apply_settings(self):
         # Apply music volume
@@ -350,8 +330,6 @@ class Menu:
     def draw(self):
         # Draw background
         self.screen.blit(self.bg_image, (0, 0))
-
-        # Title pulse effect removed
 
         if self.state == 'main':
             # Draw main title
