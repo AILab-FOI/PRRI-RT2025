@@ -23,7 +23,7 @@ def get_level_data():
         
         {
             #početna
-            'position': (5, 3),
+            'position': (5, 2),
             'door_id': 1,
             'requires_code': False,
             'code': None,  # Uses code from first terminal
@@ -31,7 +31,7 @@ def get_level_data():
         },
         {
             #soba blizu početka
-            'position': (3, 7),
+            'position': (3, 6),
             'door_id': 2,
             'requires_code': False,
             'code': None,  # Uses code from first terminal
@@ -39,7 +39,7 @@ def get_level_data():
         },
         {
             #srednja soba gornja
-            'position': (25, 13),
+            'position': (15, 12),
             'door_id': 3,
             'requires_code': False,
             'code': None,  # Uses code from first terminal
@@ -47,7 +47,7 @@ def get_level_data():
         },
         {
             #unutarnja soba lijeve sobe
-            'position': (7, 17),
+            'position': (4, 16),
             'door_id': 4,
             'requires_code': False,
             'code': None,  # Uses code from first terminal
@@ -55,7 +55,7 @@ def get_level_data():
         },
         {
             #lijeva soba
-            'position': (11, 17),
+            'position': (7, 16),
             'door_id': 5,
             'requires_code': False,
             'code': None,  # Uses code from first terminal
@@ -63,7 +63,7 @@ def get_level_data():
         },
         {
             #srednja soba lijeva
-            'position': (15, 17),
+            'position': (10, 16),
             'door_id': 6,
             'requires_code': False,
             'code': None,  # Uses code from first terminal
@@ -71,7 +71,7 @@ def get_level_data():
         },
         {
             #srednja soba desna
-            'position': (34, 17),
+            'position': (20, 16),
             'door_id': 7,
             'requires_code': False,
             'code': None,  # Uses code from first terminal
@@ -79,7 +79,7 @@ def get_level_data():
         },
         {
             #desna soba
-            'position': (41, 17),
+            'position': (23, 16),
             'door_id': 8,
             'requires_code': False,
             'code': None,  # Uses code from first terminal
@@ -87,7 +87,7 @@ def get_level_data():
         },
         {
             #unutarnja soba desne sobe
-            'position': (47, 16),
+            'position': (29, 15),
             'door_id': 9,
             'requires_code': True,
             'code': '42',  # Uses code from first terminal
@@ -95,7 +95,7 @@ def get_level_data():
         },
         {
             #srednja soba donja
-            'position': (25, 21),
+            'position': (15, 20),
             'door_id': 10,
             'requires_code': False,
             'code': None,  # Uses code from first terminal
@@ -105,7 +105,7 @@ def get_level_data():
 
     level_data['weapons'] = [
         {
-            'position': (44, 16),
+            'position': (26, 15),
             'weapon_type': 'smg',
             'path': 'resources/sprites/weapon/puska_stand.png'
         }
@@ -113,171 +113,224 @@ def get_level_data():
 
     # Decorative sprites
     level_data['sprites'] = [
+        #POČETAK
         #početna vrata
-        (('level2', 'ukras2'), (6.1, 2.9)),
-        (('level2', 'ukras2'), (6.1, 4.1)),
+        (('level2', 'ukras2'), (6.1, 1.9)),
+        (('level2', 'ukras2'), (6.1, 3.1)),
 
         #vrata pored početne sobe
-        (('level2', 'ukras2'), (2.9, 8.1)),
-        (('level2', 'ukras2'), (4.1, 8.1)),
-
-        #srednja soba 4 stupa
-        (('level2', 'ukras1'), (24.9, 16.9)),
-        (('level2', 'ukras1'), (26.1, 16.9)),
-        (('level2', 'ukras1'), (24.9, 18.1)),
-        (('level2', 'ukras1'), (26.1, 18.1)),
-
-        #srednja soba pored gornja vrata
-        (('level2', 'ukras2'), (24.9, 14.1)),
-        (('level2', 'ukras2'), (26.1, 14.1)),
-        #srednja soba pored gornji vrata vanjsko
-        (('level2', 'ukras2'), (24.9, 12.9)),
-        (('level2', 'ukras2'), (26.1, 12.9)),
-
-        #srednja soba pored desnih vrata
-        (('level2', 'ukras2'), (16.1, 16.9)),
-        (('level2', 'ukras2'), (16.1, 18.1)),
-        #srednja soba pored desnih vrata vanjsko
-        (('level2', 'ukras2'), (14.9, 16.9)),
-        (('level2', 'ukras2'), (14.9, 18.1)),
-
-        #srednja soba pored lijevih vrata
-        (('level2', 'ukras2'), (33.9, 16.9)),
-        (('level2', 'ukras2'), (33.9, 18.1)),
-        #srednja soba pored lijevih vrata vanjsko
-        (('level2', 'ukras2'), (35.1, 16.9)),
-        (('level2', 'ukras2'), (35.1, 18.1)),
-
-        #srednja soba donja vrata
-        (('level2', 'ukras2'), (24.9, 20.9)),
-        (('level2', 'ukras2'), (26.1, 20.9)),
-        #srednja soba donja vrata vanjsko
-        (('level2', 'ukras2'), (24.9, 22.1)),
-        (('level2', 'ukras2'), (26.1, 22.1)),
-
-        #lijeva soba vanjska vrata vanjsko
-        (('level2', 'ukras2'), (12.1, 16.9)),
-        (('level2', 'ukras2'), (12.1, 18.1)),
-        #lijeva soba vanjska vrata
-        (('level2', 'ukras2'), (10.9, 16.9)),
-        (('level2', 'ukras2'), (10.9, 18.1)),
-
-        #lijeva soba unutarnja vrata vanjsko
-        (('level2', 'ukras2'), (8.1, 16.9)),
-        (('level2', 'ukras2'), (8.1, 18.1)),
-        #lijeva soba unutarnja vrata
-        (('level2', 'ukras2'), (6.9, 16.9)),
-        (('level2', 'ukras2'), (6.9, 18.1)),
-
-        #desna soba vanjska vrata vanjsko
-        (('level2', 'ukras2'), (40.9, 16.9)),
-        (('level2', 'ukras2'), (40.9, 18.1)),
-        #desna soba vanjska vrata
-        (('level2', 'ukras2'), (42.1, 16.9)),
-        (('level2', 'ukras2'), (42.1, 18.1)),
-
-        #ukrasi u srednjoj sobi
-        (('level2', 'ukras3'), (20.1, 16.1)),
-        (('level2', 'ukras3'), (29.9, 16.1)),
-        (('level2', 'ukras3'), (20.1, 18.9)),
-        (('level2', 'ukras3'), (29.9, 18.9)),
-
-        #hangar
-        (('level2', 'ukras1'), (26.9, 43.9)),
-        (('level2', 'ukras1'), (26.9, 46.1)),
-        (('level2', 'ukras1'), (30.1, 43.9)),
-        (('level2', 'ukras1'), (30.1, 46.1)),
-
-        (('level2', 'ukras3'), (18.5, 45.2)),
-        (('level2', 'ukras3'), (38.5, 45.2)),
-        (('level2', 'ukras3'), (18.5, 45.8)),
-        (('level2', 'ukras3'), (38.5, 45.8)),
-
-        (('level2', 'ukras3'), (23.5, 44.5)),
-        (('level2', 'ukras3'), (23.5, 45.5)),
-        (('level2', 'ukras3'), (33.5, 44.5)),
-        (('level2', 'ukras3'), (33.5, 45.5)),
-
-        (('level2', 'ukras3'), (13.5, 44.5)),
-        (('level2', 'ukras3'), (13.5, 45.5)),
-        (('level2', 'ukras3'), (43.5, 44.5)),
-        (('level2', 'ukras3'), (43.5, 45.5)),
-
-        (('level2', 'ukras3'), (8.5, 44.1)),
-        (('level2', 'ukras3'), (8.5, 45.9)),
-        (('level2', 'ukras3'), (46.5, 44.1)),
-        (('level2', 'ukras3'), (46.5, 45.9)),
+        (('level2', 'ukras2'), (2.9, 7.1)),
+        (('level2', 'ukras2'), (4.1, 7.1)),
 
         #dio nakon početnih vrata
-        (('level2', 'ukras3'), (12.5, 6.1)),
+        (('level2', 'ukras3'), (11.5, 5.1)),
 
-        (('level2', 'ukras3'), (11.5, 9.9)),
-        (('level2', 'ukras3'), (15.5, 9.9)),
+        #pocetak mape skroz desno odjeljak
+        (('level2', 'ukras1'), (27.9, 4.5)),
+        (('level2', 'ukras1'), (30.1, 4.5)),
+        (('level2', 'ukras1'), (27.9, 6.5)),
+        (('level2', 'ukras1'), (30.1, 6.5)),
+        (('level2', 'ukras3'), (29.1, 5.5)),
 
-        (('level2', 'ukras3'), (34.5, 9.9)),
-        (('level2', 'ukras3'), (41.5, 9.9)),
 
-        (('level2', 'ukras3'), (22.5, 11.1)),
-        (('level2', 'ukras3'), (28.5, 11.1)),
+        #SREDNJA SOBA
+        #srednja soba 4 stupa
+        (('level2', 'ukras1'), (14.9, 15.9)),
+        (('level2', 'ukras1'), (16.1, 15.9)),
+        (('level2', 'ukras1'), (14.9, 16.1)),
+        (('level2', 'ukras1'), (16.1, 16.1)),
 
-        (('level2', 'ukras1'), (43.5, 5.5)),
-        (('level2', 'ukras1'), (43.5, 8.5)),
-        (('level2', 'ukras1'), (47.5, 5.5)),
-        (('level2', 'ukras1'), (47.5, 8.5)),
-        (('level2', 'ukras3'), (45.5, 7)),
+        #srednja soba pored gornja vrata
+        (('level2', 'ukras2'), (14.9, 13.1)),
+        (('level2', 'ukras2'), (16.1, 13.1)),
 
-        #lijevi hodnik
-        (('level2', 'ukras3'), (12.1, 12.9)),
-        (('level2', 'ukras3'), (14.9, 12.9)),
-        (('level2', 'ukras3'), (12.1, 22.1)),
-        (('level2', 'ukras3'), (14.9, 22.1)),
-        #desni hodnik
-        (('level2', 'ukras3'), (35.1, 12.9)),
-        (('level2', 'ukras3'), (40.9, 12.9)),
-        (('level2', 'ukras3'), (35.1, 22.1)),
-        (('level2', 'ukras3'), (40.9, 22.1)),
+        #srednja soba pored gornji vrata vanjsko
+        (('level2', 'ukras2'), (14.9, 11.9)),
+        (('level2', 'ukras2'), (16.1, 11.9)),
 
-        #dugi hodnik nakon srednje sobe
-        (('level2', 'ukras2'), (5.1, 23.9)),
-        (('level2', 'ukras2'), (7.1, 23.9)),
-        (('level2', 'ukras2'), (9.1, 23.9)),
-        (('level2', 'ukras2'), (11.1, 23.9)),
-        (('level2', 'ukras2'), (13.1, 23.9)),
-        (('level2', 'ukras2'), (15.1, 23.9)),
-        (('level2', 'ukras2'), (17.1, 23.9)),
-        (('level2', 'ukras2'), (19.1, 23.9)),
-        (('level2', 'ukras2'), (21.1, 23.9)),
+        #srednja soba pored lijevih vrata
+        (('level2', 'ukras2'), (11.1, 15.9)),
+        (('level2', 'ukras2'), (11.1, 17.1)),
 
-        (('level2', 'ukras2'), (29.9, 23.9)),
-        (('level2', 'ukras2'), (31.9, 23.9)),
-        (('level2', 'ukras2'), (33.9, 23.9)),
-        (('level2', 'ukras2'), (35.9, 23.9)),
-        (('level2', 'ukras2'), (37.9, 23.9)),
-        (('level2', 'ukras2'), (39.9, 23.9)),
-        (('level2', 'ukras2'), (41.9, 23.9)),
-        (('level2', 'ukras2'), (43.9, 23.9)),
+        #srednja soba pored lijevih vrata vanjsko
+        (('level2', 'ukras2'), (9.9, 15.9)),
+        (('level2', 'ukras2'), (9.9, 17.1)),
 
-        (('level2', 'ukras2'), (5.1, 25.1)),
-        (('level2', 'ukras2'), (7.1, 25.1)),
-        (('level2', 'ukras2'), (9.1, 25.1)),
-        (('level2', 'ukras2'), (11.1, 25.1)),
-        (('level2', 'ukras2'), (13.1, 25.1)),
-        (('level2', 'ukras2'), (15.1, 25.1)),
-        (('level2', 'ukras2'), (17.1, 25.1)),
-        (('level2', 'ukras2'), (19.1, 25.1)),
-        (('level2', 'ukras2'), (21.1, 25.1)),
+        #srednja soba pored desnih vrata
+        (('level2', 'ukras2'), (19.9, 15.9)),
+        (('level2', 'ukras2'), (19.9, 17.1)),
 
-        (('level2', 'ukras2'), (29.9, 25.1)),
-        (('level2', 'ukras2'), (31.9, 25.1)),
-        (('level2', 'ukras2'), (33.9, 25.1)),
-        (('level2', 'ukras2'), (35.9, 25.1)),
-        (('level2', 'ukras2'), (37.9, 25.1)),
-        (('level2', 'ukras2'), (39.9, 25.1)),
-        (('level2', 'ukras2'), (41.9, 25.1)),
-        (('level2', 'ukras2'), (43.9, 25.1)),
+        #srednja soba pored desnih vrata vanjsko
+        (('level2', 'ukras2'), (21.1, 15.9)),
+        (('level2', 'ukras2'), (21.1, 17.1)),
 
-        #hodnik nakon artificijalnih vrata
+        #srednja soba donja vrata
+        (('level2', 'ukras2'), (14.9, 19.9)),
+        (('level2', 'ukras2'), (16.1, 19.9)),
+
+        #srednja soba donja vrata vanjsko
+        (('level2', 'ukras2'), (14.9, 21.1)),
+        (('level2', 'ukras2'), (16.1, 21.1)),
+
+        #ukrasi u srednjoj sobi
+        (('level2', 'ukras3'), (14.1, 15.1)),
+        (('level2', 'ukras3'), (16.9, 15.1)),
+        (('level2', 'ukras3'), (14.1, 17.9)),
+        (('level2', 'ukras3'), (16.9, 17.9)),
+
+
+        #LIJEVA SOBA
+        #lijeva soba vanjska vrata vanjsko
+        (('level2', 'ukras2'), (8.1, 15.9)),
+        (('level2', 'ukras2'), (8.1, 17.1)),
+
+        #lijeva soba vanjska vrata
+        (('level2', 'ukras2'), (6.9, 15.9)),
+        (('level2', 'ukras2'), (6.9, 17.1)),
+
+        #lijeva soba unutarnja vrata vanjsko
+        (('level2', 'ukras2'), (5.1, 15.9)),
+        (('level2', 'ukras2'), (5.1, 17.1)),
+
+        #lijeva soba unutarnja vrata
+        (('level2', 'ukras2'), (3.9, 15.9)),
+        (('level2', 'ukras2'), (3.9, 17.1)),
+
+
+        #DESNA SOBA
+        #desna soba vanjska vrata vanjsko
+        (('level2', 'ukras2'), (22.9, 15.9)),
+        (('level2', 'ukras2'), (22.9, 17.1)),
+
+        #desna soba vanjska vrata
+        (('level2', 'ukras2'), (24.1, 15.9)),
+        (('level2', 'ukras2'), (24.1, 17.1)),
+
+
+        #PROLAZI
+        #prvi prolaz ulaz
+        (('level2', 'ukras3'), (12.5, 8.9)),
+        (('level2', 'ukras3'), (18.5, 8.9)),
+
+        #drugi prolaz ulaz
+        (('level2', 'ukras3'), (7.5, 8.9)),
+        (('level2', 'ukras3'), (10.5, 8.9)),
+
+        #treći prolaz ulaz
+        (('level2', 'ukras3'), (26.5, 8.9)),
+        (('level2', 'ukras3'), (29.5, 8.9)),
+
+        #prvi prolaz izlaz
+        (('level2', 'ukras3'), (12.5, 10.1)),
+        (('level2', 'ukras3'), (18.5, 10.1)),
+
+        #drugi prolaz izlaz
+        (('level2', 'ukras3'), (7.5, 10.1)),
+        (('level2', 'ukras3'), (10.5, 10.1)),
+
+        #treći prolaz izlaz
+        (('level2', 'ukras3'), (26.5, 10.1)),
+        (('level2', 'ukras3'), (29.5, 10.1)),
+
+        #LIJEVI HODNIK
+        #ulaz lijevi hodnik
+        (('level2', 'ukras3'), (7.5, 11.9)),
+        (('level2', 'ukras3'), (10.5, 11.9)),
+
+        #izlaz lijevi hodnik
+        (('level2', 'ukras3'), (7.5, 21.1)),
+        (('level2', 'ukras3'), (10.5, 21.1)),
+
+
+        #DESNO HODNIK
+        #ulaz desni hodnik
+        (('level2', 'ukras3'), (20.5, 11.9)),
+        (('level2', 'ukras3'), (23.5, 11.9)),
+
+        #izlaz desni hodnik
+        (('level2', 'ukras3'), (20.5, 21.1)),
+        (('level2', 'ukras3'), (23.5, 21.1)),
+
+
+        #DUGI HODNIK NAKON SREDNJE SOBE
+        #lijevi zid gornji dio
+        (('level2', 'ukras2'), (3.1, 22.9)),
+        (('level2', 'ukras2'), (5.1, 22.9)),
+        (('level2', 'ukras2'), (7.1, 22.9)),
+        (('level2', 'ukras2'), (9.1, 22.9)),
+        (('level2', 'ukras2'), (11.1, 22.9)),
+        (('level2', 'ukras2'), (13.1, 22.9)),
+
+        #desni zid gornji dio
+        (('level2', 'ukras2'), (17.9, 22.9)),
+        (('level2', 'ukras2'), (19.9, 22.9)),
+        (('level2', 'ukras2'), (21.9, 22.9)),
+        (('level2', 'ukras2'), (23.9, 22.9)),
+        (('level2', 'ukras2'), (25.9, 22.9)),
+        (('level2', 'ukras2'), (27.9, 22.9)),
+
+        #lijevi zid donji dio
+        (('level2', 'ukras2'), (3.1, 24.1)),
+        (('level2', 'ukras2'), (5.1, 24.1)),
+        (('level2', 'ukras2'), (7.1, 24.1)),
+        (('level2', 'ukras2'), (9.1, 24.1)),
+        (('level2', 'ukras2'), (11.1, 24.1)),
+        (('level2', 'ukras2'), (13.1, 24.1)),
+
+        #desni zid donji dio
+        (('level2', 'ukras2'), (17.9, 24.1)),
+        (('level2', 'ukras2'), (19.9, 24.1)),
+        (('level2', 'ukras2'), (21.9, 24.1)),
+        (('level2', 'ukras2'), (23.9, 24.1)),
+        (('level2', 'ukras2'), (25.9, 24.1)),
+        (('level2', 'ukras2'), (27.9, 24.1)),
+
+
+        #ARTIFICIJALNA VRATA
+        #ulaz
+        (('level2', 'ukras2'), (12.5, 26.9)),
+        (('level2', 'ukras2'), (13.5, 26.9)),
+        (('level2', 'ukras2'), (17.5, 26.9)),
+        (('level2', 'ukras2'), (18.5, 26.9)),
+
+
+        #HODNIK NAKON ARTIFICIJALNIH VRATA SLIJEPE ULICE
+        #lijevo
+        (('level2', 'ukras1'), (1.5, 27.5)),
+        (('level2', 'ukras1'), (11.5, 27.5)),
         
+        #desno
+        (('level2', 'ukras1'), (19.5, 27.5)),
+        (('level2', 'ukras1'), (30.5, 27.5)),
+
+
+        #ZADNJI VEĆI ZID NA MAPI
+        #gornji dio
+        (('level2', 'ukras2'), (10.9, 30.9)),
+        (('level2', 'ukras2'), (12.9, 30.9)),
+        (('level2', 'ukras2'), (14.9, 30.9)),
+        (('level2', 'ukras2'), (16.9, 30.9)),
+        (('level2', 'ukras2'), (18.9, 30.9)),
+        (('level2', 'ukras2'), (20.9, 30.9)),
+        (('level2', 'ukras2'), (22.9, 30.9)),
+        (('level2', 'ukras2'), (24.9, 30.9)),
+        (('level2', 'ukras2'), (26.9, 30.9)),
+
+        #donji dio
+        (('level2', 'ukras2'), (10.9, 33.1)),
+        (('level2', 'ukras2'), (12.9, 33.1)),
+        (('level2', 'ukras2'), (14.9, 33.1)),
+        (('level2', 'ukras2'), (16.9, 33.1)),
+        (('level2', 'ukras2'), (18.9, 33.1)),
+        (('level2', 'ukras2'), (20.9, 33.1)),
+        (('level2', 'ukras2'), (22.9, 33.1)),
+        (('level2', 'ukras2'), (24.9, 33.1)),
+        (('level2', 'ukras2'), (26.9, 33.1)),
+
+
+        #ZAVRŠNA VRATA
+        (('level2', 'ukras2'), (30.9, 32.9)),
+        (('level2', 'ukras2'), (30.9, 34.1))
     ]
     
     # Enemy configuration
@@ -292,7 +345,7 @@ def get_level_data():
     #Dialogue NPCs
     level_data['dialogue_npcs'] = [
        {
-            'pos': (48.8, 14.3),
+            'pos': (30.8, 13.3),
             'dialogue_id': 'level2_puzzle',
             'path': 'resources/sprites/npc/dialogue_npc/0.png'
        }
