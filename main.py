@@ -96,6 +96,7 @@ class Game:
         self.intro_sequence.update()
         self.intro_sequence.update_music_fade()
         self.loading_screen.update()
+        self.level_transition.update()
 
         pg.display.flip()
         self.delta_time = self.clock.tick(FPS)
@@ -109,6 +110,7 @@ class Game:
         self.dialogue_manager.draw()
         self.intro_sequence.draw()
         self.loading_screen.draw()
+        self.level_transition.draw()
 
     def check_events(self):
         return self.game_events.process_events()
