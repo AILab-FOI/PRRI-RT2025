@@ -24,19 +24,20 @@ class LoadingScreen:
         self.load_tips_and_lore()
 
         # Load background image
-        self.bg_image = pg.image.load('resources/tekstures/loading_bg.png')
+        self.bg_image = pg.image.load('resources/teksture/loading_bg.png')
         self.bg_image = pg.transform.scale(self.bg_image, RES)
+   
 
         # Load fonts
-        self.title_font = load_custom_font(60)  # Larger font for title
-        self.info_font = load_custom_font(30)   # Larger font for info
-        self.tip_font = load_custom_font(20)    # Smaller font for tips
+        self.title_font = load_custom_font(60)
+        self.info_font = load_custom_font(30)
+        self.tip_font = load_custom_font(20)
 
         # Loading circle settings
         self.circle_radius = 40
         self.circle_width = 4
         self.circle_y = HALF_HEIGHT + 100
-        self.num_segments = 8  # Fewer segments for smoother animation
+        self.num_segments = 8
 
         # Colors
         self.text_color = (220, 220, 255)  # Light blue text
@@ -68,9 +69,9 @@ class LoadingScreen:
         self.loading_successful = True
 
         # Select a random tip or lore
-        if random.random() < 0.5 and self.tips:  # 50% chance for a tip
+        if random.random() < 0.5 and self.tips:
             self.current_tip = random.choice(self.tips)
-        elif self.lore:  # Otherwise use lore
+        elif self.lore:
             self.current_tip = random.choice(self.lore)
 
     def update(self):
@@ -108,8 +109,7 @@ class LoadingScreen:
         self.screen.blit(self.bg_image, (0, 0))
 
         # Draw loading text with smoother pulsating effect
-        # Use sine wave for smoother pulsation
-        alpha = int(180 + 75 * math.sin(time.time() * 1.5))  # Smoother pulsation between 180 and 255
+        alpha = int(180 + 75 * math.sin(time.time() * 1.5)) 
         loading_text = self.title_font.render("LOADING", True, self.text_color)
         loading_text.set_alpha(alpha)
         loading_text_rect = loading_text.get_rect(center=(HALF_WIDTH, HALF_HEIGHT - 60))
@@ -152,24 +152,19 @@ class LoadingScreen:
                       self.circle_radius, self.circle_width)
 
         # Calculate rotation based on time only (constant speed)
-        rotation_speed = 0.3  # Fixed rotation speed
-        base_angle = time.time() * rotation_speed * 360  # Convert to degrees
+        rotation_speed = 0.3
+        base_angle = time.time() * rotation_speed * 360
 
         # Draw the rotating segments
         for i in range(self.num_segments):
             # Calculate the angle for this segment
-            angle = base_angle - (i * (360 / self.num_segments))  # Negative for clockwise rotation
-
-            # Calculate the opacity based on position in the rotation with smoother falloff
-            # The leading segment is fully opaque, trailing segments fade out more gradually
-            opacity = 255 - int(180 * (i / self.num_segments) ** 1.5)  # Exponential falloff for smoother transition
-
-            # Create a color with the calculated opacity
+            angle = base_angle - (i * (360 / self.num_segments))
+            opacity = 255 - int(180 * (i / self.num_segments) ** 1.5)
             segment_color = (*self.circle_color[:3], opacity)
 
             # Convert angle to radians for sin/cos
             start_angle = math.radians(angle)
-            end_angle = math.radians(angle + (360 / self.num_segments) * 0.8)  # Larger segments with smaller gaps
+            end_angle = math.radians(angle + (360 / self.num_segments) * 0.8)
 
             # Draw the arc segment
             pg.draw.arc(self.screen, segment_color,
