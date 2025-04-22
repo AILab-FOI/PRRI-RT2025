@@ -9,6 +9,7 @@ class LevelManager:
         self.current_level = 1
         self.level_data = {}
         self.max_level = 5  # Total number of levels
+        self.current_weapon_type = 'pistol'  # Default weapon type
         self.initialize_levels()
 
     def initialize_levels(self):

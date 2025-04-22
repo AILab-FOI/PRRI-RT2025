@@ -6,7 +6,7 @@ from raycasting import *
 from object_renderer import *
 from sprite_object import *
 from object_handler import *
-from weapon import Pistol
+from weapon import Pistol, SMG
 from sound import *
 from pathfinding import *
 from interaction import Interaction
@@ -58,7 +58,11 @@ class Game:
         else:
             self.object_handler.reset()
 
-        self.weapon = Pistol(self)
+        # Create the appropriate weapon based on the stored weapon type
+        if hasattr(self, 'level_manager') and self.level_manager.current_weapon_type == 'smg':
+            self.weapon = SMG(self)
+        else:
+            self.weapon = Pistol(self)
         self.pathfinding = PathFinding(self)
         self.interaction = Interaction(self)
 

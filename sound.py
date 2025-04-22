@@ -13,7 +13,7 @@ class Sound:
         pg.mixer.init()
         self.path = 'resources/sound/'
 
-        self.music_volume = 0.3
+        self.music_volume = 0.1
         self.sfx_volume = 0.7
 
         # Sound volume factors
