@@ -158,7 +158,7 @@ class LevelManager:
         exit_positions = {
             1: (12, 34),  # Level 1 exit at position (12, 34)
             2: (31, 33),  # Level 2 exit at position (12, 20)
-            3: (12, 20)   # Level 3 exit at position (12, 20)
+            3: (14, 34)   # Level 3 exit at position (12, 20)
         }
 
         # Add the exit door if we have a position defined for this level

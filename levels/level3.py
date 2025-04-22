@@ -10,56 +10,34 @@ def get_level_data():
     
     # Terminals
     level_data['terminals'] = [
-        {
-            'position': (5, 5),
-            'code': '9999',
-            'unlocks_door_id': None
-        }
+        #{
+            #'position': (5, 5),
+            #'code': '9999',
+            #'unlocks_door_id': None
+        #}
     ]
     
     # Doors
     level_data['doors'] = [
         {
-            'position': (11, 10),
+            'position': (9, 21),
             'door_id': 1,
-            'requires_code': True,
-            'code': '9999'
+            'requires_code': False,
+            'code': None,
+            'requires_door_id': None
+        },
+        {
+            'position': (19, 21),
+            'door_id': 2,
+            'requires_code': False,
+            'code': None,
+            'requires_door_id': None
         }
     ]
     
     # Decorative sprites
     level_data['sprites'] = [
-        # Different decorations for level 3 - more intense
-        ('ukras1', (7.5, 7.5)),
-        ('ukras1', (8.5, 7.5)),
-        ('ukras1', (9.5, 7.5)),
-        ('ukras1', (10.5, 7.5)),
-        ('ukras1', (11.5, 7.5)),
-        ('ukras1', (12.5, 7.5)),
-        
-        ('ukras2', (7.5, 12.5)),
-        ('ukras2', (8.5, 12.5)),
-        ('ukras2', (9.5, 12.5)),
-        ('ukras2', (10.5, 12.5)),
-        ('ukras2', (11.5, 12.5)),
-        ('ukras2', (12.5, 12.5)),
-        
-        # Create a pattern in the corners
-        ('ukras1', (3.5, 3.5)),
-        ('ukras1', (4.5, 3.5)),
-        ('ukras1', (3.5, 4.5)),
-        
-        ('ukras1', (16.5, 3.5)),
-        ('ukras1', (17.5, 3.5)),
-        ('ukras1', (17.5, 4.5)),
-        
-        ('ukras1', (3.5, 16.5)),
-        ('ukras1', (3.5, 17.5)),
-        ('ukras1', (4.5, 17.5)),
-        
-        ('ukras1', (16.5, 17.5)),
-        ('ukras1', (17.5, 16.5)),
-        ('ukras1', (17.5, 17.5)),
+
     ]
     
     # Enemy configuration
@@ -73,11 +51,11 @@ def get_level_data():
     
     # Dialogue NPCs
     level_data['dialogue_npcs'] = [
-        {
-            'pos': (12.5, 5.5),
-            'dialogue_id': 'level3_intro',
-            'path': 'resources/sprites/npc/dialogue_npc/0.png'
-        }
+        #{
+            #'pos': (12.5, 5.5),
+            #'dialogue_id': 'level3_intro',
+            #'path': 'resources/sprites/npc/dialogue_npc/0.png'
+        #}
     ]
     
     return level_data
