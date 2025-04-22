@@ -1,5 +1,4 @@
 import pygame as pg
-import sys
 from settings import *
 from map import *
 from player import *
@@ -7,15 +6,17 @@ from raycasting import *
 from object_renderer import *
 from sprite_object import *
 from object_handler import *
-from weapon import Weapon, Pistol, SMG
+from weapon import Pistol
 from sound import *
 from pathfinding import *
 from interaction import Interaction
 from level_manager import LevelManager
 from dialogue import DialogueManager
 from menu import Menu
-from font_manager import load_custom_font
 from intro_sequence import IntroSequence
+from loading_screen import LoadingScreen
+from level_transition import LevelTransition
+from game_events import GameEvents
 
 
 class Game:
@@ -33,6 +34,9 @@ class Game:
         self.sound = Sound(self)
         self.menu = Menu(self)
         self.intro_sequence = IntroSequence(self)
+        self.loading_screen = LoadingScreen(self)
+        self.level_transition = LevelTransition(self)
+        self.game_events = GameEvents(self)
         self.game_initialized = False
         self.show_menu()
 
@@ -54,7 +58,7 @@ class Game:
         else:
             self.object_handler.reset()
 
-        self.weapon = Pistol(self)  # Start with a pistol
+        self.weapon = Pistol(self)
         self.pathfinding = PathFinding(self)
         self.interaction = Interaction(self)
 
@@ -77,7 +81,6 @@ class Game:
         if not pg.mixer.music.get_busy():
             pg.mixer.music.play(-1)
 
-        # Only play intro sequence on level 1
         if self.level_manager.current_level == 1:
             self.intro_sequence.start()
 
@@ -92,6 +95,7 @@ class Game:
 
         self.intro_sequence.update()
         self.intro_sequence.update_music_fade()
+        self.loading_screen.update()
 
         pg.display.flip()
         self.delta_time = self.clock.tick(FPS)
@@ -104,50 +108,14 @@ class Game:
         self.interaction.draw()
         self.dialogue_manager.draw()
         self.intro_sequence.draw()
+        self.loading_screen.draw()
 
     def check_events(self):
-        self.global_trigger = False
-        for event in pg.event.get():
-            if event.type == pg.QUIT:
-                pg.quit()
-                sys.exit()
-
-            elif event.type == pg.KEYDOWN and event.key == pg.K_ESCAPE and not self.interaction.input_active:
-                self.show_menu()
-                return
-            elif event.type == self.global_event:
-                self.global_trigger = True
-
-            elif event.type == pg.USEREVENT:
-                self.intro_sequence.start_music_with_fade()
-
-            # Debug key to advance to next level (N key)
-            elif event.type == pg.KEYDOWN and event.key == pg.K_n:
-                self.next_level()
-
-
-            elif event.type == pg.KEYDOWN and event.key == pg.K_e:
-                if self.dialogue_manager.dialogue_active:
-                    self.dialogue_manager.handle_key_press()
-                else:
-                    for npc in self.object_handler.npc_list:
-                        if hasattr(npc, 'is_friendly') and npc.is_friendly and hasattr(npc, 'interaction_indicator_visible'):
-                            if npc.interaction_indicator_visible:
-                                npc.start_dialogue()
-                                break
-
-            self.player.single_fire_event(event)
-            self.interaction.handle_key_event(event)
+        return self.game_events.process_events()
 
     def next_level(self):
         """Advance to the next level"""
-        if self.level_manager.next_level():
-            font = load_custom_font(30)
-            text_surface = font.render("Loading next level...", True, (255, 255, 255))
-            text_rect = text_surface.get_rect(center=(HALF_WIDTH, HALF_HEIGHT))
-            self.screen.blit(text_surface, text_rect)
-            pg.display.flip()
-            pg.time.delay(1000)
+        return self.level_transition.transition_to_next_level()
 
     def show_menu(self):
         pg.mouse.set_visible(True)
@@ -163,7 +131,8 @@ class Game:
 
     def game_loop(self):
         while True:
-            self.check_events()
+            if self.check_events():
+                return
             self.update()
             self.draw()
 

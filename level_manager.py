@@ -261,8 +261,28 @@ class LevelManager:
             # Create dialogue NPCs for the current level
             create_dialogue_npcs(self.game, level_data['dialogue_npcs'])
 
+    def prepare_next_level(self):
+        """Prepare the next level for loading but don't activate it yet"""
+        next_level = self.current_level + 1
+        if next_level <= self.max_level and next_level in self.level_data:
+            # Store the next level number but don't change current_level yet
+            self._next_level = next_level
+            return True
+        elif next_level > self.max_level:
+            print("Congratulations! You have completed all levels!")
+            return False
+        return False
+
+    def activate_next_level(self):
+        """Activate the previously prepared next level"""
+        if hasattr(self, '_next_level'):
+            self.current_level = self._next_level
+            self.game.map.load_level(self.current_level)
+            return True
+        return False
+
     def next_level(self):
-        """Advance to the next level"""
+        """Legacy method for backward compatibility"""
         next_level = self.current_level + 1
         if next_level <= self.max_level and next_level in self.level_data:
             self.current_level = next_level
