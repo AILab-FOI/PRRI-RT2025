@@ -1,7 +1,7 @@
 """
 Level 1 configuration
 """
-from npc import KlonoviNPC, StakorNPC
+from npc import KlonoviNPC, StakorNPC, TosterNPC, ParazitNPC, JazavacNPC
 from levels.base_level import create_base_level_structure
 
 def get_level_data():
@@ -69,7 +69,7 @@ def get_level_data():
         # - A tuple (folder, sprite_type) to specify a folder
 
         # Using static sprites folder (default)
-        ## pored vrata 
+        ## pored vrata
         (('level2', 'ukras2'), (12.9, 33.5)),
         (('level2', 'ukras2'), (12.1, 33.5)),
 
@@ -118,15 +118,15 @@ def get_level_data():
         ('ukras2', (3, 30.5)),
         ('ukras2', (3, 31.0)),
         ('ukras2', (3, 31.5)),
-        ('ukras1', (3, 32.0)), 
+        ('ukras1', (3, 32.0)),
 
         ## donji desni kut
         (('level2', 'ukras2'), (23.2, 33.5)),
-        
+
         # po mapi 3. sektor
 
-  
-        (('level2', 'ukras2'), (8.9, 33.8)), 
+
+        (('level2', 'ukras2'), (8.9, 33.8)),
 
         ('ukras1', (20.2, 12.2)),
         ('ukras2', (20.2, 12.7)),
@@ -155,11 +155,11 @@ def get_level_data():
 
     # Enemy configuration
     level_data['enemies'] = {
-        'count': 4,  # Number of enemies to spawn
-        'types': [KlonoviNPC, StakorNPC],  # Types of enemies that can spawn
-        'weights': [50, 50],  # Spawn weights for each enemy type
+        'count': 5,  # Number of enemies to spawn
+        'types': [KlonoviNPC, StakorNPC, TosterNPC, ParazitNPC, JazavacNPC],  # Types of enemies that can spawn
+        'weights': [20, 20, 20, 20, 20],  # Equal spawn weights for each enemy type
         'restricted_area': {(i, j) for i in range(10) for j in range(10)},  # Areas where enemies cannot spawn
-        'fixed_positions': []  # Optional list of fixed positions for enemies: [(x, y), (x, y), ...]
+        'fixed_positions': [(20, 20), (25, 25)]  # Optional list of fixed positions for enemies: [(x, y), (x, y), ...]
     }
 
     # Dialogue NPCs

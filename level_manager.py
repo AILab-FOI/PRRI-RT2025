@@ -1,6 +1,6 @@
 import os
 from interaction import InteractiveObject
-from npc import KlonoviNPC, StakorNPC
+from npc import KlonoviNPC, StakorNPC, TosterNPC, ParazitNPC, JazavacNPC
 from dialogue import create_dialogue_npcs
 
 class LevelManager:
@@ -57,9 +57,9 @@ class LevelManager:
             return level_data['enemies']
         # Default enemy configuration if none is specified
         return {
-            'count': 4,
-            'types': [KlonoviNPC, StakorNPC],
-            'weights': [50, 50],
+            'count': 5,
+            'types': [KlonoviNPC, StakorNPC, TosterNPC, ParazitNPC, JazavacNPC],
+            'weights': [20, 20, 20, 20, 20],
             'restricted_area': {(i, j) for i in range(10) for j in range(10)},
             'fixed_positions': []
         }
