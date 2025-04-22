@@ -159,11 +159,11 @@ class DialogueManager:
         # Draw speaker name with colored background if available
         if current_speaker:
             # Create a background for the speaker name
-            speaker_text = self.speaker_font.render(current_speaker, True, (0, 0, 0))  # Black text for better contrast
-            speaker_bg_width = speaker_text.get_width() + 30  # Wider background
-            speaker_bg_height = speaker_text.get_height() + 12  # Taller background
+            speaker_text = self.speaker_font.render(current_speaker, True, (0, 0, 0))
+            speaker_bg_width = speaker_text.get_width() + 30
+            speaker_bg_height = speaker_text.get_height() + 12
             speaker_bg_x = box_x + self.dialogue_box_padding
-            speaker_bg_y = box_y - speaker_bg_height + 2  # Position it slightly higher
+            speaker_bg_y = box_y - speaker_bg_height + 2
 
             # Draw speaker background with full opacity
             speaker_bg = pg.Surface((speaker_bg_width, speaker_bg_height))
@@ -233,10 +233,10 @@ class DialogueNPC(NPC):
         super().__init__(game, path, pos, scale, shift, animation_time)
 
         # Dialogue properties
-        self.dialogue_id = dialogue_id or "marvin_intro"  # Default to Marvin's intro dialogue
+        self.dialogue_id = dialogue_id or "marvin_intro"
         self.interaction_radius = interaction_radius
         self.can_interact = True
-        self.interaction_cooldown = 1000  # ms
+        self.interaction_cooldown = 1000
         self.last_interaction_time = 0
 
         # Override NPC properties to make it non-hostile
@@ -245,8 +245,6 @@ class DialogueNPC(NPC):
         self.attack_damage = 0
         self.speed = 0
         self.accuracy = 0
-
-        # Mark as friendly NPC - this will be used to exclude it from enemy counts
         self.is_friendly = True
 
         # Visual indicator for interaction
@@ -291,14 +289,14 @@ class DialogueNPC(NPC):
         # Circular indicator removed
 
         # Draw "Press E to talk" text with background
-        font = load_custom_font(16)  # Smaller size for this text
+        font = load_custom_font(16)
         text = font.render("Press E to talk", True, (255, 255, 255))
         text_rect = text.get_rect(center=(screen_x, screen_y - 25))
 
         # Draw text background
         bg_rect = text_rect.inflate(20, 10)
         bg_surface = pg.Surface((bg_rect.width, bg_rect.height), pg.SRCALPHA)
-        bg_surface.fill((0, 0, 0, 180))  # Semi-transparent black
+        bg_surface.fill((0, 0, 0, 180))
         self.game.screen.blit(bg_surface, bg_rect)
 
         # Draw text
@@ -321,16 +319,6 @@ class DialogueNPC(NPC):
 
 # Helper function to create dialogue NPCs for a level
 def create_dialogue_npcs(game, npc_data):
-    """
-    Create dialogue NPCs for a level based on the provided data.
-
-    npc_data should be a list of dictionaries with the following keys:
-    - pos: tuple (x, y) - Position of the NPC
-    - dialogue_id: str - ID of the dialogue to use
-    - path: str (optional) - Path to the NPC sprite
-    - scale: float (optional) - Scale of the NPC sprite
-    - shift: float (optional) - Height shift of the NPC sprite
-    """
     npcs = []
 
     for data in npc_data:
@@ -358,8 +346,6 @@ def create_dialogue_npcs(game, npc_data):
         )
 
         npcs.append(npc)
-
-        # Add to game's object handler
         game.object_handler.add_npc(npc)
 
     return npcs

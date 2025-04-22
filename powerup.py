@@ -7,7 +7,6 @@ from sprite_object import SpriteObject
 class PowerUp(SpriteObject):
     def __init__(self, game, path='resources/teksture/level1/powerup.png', pos=(10.5, 3.5), powerup_type='invulnerability'):
 
-        # Add 0.5 to position for proper sprite rendering in the center of the tile
         adjusted_pos = (pos[0] + 0.5, pos[1] + 0.5) if isinstance(pos, tuple) else pos
 
         super().__init__(game, path, adjusted_pos, scale=0.35, shift=1)
@@ -19,7 +18,6 @@ class PowerUp(SpriteObject):
     def update(self):
         super().update()
 
-        # Check if player is close enough to pick up the powerup
         if not self.collected:
             player_pos = self.game.player.pos
             distance = math.hypot(player_pos[0] - self.x, player_pos[1] - self.y)

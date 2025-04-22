@@ -1,6 +1,5 @@
 from sprite_object import *
 
-
 class Weapon(AnimatedSprite):
     def __init__(self, game, path='resources/sprites/weapon/pistol/0.png', scale=0.4, animation_time=90, damage=50, name='pistol'):
         super().__init__(game=game, path=path, scale=scale, animation_time=animation_time)
@@ -20,13 +19,18 @@ class Weapon(AnimatedSprite):
             if self.animation_trigger:
                 self.images.rotate(-1)
                 self.image = self.images[0]
+                if hasattr(self, '_current_image_id'):
+                    self._current_image_id += 1
+                else:
+                    self._current_image_id = 0
+                if hasattr(self, '_scaled_image_cache'):
+                    self._scaled_image_cache = {}
                 self.frame_counter += 1
                 if self.frame_counter == self.num_images:
                     self.reloading = False
                     self.frame_counter = 0
 
     def draw(self):
-        # Don't draw weapon if intro sequence is active
         if hasattr(self.game, 'intro_sequence') and self.game.intro_sequence.active:
             return
 
@@ -41,12 +45,12 @@ class SMG(Weapon):
     def __init__(self, game):
         super().__init__(game=game,
                          path='resources/sprites/weapon/smg/0.png',
-                         scale=0.5,
+                         scale=1.2,
                          animation_time=40,
                          damage=15,
                          name='smg')
 
-        right_offset = 100
+        right_offset = 230
         self.weapon_pos = (HALF_WIDTH - self.images[0].get_width() // 2 + right_offset,
                           HEIGHT - self.images[0].get_height())
 

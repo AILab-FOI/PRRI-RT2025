@@ -17,12 +17,12 @@ class Interaction:
         self.font = load_custom_font(30)
         self.small_font = load_custom_font(20)
 
-        self.input_code = ""  # Code being entered by player
+        self.input_code = ""
         self.input_active = False
         self.unlocked_doors = set()  # Set of door IDs that have been unlocked
         self.message = ""
         self.message_time = 0
-        self.message_duration = 3000  # 3 seconds
+        self.message_duration = 3000
 
     def add_object(self, obj):
         self.interaction_objects.append(obj)
@@ -79,9 +79,9 @@ class Interaction:
 
         # Draw code input interface
         if self.input_active:
-            # Background - create a semi-transparent surface (make it much wider and taller)
-            bg_width = 600  # Increased from 500
-            bg_height = 300  # Increased from 220
+            # Background
+            bg_width = 600
+            bg_height = 300
             bg_surface = pg.Surface((bg_width, bg_height), pg.SRCALPHA)
             bg_surface.fill((0, 0, 0, 180))
             self.game.screen.blit(bg_surface, (HALF_WIDTH - bg_width//2, HALF_HEIGHT - bg_height//2))
@@ -100,13 +100,13 @@ class Interaction:
             input_text = self.input_code + "_" if len(self.input_code) < 4 else self.input_code
 
             # Make the input text much larger and add a background
-            large_font = load_custom_font(60)  # Much larger font for the code
+            large_font = load_custom_font(60)
 
             # Add a darker background behind the code for better readability
             code_bg_width = 300
             code_bg_height = 80
             code_bg = pg.Surface((code_bg_width, code_bg_height), pg.SRCALPHA)
-            code_bg.fill((0, 0, 0, 120))  # Darker but still semi-transparent
+            code_bg.fill((0, 0, 0, 120))
             self.game.screen.blit(code_bg, (HALF_WIDTH - code_bg_width//2, HALF_HEIGHT - code_bg_height//2))
 
             # Render the code with the larger font
@@ -168,16 +168,11 @@ class Interaction:
                     else:
                         self.input_active = True
                 else:
-                    # Door doesn't require a code, just open it
                     self.open_door()
             elif self.active_object.interaction_type == "level_door":
-                # Check if this is a level exit door
                 if self.active_object.is_level_exit:
-                    # Check if all enemies are defeated
                     if hasattr(self.game.object_handler, 'all_enemies_defeated') and self.game.object_handler.all_enemies_defeated:
-                        # Check if the door is enabled
                         if self.active_object.is_enabled:
-                            # Transition to the next level
                             self.game.next_level()
                         else:
                             self.message = "This door is locked."
@@ -194,9 +189,6 @@ class Interaction:
             self.message = f"Terminal Code: {self.active_object.code}"
             self.message_time = pg.time.get_ticks()
             self.game.sound.terminal_beep.play()
-
-            # Note: We no longer automatically unlock doors when viewing the terminal code
-            # The player must enter the code at each door
 
     def check_code(self):
         if self.active_object and self.active_object.requires_code:
@@ -255,13 +247,7 @@ class Interaction:
                 # Default to pistol if unknown weapon type
                 new_weapon = Pistol(self.game)
 
-            # Get the old weapon type (for potential future use)
-            # old_weapon_type = self.game.weapon.name
-
-            # Replace the current weapon with the new one
             self.game.weapon = new_weapon
-
-            # Play pickup sound
             self.game.sound.weapon_pickup.play()
 
             # Show a message

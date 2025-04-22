@@ -205,7 +205,7 @@ def get_level_data():
         #desna soba vanjska vrata
         (('level2', 'ukras2'), (24.1, 15.9)),
         (('level2', 'ukras2'), (24.1, 17.1)),
-
+      
 
         #PROLAZI
         #prvi prolaz ulaz

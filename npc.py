@@ -21,7 +21,7 @@ class NPC(AnimatedSprite):
         self.alive = True
         self.pain = False
         self.ray_cast_value = False
-        self.death_frame = 0 
+        self.death_frame = 0
         self.player_search_trigger = False
 
     def update(self):
@@ -56,12 +56,15 @@ class NPC(AnimatedSprite):
 
     def animate_death(self):
         if not self.alive and len(self.death_images) > 0:
-            # Use animation_trigger for smoother animation
             if self.animation_trigger and self.death_frame < len(self.death_images) - 1:
-                # Increment the death frame counter, but only if we haven't reached the last frame
                 self.death_frame += 1
-                # Set the image to the current death frame
                 self.image = self.death_images[self.death_frame]
+                if hasattr(self, '_current_image_id'):
+                    self._current_image_id += 1
+                else:
+                    self._current_image_id = 0
+                if hasattr(self, '_scaled_image_cache'):
+                    self._scaled_image_cache = {}
 
     def animate_pain(self):
         self.animate(self.pain_images)
@@ -84,7 +87,6 @@ class NPC(AnimatedSprite):
             if type(self) is NPC:
                 self.game.sound.npc_death.play()
 
-            # Reset death frame counter and set the initial death frame immediately
             self.death_frame = 0
 
             if hasattr(self, 'death_height_shift'):
@@ -93,6 +95,12 @@ class NPC(AnimatedSprite):
                 self.SPRITE_HEIGHT_SHIFT = 0.5
             if len(self.death_images) > 0:
                 self.image = self.death_images[0]
+                if hasattr(self, '_current_image_id'):
+                    self._current_image_id += 1
+                else:
+                    self._current_image_id = 0
+                if hasattr(self, '_scaled_image_cache'):
+                    self._scaled_image_cache = {}
 
     def run_logic(self):
         if self.alive:
@@ -193,46 +201,12 @@ class NPC(AnimatedSprite):
             return True
         return False
 
-    # Debug method for visualizing ray casting - not used in production
-    # def draw_ray_cast(self):
-    #     pg.draw.circle(self.game.screen, 'red', (100 * self.x, 100 * self.y), 15)
-    #     if self.ray_cast_player_npc():
-    #         pg.draw.line(self.game.screen, 'orange', (100 * self.game.player.x, 100 * self.game.player.y),
-    #                      (100 * self.x, 100 * self.y), 2)
-
-'''
-class SoldierNPC(NPC):
-    def __init__(self, game, path='resources/sprites/npc/soldier/0.png', pos=(10.5, 5.5),
-                 scale=0.6, shift=0.38, animation_time=180):
-        super().__init__(game, path, pos, scale, shift, animation_time)
-
-
-class CacoDemonNPC(NPC):
-    def __init__(self, game, path='resources/sprites/npc/caco_demon/0.png', pos=(10.5, 6.5),
-                 scale=0.7, shift=0.27, animation_time=250):
-        super().__init__(game, path, pos, scale, shift, animation_time)
-        self.attack_dist = 1.0
-        self.health = 150
-        self.attack_damage = 25
-        self.speed = 0.05
-        self.accuracy = 0.35
-
-class CyberDemonNPC(NPC):
-    def __init__(self, game, path='resources/sprites/npc/cyber_demon/0.png', pos=(11.5, 6.0),
-                 scale=1.0, shift=0.04, animation_time=210):
-        super().__init__(game, path, pos, scale, shift, animation_time)
-        self.attack_dist = 6
-        self.health = 350
-        self.attack_damage = 15
-        self.speed = 0.055
-        self.accuracy = 0.25
-'''
 class KlonoviNPC(NPC):
     def __init__(self, game, path='resources/sprites/npc/klonovi/0.png', pos=(10.5, 5.5),
                  scale=0.6, shift=0.38, animation_time=180):
         super().__init__(game, path, pos, scale, shift, animation_time)
         self.original_height_shift = self.SPRITE_HEIGHT_SHIFT
-        self.death_height_shift = 0.7 
+        self.death_height_shift = 0.7
 
 class StakorNPC(NPC):
     def __init__(self, game, path='resources/sprites/npc/stakor/0.png', pos=(10.5, 5.5),
@@ -265,7 +239,5 @@ class StakorNPC(NPC):
                 self.game.player.get_damage(self.attack_damage)
     def check_health(self):
         if self.health < 1 and self.alive:
-            # Play the custom sound for this NPC type
             self.game.sound.stakor_smrt.play()
-            # Call parent method with alive still set to True
             super().check_health()

@@ -14,10 +14,7 @@ class ObjectHandler:
         self.anim_sprite_path = 'resources/sprites/animated_sprites/'
         self.npc_positions = {}
         self.win_message_shown = False
-
         self.spawn_npc()
-
-        # Load decorative sprites for the current level
         self.load_decorative_sprites()
 
     def spawn_npc(self):
@@ -38,7 +35,7 @@ class ObjectHandler:
         # First spawn enemies at fixed positions
         for pos in fixed_positions:
             if len(self.npc_list) >= self.enemies:
-                break  # Don't spawn more than the configured count
+                break
 
             x, y = pos
             # Skip if position is in a wall or restricted area
@@ -167,14 +164,9 @@ class ObjectHandler:
 
     def reset(self):
         """Reset the object handler for a new level"""
-        # Clear all sprites and NPCs
         self.sprite_list = []
         self.npc_list = []
         self.npc_positions = {}
         self.win_message_shown = False
-
-        # Spawn NPCs for the new level
         self.spawn_npc()
-
-        # Load decorative sprites for the new level
         self.load_decorative_sprites()

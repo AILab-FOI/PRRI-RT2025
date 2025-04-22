@@ -14,7 +14,7 @@ class Player:
         self.health_recovery_delay = 700
         self.time_prev = pg.time.get_ticks()
 
-        # Dash svojstva
+        # Dash
         self.is_dashing = False
         self.dash_direction = (0, 0)
         self.dash_start_time = 0
@@ -209,9 +209,7 @@ class Player:
         # Check if invulnerability has expired
         if self.invulnerability_time_left <= 0:
             self.is_invulnerable = False
-            # Stop the active sound
             self.game.sound.powerup_active.stop()
-            # Play the end sound
             self.game.sound.powerup_end.play()
 
     def update(self):
@@ -224,10 +222,8 @@ class Player:
         self.update_auto_fire()
 
     def update_auto_fire(self):
-        # Handle automatic firing for SMG
         if self.auto_fire and self.game.weapon.name == 'smg':
             current_time = pg.time.get_ticks()
-            # Check if enough time has passed since the last shot
             if (not self.game.weapon.reloading and
                 current_time - self.last_auto_fire_time >= self.auto_fire_delay):
                 self.fire_weapon()
