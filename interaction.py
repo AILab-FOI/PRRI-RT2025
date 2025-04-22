@@ -246,6 +246,10 @@ class Interaction:
             else:
                 # Default to pistol if unknown weapon type
                 new_weapon = Pistol(self.game)
+                weapon_type = "pistol"
+
+            # Store the current weapon type in the level manager for level transitions
+            self.game.level_manager.current_weapon_type = weapon_type
 
             self.game.weapon = new_weapon
             self.game.sound.weapon_pickup.play()

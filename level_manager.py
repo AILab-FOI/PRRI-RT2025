@@ -1,6 +1,6 @@
 import os
 from interaction import InteractiveObject
-from npc import KlonoviNPC, StakorNPC
+from npc import KlonoviNPC, StakorNPC, TosterNPC, ParazitNPC, JazavacNPC
 from dialogue import create_dialogue_npcs
 
 class LevelManager:
@@ -9,6 +9,7 @@ class LevelManager:
         self.current_level = 1
         self.level_data = {}
         self.max_level = 5  # Total number of levels
+        self.current_weapon_type = 'pistol'  # Default weapon type
         self.initialize_levels()
 
     def initialize_levels(self):
@@ -56,9 +57,9 @@ class LevelManager:
             return level_data['enemies']
         # Default enemy configuration if none is specified
         return {
-            'count': 4,
-            'types': [KlonoviNPC, StakorNPC],
-            'weights': [50, 50],
+            'count': 5,
+            'types': [KlonoviNPC, StakorNPC, TosterNPC, ParazitNPC, JazavacNPC],
+            'weights': [20, 20, 20, 20, 20],
             'restricted_area': {(i, j) for i in range(10) for j in range(10)},
             'fixed_positions': []
         }
