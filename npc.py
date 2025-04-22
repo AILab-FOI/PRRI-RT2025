@@ -260,13 +260,13 @@ class TosterNPC(NPC):
     # Napad tostera
     def attack(self):
         if self.animation_trigger:
-            self.game.sound.npc_attack.play()
+            self.game.sound.toster_attack.play()
             if random() < self.accuracy:
                 self.game.player.get_damage(self.attack_damage)
 
     def check_health(self):
         if self.health < 1 and self.alive:
-            self.game.sound.npc_death.play()
+            self.game.sound.toster_death.play()
             super().check_health()
 
 class ParazitNPC(NPC):
@@ -287,13 +287,13 @@ class ParazitNPC(NPC):
     # Napad parazita
     def attack(self):
         if self.animation_trigger:
-            self.game.sound.napad_stakor.play()  # Reuse stakor sound for now
+            self.game.sound.parazit_attack.play()
             if random() < self.accuracy:
                 self.game.player.get_damage(self.attack_damage)
 
     def check_health(self):
         if self.health < 1 and self.alive:
-            self.game.sound.npc_death.play()
+            self.game.sound.parazit_death.play()
             super().check_health()
 
 class JazavacNPC(NPC):
@@ -314,11 +314,11 @@ class JazavacNPC(NPC):
     # Napad jazavca
     def attack(self):
         if self.animation_trigger:
-            self.game.sound.npc_attack.play()
+            self.game.sound.jazavac_attack.play()
             if random() < self.accuracy:
                 self.game.player.get_damage(self.attack_damage)
 
     def check_health(self):
         if self.health < 1 and self.alive:
-            self.game.sound.npc_death.play()
+            self.game.sound.jazavac_death.play()
             super().check_health()
