@@ -82,7 +82,7 @@ class Sound:
         self.toster_damage = self.load_sound('toster_damage.wav', self.volume_factors['toster_damage'])
 
         # Parazit sounds (reusing existing sounds but with different volume factors)
-        self.parazit_attack = self.load_sound('stakor_napad.mp3', self.volume_factors['parazit_attack'])
+        self.parazit_attack = self.load_sound('parazit_napad.mp3', self.volume_factors['parazit_attack'])
         self.parazit_death = self.load_sound('npc_death.wav', self.volume_factors['parazit_death'])
 
         # Jazavac sounds (reusing existing sounds but with different volume factors)
