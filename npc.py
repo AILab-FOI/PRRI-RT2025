@@ -264,11 +264,20 @@ class TosterNPC(NPC):
             self.game.sound.toster_attack.play()
             if random() < self.accuracy:
                 self.game.player.get_damage(self.attack_damage)
-
+    # Smrt tostera
     def check_health(self):
         if self.health < 1 and self.alive:
             self.game.sound.toster_death.play()
             super().check_health()
+    # Damage tostera
+    def check_hit_in_npc(self):
+        if self.ray_cast_value and self.game.player.shot:
+            if HALF_WIDTH - self.sprite_half_width < self.screen_x < HALF_WIDTH + self.sprite_half_width:
+                self.game.sound.toster_damage.play()
+                self.game.player.shot = False
+                self.pain = True
+                self.health -= self.game.weapon.damage
+                self.check_health()
 
 class ParazitNPC(NPC):
     def __init__(self, game, path='resources/sprites/npc/parazit/0.png', pos=(10.5, 5.5),

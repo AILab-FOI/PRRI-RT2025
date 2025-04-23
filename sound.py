@@ -37,6 +37,7 @@ class Sound:
             'stakor_smrt': 0.7,   # Stakor death
             'toster_attack': 0.5, # Toster attack
             'toster_death': 0.7,  # Toster death
+            'toster_damage': 0.5,  # Toster damage
             'parazit_attack': 0.6,# Parazit attack
             'parazit_death': 0.7, # Parazit death
             'jazavac_attack': 0.5,# Jazavac attack
@@ -75,9 +76,10 @@ class Sound:
         self.napad_stakor = self.load_sound('stakor_napad.mp3', self.volume_factors['napad_stakor'])
         self.stakor_smrt = self.load_sound('stakor_smrt.mp3', self.volume_factors['stakor_smrt'])
 
-        # Toster sounds (reusing existing sounds but with different volume factors)
+        # Toster sounds
         self.toster_attack = self.load_sound('toster_napad.wav', self.volume_factors['toster_attack'])
         self.toster_death = self.load_sound('toster_smrt.mp3', self.volume_factors['toster_death'])
+        self.toster_damage = self.load_sound('toster_damage.wav', self.volume_factors['toster_damage'])
 
         # Parazit sounds (reusing existing sounds but with different volume factors)
         self.parazit_attack = self.load_sound('stakor_napad.mp3', self.volume_factors['parazit_attack'])
