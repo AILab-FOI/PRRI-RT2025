@@ -37,12 +37,12 @@ class Sound:
             'stakor_smrt': 0.7,   # Stakor death
 
             'toster_attack': 0.5, # Toster attack
-            'toster_death': 0.9,  # Toster death
-            'toster_damage': 0.7,  # Toster damage
+            'toster_death': 0.7,  # Toster death
+            'toster_damage': 0.5,  # Toster damage
 
             'parazit_attack': 0.6,# Parazit attack
             'parazit_death': 0.7, # Parazit death
-            'parazit_damage': 0.7, # Parazit damage
+            'parazit_damage': 0.5, # Parazit damage
 
             'jazavac_attack': 0.5,# Jazavac attack
             'jazavac_death': 0.7, # Jazavac death
@@ -134,12 +134,18 @@ class Sound:
             # Enemy-specific sounds
             'napad_stakor': self.napad_stakor,
             'stakor_smrt': self.stakor_smrt,
+
             'toster_attack': self.toster_attack,
             'toster_death': self.toster_death,
+            'toster_damage': self.toster_damage,
+
             'parazit_attack': self.parazit_attack,
             'parazit_death': self.parazit_death,
+            'parazit_damage': self.parazit_damage,
+
             'jazavac_attack': self.jazavac_attack,
             'jazavac_death': self.jazavac_death,
+            'jazavac_damage': self.jazavac_damage,
 
             # Interaction sounds
             'terminal_beep': self.terminal_beep,
