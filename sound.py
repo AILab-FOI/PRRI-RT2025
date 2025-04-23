@@ -46,7 +46,7 @@ class Sound:
 
             'jazavac_attack': 0.5,# Jazavac attack
             'jazavac_death': 0.7, # Jazavac death
-            'jazavac_damage': 0.7, # Jazavac damage
+            'jazavac_damage': 0.5, # Jazavac damage
 
             # Interaction sounds
             'terminal_beep': 0.7,
