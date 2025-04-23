@@ -76,7 +76,7 @@ class Sound:
         self.stakor_smrt = self.load_sound('stakor_smrt.mp3', self.volume_factors['stakor_smrt'])
 
         # Toster sounds (reusing existing sounds but with different volume factors)
-        self.toster_attack = self.load_sound('npc_attack.wav', self.volume_factors['toster_attack'])
+        self.toster_attack = self.load_sound('toster_napad.wav', self.volume_factors['toster_attack'])
         self.toster_death = self.load_sound('npc_death.wav', self.volume_factors['toster_death'])
 
         # Parazit sounds (reusing existing sounds but with different volume factors)
