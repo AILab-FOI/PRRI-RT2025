@@ -237,6 +237,7 @@ class StakorNPC(NPC):
             self.game.sound.napad_stakor.play()
             if random() < self.accuracy:
                 self.game.player.get_damage(self.attack_damage)
+    #Smrt štakora
     def check_health(self):
         if self.health < 1 and self.alive:
             self.game.sound.stakor_smrt.play()
