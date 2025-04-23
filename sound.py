@@ -36,8 +36,8 @@ class Sound:
             'napad_stakor': 0.6,  # Stakor attack
             'stakor_smrt': 0.7,   # Stakor death
             'toster_attack': 0.5, # Toster attack
-            'toster_death': 0.7,  # Toster death
-            'toster_damage': 0.5,  # Toster damage
+            'toster_death': 0.9,  # Toster death
+            'toster_damage': 0.7,  # Toster damage
             'parazit_attack': 0.6,# Parazit attack
             'parazit_death': 0.7, # Parazit death
             'jazavac_attack': 0.5,# Jazavac attack
