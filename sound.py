@@ -91,7 +91,7 @@ class Sound:
         self.parazit_damage = self.load_sound('parazit_damage.mp3', self.volume_factors['parazit_damage'])
 
         # Jazavac sounds (reusing existing sounds but with different volume factors)
-        self.jazavac_attack = self.load_sound('npc_attack.wav', self.volume_factors['jazavac_attack'])
+        self.jazavac_attack = self.load_sound('jazavac_napad.wav', self.volume_factors['jazavac_attack'])
         self.jazavac_death = self.load_sound('npc_death.wav', self.volume_factors['jazavac_death'])
 
         # ===== INTERACTION SOUNDS =====
