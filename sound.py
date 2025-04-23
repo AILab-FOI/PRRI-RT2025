@@ -46,6 +46,7 @@ class Sound:
 
             'jazavac_attack': 0.5,# Jazavac attack
             'jazavac_death': 0.7, # Jazavac death
+            'jazavac_damage': 0.7, # Jazavac damage
 
             # Interaction sounds
             'terminal_beep': 0.7,
@@ -93,6 +94,7 @@ class Sound:
         # Jazavac sounds (reusing existing sounds but with different volume factors)
         self.jazavac_attack = self.load_sound('jazavac_napad.wav', self.volume_factors['jazavac_attack'])
         self.jazavac_death = self.load_sound('jazavac_smrt.wav', self.volume_factors['jazavac_death'])
+        self.jazavac_damage = self.load_sound('jazavac_damage.wav', self.volume_factors['jazavac_damage'])
 
         # ===== INTERACTION SOUNDS =====
         self.terminal_beep = self.load_sound('terminal.wav', self.volume_factors['terminal_beep'])
