@@ -58,11 +58,10 @@ class Pistol(Weapon):
     def __init__(self, game):
         super().__init__(game=game,
                          path='resources/sprites/weapon/pistol/0.png',
-                         scale=1.2,
+                         scale=0.3,
                          animation_time=90,
                          damage=50,
                          name='pistol')
 
-        right_offset = 230
-        self.weapon_pos = (HALF_WIDTH - self.images[0].get_width() // 2 + right_offset,
+        self.weapon_pos = (HALF_WIDTH - self.images[0].get_width() // 2,
                           HEIGHT - self.images[0].get_height())

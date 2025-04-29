@@ -29,8 +29,16 @@ class ObjectRenderer:
         self.game = game
         self.screen = game.screen
         self.wall_textures = self.load_wall_textures()
-        self.sky_image = self.get_texture('resources/textures/sky.png', (WIDTH, HALF_HEIGHT))
+
+        # Sky images for different levels
+        self.sky_images = {
+            1: self.get_texture('resources/teksture/level1/sky1.png', (WIDTH, HALF_HEIGHT)),
+            2: self.get_texture('resources/teksture/level2/sky2.png', (WIDTH, HALF_HEIGHT)),
+            3: self.get_texture('resources/textures/sky.png', (WIDTH, HALF_HEIGHT))
+        }
+        self.sky_image = self.sky_images[1]
         self.sky_offset = 0
+
         self.blood_screen = self.get_texture('resources/textures/blood_screen.png', RES)
         self.digit_size = 90
         self.digit_images = [self.get_texture(f'resources/teksture/brojevi/{i}.png', [self.digit_size] * 2)
@@ -192,7 +200,20 @@ class ObjectRenderer:
         timer_rect = timer_surface.get_rect(center=timer_position)
         self.screen.blit(timer_surface, timer_rect)
 
+    def update_sky_image(self):
+        """Update the sky image based on the current level"""
+        if hasattr(self.game, 'level_manager'):
+            current_level = self.game.level_manager.current_level
+            if current_level in self.sky_images:
+                self.sky_image = self.sky_images[current_level]
+            else:
+                # Fallback to default sky image
+                self.sky_image = self.sky_images[3]
+
     def draw_background(self):
+        # Update sky image based on current level
+        self.update_sky_image()
+
         self.sky_offset = (self.sky_offset + 4.5 * self.game.player.rel) % WIDTH
         self.screen.blit(self.sky_image, (-self.sky_offset, 0))
         self.screen.blit(self.sky_image, (-self.sky_offset + WIDTH, 0))

@@ -31,7 +31,6 @@ class Game:
         self.global_trigger = False
         self.global_event = pg.USEREVENT + 0
         pg.time.set_timer(self.global_event, 40)
-
         self.sound = Sound(self)
         self.menu = Menu(self)
         self.intro_sequence = IntroSequence(self)
@@ -83,6 +82,8 @@ class Game:
             self.player.x, self.player.y = PLAYER_POS_LEVEL2
         elif self.level_manager.current_level == 3:
             self.player.x, self.player.y = PLAYER_POS_LEVEL3
+
+        self.object_renderer.update_sky_image()
 
         if not pg.mixer.music.get_busy():
             pg.mixer.music.play(-1)
