@@ -188,14 +188,14 @@ class Menu:
         ]
 
         # Load background image
-        self.bg_image = pg.image.load('resources/textures/menu_bg.png')
+        self.bg_image = pg.image.load('resources/teksture/pocetna.png')
         self.bg_image = pg.transform.scale(self.bg_image, RES)
 
         # Font for title
         self.title_font = load_custom_font(72)
 
         self.title_text = self.title_font.render("Galaxy's Doom", True, (220, 220, 255))
-        self.title_rect = self.title_text.get_rect(center=(HALF_WIDTH, 150))
+        self.title_rect = self.title_text.get_rect(center=(HALF_WIDTH, 100))
 
         # Add a decorative underline for the title
         self.underline_width = self.title_rect.width * 0.8
@@ -214,10 +214,10 @@ class Menu:
         self.small_font = load_custom_font(16)
 
         self.version_text = self.small_font.render(self.version, True, (180, 180, 220))
-        self.version_rect = self.version_text.get_rect(bottomright=(WIDTH - 20, HEIGHT - 10))
+        self.version_rect = self.version_text.get_rect(topright=(WIDTH - 20, 20))
 
         self.credits_text = self.small_font.render(self.credits, True, (180, 180, 220))
-        self.credits_rect = self.credits_text.get_rect(bottomleft=(20, HEIGHT - 10))
+        self.credits_rect = self.credits_text.get_rect(topleft=(20, 20))
 
     def update_start_button_text(self):
         """Update the text of the start button based on game state"""
@@ -302,7 +302,7 @@ class Menu:
         self.game.sound.sfx_volume = self.sliders[1].value
         self.game.sound.update_sfx_volume()
 
-    def draw_title(self, title_text, y_pos=150):
+    def draw_title(self, title_text, y_pos=100):
         """Draw a simplified title"""
         # Render title text if it's a string, otherwise use the provided surface
         if isinstance(title_text, str):
