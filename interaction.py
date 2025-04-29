@@ -73,8 +73,11 @@ class Interaction:
             else:
                 prompt_text = f"Press 'E' to {self.active_object.interaction_type}"
 
+            # Calculate bottom margin based on percentage
+            margin_y = int(HEIGHT * UI_MARGIN_PERCENT_Y)
+
             text_surface = self.font.render(prompt_text, True, (255, 255, 255))
-            text_rect = text_surface.get_rect(center=(HALF_WIDTH, HEIGHT - 100))
+            text_rect = text_surface.get_rect(center=(HALF_WIDTH, HEIGHT - 100 - margin_y))
             self.game.screen.blit(text_surface, text_rect)
 
         # Draw code input interface
@@ -128,8 +131,11 @@ class Interaction:
 
         # Draw message if there is one
         if self.message:
+            # Calculate bottom margin based on percentage
+            margin_y = int(HEIGHT * UI_MARGIN_PERCENT_Y)
+
             message_surface = self.font.render(self.message, True, (255, 255, 255))
-            message_rect = message_surface.get_rect(center=(HALF_WIDTH, HEIGHT - 150))
+            message_rect = message_surface.get_rect(center=(HALF_WIDTH, HEIGHT - 150 - margin_y))
             self.game.screen.blit(message_surface, message_rect)
 
     def handle_key_event(self, event):

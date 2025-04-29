@@ -6,7 +6,8 @@ class Weapon(AnimatedSprite):
         self.images = deque(
             [pg.transform.smoothscale(img, (self.image.get_width() * scale, self.image.get_height() * scale))
              for img in self.images])
-        self.weapon_pos = (HALF_WIDTH - self.images[0].get_width() // 2, HEIGHT - self.images[0].get_height())
+        bottom_margin = int(HEIGHT * UI_MARGIN_PERCENT_Y)
+        self.weapon_pos = (HALF_WIDTH - self.images[0].get_width() // 2, HEIGHT - self.images[0].get_height() - bottom_margin)
         self.reloading = False
         self.num_images = len(self.images)
         self.frame_counter = 0
@@ -51,8 +52,10 @@ class SMG(Weapon):
                          name='smg')
 
         right_offset = 230
+        # Calculate bottom margin based on percentage
+        bottom_margin = int(HEIGHT * UI_MARGIN_PERCENT_Y)
         self.weapon_pos = (HALF_WIDTH - self.images[0].get_width() // 2 + right_offset,
-                          HEIGHT - self.images[0].get_height())
+                          HEIGHT - self.images[0].get_height() - bottom_margin)
 
 class Pistol(Weapon):
     def __init__(self, game):
@@ -64,5 +67,7 @@ class Pistol(Weapon):
                          name='pistol')
 
         right_offset = 230
+        # Calculate bottom margin based on percentage
+        bottom_margin = int(HEIGHT * UI_MARGIN_PERCENT_Y)
         self.weapon_pos = (HALF_WIDTH - self.images[0].get_width() // 2 + right_offset,
-                          HEIGHT - self.images[0].get_height())
+                          HEIGHT - self.images[0].get_height() - bottom_margin)

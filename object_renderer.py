@@ -75,8 +75,10 @@ class ObjectRenderer:
         # Create the counter text
         counter_text = f"Enemies: {remaining_enemies}/{total_enemies}"
 
-        # Use preloaded font
-        position = (WIDTH - 20, HEIGHT - 20)
+        # Calculate margin based on percentage
+        margin_x = int(WIDTH * UI_MARGIN_PERCENT_X)
+        margin_y = int(HEIGHT * UI_MARGIN_PERCENT_Y)
+        position = (WIDTH - margin_x, HEIGHT - margin_y)
 
         # Custom positioning for bottom right
         text_surface = self.enemy_counter_font.render(counter_text, True, (255, 255, 255))
@@ -95,9 +97,14 @@ class ObjectRenderer:
 
     def draw_player_health(self):
         health = str(self.game.player.health)
+
+        # Calculate margin based on percentage
+        margin_x = int(WIDTH * UI_MARGIN_PERCENT_X)
+        margin_y = int(HEIGHT * UI_MARGIN_PERCENT_Y)
+
         for i, char in enumerate(health):
-            self.screen.blit(self.digits[char], (i * self.digit_size, 0))
-        self.screen.blit(self.digits['10'], ((i + 1) * self.digit_size, 0))
+            self.screen.blit(self.digits[char], (margin_x + i * self.digit_size, margin_y))
+        self.screen.blit(self.digits['10'], (margin_x + (i + 1) * self.digit_size, margin_y))
 
     def player_damage(self):
         self.screen.blit(self.blood_screen, (0, 0))
@@ -110,13 +117,16 @@ class ObjectRenderer:
     def draw_message(self):
         """Draw the current message if it's active"""
         if self.message and pg.time.get_ticks() - self.message_time < self.message_duration:
+            # Calculate margin based on percentage
+            margin_y = int(HEIGHT * UI_MARGIN_PERCENT_Y)
+
             # Use a full-width background for messages
             bg_surface = pg.Surface((WIDTH, 80), pg.SRCALPHA)
             bg_surface.fill((0, 0, 0, 180))
-            self.screen.blit(bg_surface, (0, self.digit_size + 10))
+            self.screen.blit(bg_surface, (0, self.digit_size + margin_y + 10))
 
             # Draw the message text centered
-            position = (HALF_WIDTH, self.digit_size + 50)
+            position = (HALF_WIDTH, self.digit_size + margin_y + 50)
             text_surface = self.message_font.render(self.message, True, (255, 255, 255))
             text_rect = text_surface.get_rect(center=position)
             self.screen.blit(text_surface, text_rect)
@@ -133,8 +143,13 @@ class ObjectRenderer:
         # Nacrtaj indikator cooldowna
         indicator_width = 200
         indicator_height = 10
-        indicator_x = WIDTH - indicator_width - 20
-        indicator_y = 20
+
+        # Calculate margins based on percentage
+        margin_x = int(WIDTH * UI_MARGIN_PERCENT_X)
+        margin_y = int(HEIGHT * UI_MARGIN_PERCENT_Y)
+
+        indicator_x = WIDTH - indicator_width - margin_x
+        indicator_y = margin_y
 
         # Pozadina indikatora
         pg.draw.rect(self.screen, (50, 50, 50),
@@ -158,18 +173,21 @@ class ObjectRenderer:
         seconds_left = max(1, int(self.game.player.invulnerability_time_left / 1000) + 1)
         center_x = HALF_WIDTH
 
+        # Calculate top margin based on percentage
+        margin_y = int(HEIGHT * UI_MARGIN_PERCENT_Y)
+
         # Draw title text (using preloaded font)
-        title_position = (center_x, 30)
+        title_position = (center_x, margin_y + 30)
         title_surface = self.invulnerability_title_font.render("INVINCIBILITY", True, (255, 255, 255))
         title_rect = title_surface.get_rect(center=title_position)
         self.screen.blit(title_surface, title_rect)
 
         # Draw icon (using preloaded texture)
-        icon_rect = self.powerup_icon.get_rect(center=(center_x, 80))
+        icon_rect = self.powerup_icon.get_rect(center=(center_x, margin_y + 80))
         self.screen.blit(self.powerup_icon, icon_rect)
 
         # Draw timer (using preloaded font)
-        timer_position = (center_x, 140)
+        timer_position = (center_x, margin_y + 140)
         timer_surface = self.invulnerability_timer_font.render(f"{seconds_left}s", True, (255, 255, 255))
         timer_rect = timer_surface.get_rect(center=timer_position)
         self.screen.blit(timer_surface, timer_rect)

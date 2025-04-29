@@ -26,6 +26,10 @@ PLAYER_DASH_COOLDOWN = 1000
 POWERUP_INVULNERABILITY_DURATION = 5000
 POWERUP_PICKUP_DISTANCE = 0.5
 
+# UI settings - percentage-based margins
+UI_MARGIN_PERCENT_X = 0.05  # 5% horizontal margin (left/right)
+UI_MARGIN_PERCENT_Y = 0.05  # 5% vertical margin (top/bottom)
+
 MOUSE_SENSITIVITY = 0.0003
 MOUSE_MAX_REL = 40
 MOUSE_BORDER_LEFT = 100
