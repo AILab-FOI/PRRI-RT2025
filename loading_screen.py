@@ -5,6 +5,7 @@ import json
 import random
 from settings import *
 from font_manager import load_custom_font
+from menu import MetallicUIRenderer, Button
 
 class LoadingScreen:
     def __init__(self, game):
@@ -12,38 +13,42 @@ class LoadingScreen:
         self.screen = game.screen
         self.active = False
         self.start_time = 0
-        # Only keep essential properties
         self.duration = 3.0
+        self.auto_continue = True
 
         self.tips = []
         self.lore = []
         self.current_tip = ""
         self.load_tips_and_lore()
 
-        # Load background image
         self.bg_image = pg.image.load('resources/teksture/loading_bg.png')
         self.bg_image = pg.transform.scale(self.bg_image, RES)
- 
 
-        # Load fonts
         self.title_font = load_custom_font(60)
         self.info_font = load_custom_font(30)
         self.tip_font = load_custom_font(20)
 
-        # Loading circle settings
         self.circle_radius = 40
         self.circle_width = 4
         self.circle_y = HALF_HEIGHT + 100
         self.num_segments = 8
 
-        # Colors
-        self.text_color = (220, 220, 255)  # Light blue text
-        self.circle_color = (120, 180, 255)  # Brighter blue for the circle
-        self.circle_bg_color = (40, 40, 60, 80)  # More subtle background
-        self.tip_bg_color = (30, 30, 50, 180)  # More opaque background for tips
+        self.text_color = (220, 220, 255)
+        self.circle_color = (255, 140, 0)
+        self.circle_bg_color = (40, 40, 45, 80)
+
+        self.ui_renderer = MetallicUIRenderer(self.screen)
+
+        button_height = 60
+        button_width = 300
+        center_x = HALF_WIDTH - button_width // 2
+
+        self.buttons = [
+            Button(center_x, HEIGHT - 150, button_width, button_height, "Continue", font_size=36),
+            Button(center_x, HEIGHT - 80, button_width, button_height, "Exit", font_size=36)
+        ]
 
     def load_tips_and_lore(self):
-        """Load tips and lore from JSON file"""
         try:
             with open('resources/loading_tips.json', 'r') as f:
                 data = json.load(f)
@@ -54,28 +59,52 @@ class LoadingScreen:
             self.tips = ["Press E to interact with objects."]
             self.lore = ["The ship was attacked by Vogons."]
 
-    def start(self, level_number=None):
-        """Start the loading screen"""
+    def start(self, level_number=None, auto_continue=True):
         self.active = True
         self.start_time = time.time()
         self.level_number = level_number
+        self.auto_continue = auto_continue
+
+        if not auto_continue:
+            pg.mouse.set_visible(True)
 
         if random.random() < 0.5 and self.tips:
             self.current_tip = random.choice(self.tips)
         elif self.lore:
             self.current_tip = random.choice(self.lore)
 
+    def handle_events(self):
+        if not self.active or self.auto_continue:
+            return False
+
+        mouse_pos = pg.mouse.get_pos()
+
+        for event in pg.event.get():
+            if event.type == pg.QUIT:
+                pg.quit()
+                exit()
+
+            for i, button in enumerate(self.buttons):
+                button.update(mouse_pos, self.game)
+                if button.is_clicked(event, self.game):
+                    if i == 0:
+                        self.active = False
+                        return True
+                    elif i == 1:
+                        pg.quit()
+                        exit()
+
+        return False
+
     def update(self):
-        """Update the loading screen progress"""
         if not self.active:
             return
 
         elapsed = time.time() - self.start_time
-        if elapsed >= self.duration:
+        if elapsed >= self.duration and self.auto_continue:
             self.active = False
 
     def set_custom_message(self, message, position=None, color=None):
-        """Display a custom message on the loading screen"""
         if not color:
             color = self.text_color
 
@@ -87,64 +116,72 @@ class LoadingScreen:
         self.game.screen.blit(message_text, message_rect)
 
     def draw(self):
-        """Draw the loading screen"""
         if not self.active:
             return
 
-        # Draw background
         self.screen.blit(self.bg_image, (0, 0))
 
-        # Draw loading text with smoother pulsating effect
-        alpha = int(180 + 75 * math.sin(time.time() * 1.5))
-        loading_text = self.title_font.render("LOADING", True, self.text_color)
-        loading_text.set_alpha(alpha)
-        loading_text_rect = loading_text.get_rect(center=(HALF_WIDTH, HALF_HEIGHT - 60))
-        self.screen.blit(loading_text, loading_text_rect)
 
-        # Draw level info if available
-        if self.level_number is not None:
+        title_text = "LOADING"
+        if not self.auto_continue and self.level_number is not None:
+            title_text = f"LEVEL {self.level_number}"
+
+        self.ui_renderer.draw_metallic_text(
+            title_text,
+            self.title_font,
+            (HALF_WIDTH, HALF_HEIGHT - 100),
+            bg_alpha=128
+        )
+
+
+        if self.level_number is not None and self.auto_continue:
             level_text = self.info_font.render(f"LEVEL {self.level_number}", True, self.text_color)
             level_rect = level_text.get_rect(center=(HALF_WIDTH, HALF_HEIGHT))
             self.screen.blit(level_text, level_rect)
 
-        # Draw tip/lore text
+
         if self.current_tip:
-            tip_bg_surface = pg.Surface((WIDTH - 200, 70), pg.SRCALPHA)
-            tip_bg_surface.fill(self.tip_bg_color)
+            tip_rect = pg.Rect(0, 0, WIDTH - 200, 70)
+            tip_rect.center = (HALF_WIDTH, HALF_HEIGHT + 200)
 
-            tip_y_position = HALF_HEIGHT + 200
-            tip_bg_rect = tip_bg_surface.get_rect(center=(HALF_WIDTH, tip_y_position))
-
-            border_rect = tip_bg_rect.copy()
-            border_rect.inflate_ip(4, 4)
-            pg.draw.rect(self.screen, (80, 100, 180, 100), border_rect, border_radius=10)
-
-            self.screen.blit(tip_bg_surface, tip_bg_rect)
+            self.ui_renderer.draw_metallic_panel(
+                tip_rect,
+                chamfer_size=8,
+                bg_alpha=180
+            )
 
             tip_text = self.tip_font.render(self.current_tip, True, self.text_color)
-            tip_rect = tip_text.get_rect(center=(HALF_WIDTH, tip_y_position))
-            self.screen.blit(tip_text, tip_rect)
+            tip_text_rect = tip_text.get_rect(center=(HALF_WIDTH, HALF_HEIGHT + 200))
+            self.screen.blit(tip_text, tip_text_rect)
 
-        # Draw loading circle
-        circle_center = (HALF_WIDTH, self.circle_y)
 
-        pg.draw.circle(self.screen, self.circle_bg_color, circle_center,
-                      self.circle_radius, self.circle_width)
+        if self.auto_continue:
+            circle_center = (HALF_WIDTH, self.circle_y)
 
-        rotation_speed = 0.3
-        base_angle = time.time() * rotation_speed * 360
+            pg.draw.circle(self.screen, self.circle_bg_color, circle_center,
+                          self.circle_radius, self.circle_width)
 
-        for i in range(self.num_segments):
-            angle = base_angle - (i * (360 / self.num_segments))
-            opacity = 255 - int(180 * (i / self.num_segments) ** 1.5)
-            segment_color = (*self.circle_color[:3], opacity)
+            rotation_speed = 0.3
+            base_angle = time.time() * rotation_speed * 360
 
-            start_angle = math.radians(angle)
-            end_angle = math.radians(angle + (360 / self.num_segments) * 0.8)
+            for i in range(self.num_segments):
+                angle = base_angle - (i * (360 / self.num_segments))
+                opacity = 255 - int(180 * (i / self.num_segments) ** 1.5)
+                segment_color = (*self.circle_color[:3], opacity)
 
-            pg.draw.arc(self.screen, segment_color,
-                       (circle_center[0] - self.circle_radius,
-                        circle_center[1] - self.circle_radius,
-                        self.circle_radius * 2,
-                        self.circle_radius * 2),
-                       start_angle, end_angle, self.circle_width)
+                start_angle = math.radians(angle)
+                end_angle = math.radians(angle + (360 / self.num_segments) * 0.8)
+
+                pg.draw.arc(self.screen, segment_color,
+                           (circle_center[0] - self.circle_radius,
+                            circle_center[1] - self.circle_radius,
+                            self.circle_radius * 2,
+                            self.circle_radius * 2),
+                           start_angle, end_angle, self.circle_width)
+
+
+        if not self.auto_continue:
+            for button in self.buttons:
+                button.draw(self.screen)
+
+        pg.display.flip()

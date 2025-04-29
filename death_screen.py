@@ -1,7 +1,7 @@
 import pygame as pg
 from settings import *
 from font_manager import load_custom_font
-from menu import Button
+from menu import Button, MetallicUIRenderer
 
 class DeathScreen:
     def __init__(self, game):
@@ -13,8 +13,7 @@ class DeathScreen:
         self.title_font = load_custom_font(72)
         self.subtitle_font = load_custom_font(36)
 
-        self.title_text = self.title_font.render("YOU DIED", True, (220, 50, 50))
-        self.title_rect = self.title_text.get_rect(center=(HALF_WIDTH, HALF_HEIGHT - 150))
+        self.ui_renderer = MetallicUIRenderer(self.screen)
 
         button_height = 70
         button_width = 400
@@ -26,12 +25,10 @@ class DeathScreen:
         ]
 
     def start(self):
-        """Activate the death screen"""
         self.active = True
         pg.mouse.set_visible(True)
 
     def handle_events(self):
-        """Handle events for the death screen"""
         if not self.active:
             return False
 
@@ -57,17 +54,24 @@ class DeathScreen:
         return False
 
     def update(self):
-        """Update the death screen"""
         if not self.active:
             return
 
     def draw(self):
-        """Draw the death screen"""
         if not self.active:
             return
 
         self.screen.blit(self.bg_image, (0, 0))
-        self.screen.blit(self.title_text, self.title_rect)
+
+
+        self.ui_renderer.draw_metallic_text(
+            "YOU DIED",
+            self.title_font,
+            (HALF_WIDTH, HALF_HEIGHT - 150),
+            bg_alpha=180,
+            border_color=(180, 40, 40)
+        )
+
         for button in self.buttons:
             button.draw(self.screen)
 

@@ -2,15 +2,118 @@ import pygame as pg
 from settings import *
 from font_manager import load_custom_font
 
-class UIElement:
-    """Base class for UI elements with common functionality"""
-    def __init__(self):
-        pass
+class MetallicUIRenderer:
+    def __init__(self, screen):
+        self.screen = screen
+        self.accent_color = (255, 140, 0)
+        self.bg_color = (40, 40, 45)
+        self.hover_color = (60, 60, 65)
+        self.border_color = (80, 80, 85)
+        self.bevel_size = 3
+        self.bevel_light = (70, 70, 75)
+        self.bevel_dark = (30, 30, 35)
 
-class Button(UIElement):
+    def _get_chamfer_points(self, rect, chamfer_size):
+        return [
+            (rect.left + chamfer_size, rect.top),
+            (rect.right - chamfer_size, rect.top),
+            (rect.right, rect.top + chamfer_size),
+            (rect.right, rect.bottom - chamfer_size),
+            (rect.right - chamfer_size, rect.bottom),
+            (rect.left + chamfer_size, rect.bottom),
+            (rect.left, rect.bottom - chamfer_size),
+            (rect.left, rect.top + chamfer_size)
+        ]
+
+    def draw_chamfered_rect(self, color, rect, chamfer_size, border_width=0):
+        points = self._get_chamfer_points(rect, chamfer_size)
+
+        if border_width == 0:
+            pg.draw.polygon(self.screen, color, points)
+        else:
+            pg.draw.polygon(self.screen, color, points, border_width)
+
+        return points
+
+    def draw_bevel_effect(self, rect, chamfer_size):
+        bevel_top_left = [
+            (rect.left + chamfer_size, rect.top),
+            (rect.left, rect.top + chamfer_size),
+            (rect.left, rect.bottom - chamfer_size),
+            (rect.left + chamfer_size, rect.bottom),
+            (rect.left + self.bevel_size + chamfer_size, rect.bottom - self.bevel_size),
+            (rect.left + self.bevel_size, rect.bottom - chamfer_size - self.bevel_size),
+            (rect.left + self.bevel_size, rect.top + chamfer_size + self.bevel_size),
+            (rect.left + self.bevel_size + chamfer_size, rect.top + self.bevel_size)
+        ]
+        pg.draw.polygon(self.screen, self.bevel_dark, bevel_top_left)
+
+        bevel_bottom_right = [
+            (rect.right - chamfer_size, rect.top),
+            (rect.right, rect.top + chamfer_size),
+            (rect.right, rect.bottom - chamfer_size),
+            (rect.right - chamfer_size, rect.bottom),
+            (rect.right - self.bevel_size - chamfer_size, rect.bottom - self.bevel_size),
+            (rect.right - self.bevel_size, rect.bottom - chamfer_size - self.bevel_size),
+            (rect.right - self.bevel_size, rect.top + chamfer_size + self.bevel_size),
+            (rect.right - self.bevel_size - chamfer_size, rect.top + self.bevel_size)
+        ]
+        pg.draw.polygon(self.screen, self.bevel_light, bevel_bottom_right)
+
+    def draw_chamfered_rect_alpha(self, color, rect, chamfer_size, border_width=0, alpha=255):
+        points = self._get_chamfer_points(rect, chamfer_size)
+
+        temp_surface = pg.Surface((rect.width + 8, rect.height + 8), pg.SRCALPHA)
+
+        if border_width == 0:
+            pg.draw.polygon(temp_surface, (*color, alpha), [(p[0] - rect.left + 4, p[1] - rect.top + 4) for p in points])
+        else:
+            pg.draw.polygon(temp_surface, (*color, alpha), [(p[0] - rect.left + 4, p[1] - rect.top + 4) for p in points], border_width)
+        self.screen.blit(temp_surface, (rect.left - 4, rect.top - 4))
+
+        return points
+
+    def draw_metallic_panel(self, rect, chamfer_size, color=None, border_color=None, with_bevel=True, border_alpha=255, bg_alpha=255):
+        color = color or self.bg_color
+        border_color = border_color or self.border_color
+
+        if bg_alpha < 255:
+            self.draw_chamfered_rect_alpha(color, rect, chamfer_size, 0, bg_alpha)
+        else:
+            self.draw_chamfered_rect(color, rect, chamfer_size)
+
+        if with_bevel:
+            self.draw_bevel_effect(rect, chamfer_size)
+
+        border_rect = rect.inflate(4, 4)
+        if border_alpha < 255:
+            self.draw_chamfered_rect_alpha(border_color, border_rect, chamfer_size, 2, border_alpha)
+        else:
+            self.draw_chamfered_rect(border_color, border_rect, chamfer_size, 2)
+
+    def draw_metallic_text(self, text, font, pos, padding=(20, 15), chamfer_size=10, border_color=None, border_alpha=255, bg_alpha=255):
+        text_surface = font.render(text, True, (220, 220, 255))
+        text_rect = text_surface.get_rect(center=pos)
+
+        bg_rect = text_rect.inflate(padding[0] * 2, padding[1] * 2)
+
+        border_color = border_color if border_color is not None else self.accent_color
+        self.draw_metallic_panel(bg_rect, chamfer_size, border_color=border_color, border_alpha=border_alpha, bg_alpha=bg_alpha)
+        self.screen.blit(text_surface, text_rect)
+
+        return bg_rect
+
+    def draw_glow_effect(self, rect, chamfer_size, color=None, alpha=100):
+        color = color or self.accent_color
+        glow_rect = rect.inflate(16, 16)
+        glow_color = (*color, alpha)
+        glow_surf = pg.Surface((glow_rect.width, glow_rect.height), pg.SRCALPHA)
+        pg.draw.rect(glow_surf, glow_color, glow_surf.get_rect(), border_radius=chamfer_size)
+        self.screen.blit(glow_surf, glow_rect.topleft)
+
+class Button:
     def __init__(self, x, y, width, height, text, font_size=36, text_color=(220, 220, 255),
-                 bg_color=(40, 45, 80), hover_color=(60, 70, 120)):
-        super().__init__()
+                 bg_color=(40, 40, 45), hover_color=(60, 60, 65)):
         self.rect = pg.Rect(x, y, width, height)
         self.text = text
         self.font_size = font_size
@@ -20,12 +123,12 @@ class Button(UIElement):
         self.hovered = False
         self.was_hovered = False
         self.glow_size = 0
-
+        self.chamfer_size = 8
         self.font = load_custom_font(self.font_size)
         self.update_text(text)
+        self.renderer = None
 
     def update_text(self, new_text):
-        """Update button text and recalculate text surface"""
         self.text = new_text
         self.text_surface = self.font.render(self.text, True, self.text_color)
         self.text_rect = self.text_surface.get_rect(center=self.rect.center)
@@ -43,13 +146,17 @@ class Button(UIElement):
             self.glow_size = max(self.glow_size - 0.5, 0)
 
     def draw(self, screen):
+        renderer = getattr(self, 'renderer', None) or MetallicUIRenderer(screen)
+        self.renderer = renderer
+
         color = self.hover_color if self.hovered else self.bg_color
+        border_color = self.renderer.accent_color if self.hovered else self.renderer.border_color
 
-        pg.draw.rect(screen, color, self.rect, border_radius=12)
-
-        pg.draw.rect(screen, (120, 160, 255), self.rect, 2, border_radius=12)
+        self.renderer.draw_metallic_panel(self.rect, self.chamfer_size, color, border_color)
 
         screen.blit(self.text_surface, self.text_rect)
+        if self.hovered:
+            self.renderer.draw_glow_effect(self.rect, self.chamfer_size)
 
     def is_clicked(self, event, game=None):
         if event.type == pg.MOUSEBUTTONDOWN and event.button == 1 and self.hovered:
@@ -58,9 +165,8 @@ class Button(UIElement):
             return True
         return False
 
-class Slider(UIElement):
+class Slider:
     def __init__(self, x, y, width, height, min_val, max_val, initial_val, text, font_size=24):
-        super().__init__()
         self.rect = pg.Rect(x, y, width, height)
         self.min_val = min_val
         self.max_val = max_val
@@ -70,16 +176,16 @@ class Slider(UIElement):
         self.dragging = False
         self.font = load_custom_font(self.font_size)
         self.update_text()
+        self.chamfer_size = 4
         self.handle_rect = pg.Rect(0, 0, 16, height + 14)
         self.update_handle_position()
+        self.renderer = None
 
     def update_text(self):
-        """Update the slider text with current value"""
         self.text_surface = self.font.render(f"{self.text}: {int(self.value * 100)}%", True, (220, 220, 255))
         self.text_rect = self.text_surface.get_rect(center=(self.rect.centerx, self.rect.y - 15))
 
     def update_handle_position(self):
-        """Update the slider handle position based on current value"""
         normalized_value = (self.value - self.min_val) / (self.max_val - self.min_val)
         handle_x = self.rect.x + (self.rect.width - self.handle_rect.width) * normalized_value
         self.handle_rect.x = handle_x
@@ -99,19 +205,37 @@ class Slider(UIElement):
             self.dragging = False
 
     def draw(self, screen):
-        track_color = (30, 35, 60)
-        pg.draw.rect(screen, track_color, self.rect, border_radius=5)
+        renderer = getattr(self, 'renderer', None) or MetallicUIRenderer(screen)
+        self.renderer = renderer
+
+        self.renderer.draw_chamfered_rect((30, 30, 35), self.rect, self.chamfer_size)
 
         fill_width = int((self.value - self.min_val) / (self.max_val - self.min_val) * self.rect.width)
         if fill_width > 0:
             fill_rect = pg.Rect(self.rect.x, self.rect.y, fill_width, self.rect.height)
-            fill_color = (60, 100, 200)
-            pg.draw.rect(screen, fill_color, fill_rect, border_radius=5)
+            self.renderer.draw_chamfered_rect(self.renderer.accent_color, fill_rect, self.chamfer_size)
 
-        pg.draw.rect(screen, (100, 140, 240), self.rect, 1, border_radius=5)
-        handle_color = (80, 120, 220) if self.dragging else (60, 90, 180)
-        pg.draw.rect(screen, handle_color, self.handle_rect, border_radius=8)
-        pg.draw.rect(screen, (140, 180, 255), self.handle_rect, 1, border_radius=8)
+        border_rect = self.rect.inflate(2, 2)
+        self.renderer.draw_chamfered_rect(self.renderer.border_color, border_rect, self.chamfer_size, 1)
+
+        handle_color = (80, 80, 85) if self.dragging else (60, 60, 65)
+        pg.draw.rect(screen, handle_color, self.handle_rect, border_radius=4)
+
+        pg.draw.line(screen, (100, 100, 105),
+                    (self.handle_rect.left + 1, self.handle_rect.top + 1),
+                    (self.handle_rect.right - 1, self.handle_rect.top + 1), 1)
+        pg.draw.line(screen, (100, 100, 105),
+                    (self.handle_rect.left + 1, self.handle_rect.top + 1),
+                    (self.handle_rect.left + 1, self.handle_rect.bottom - 1), 1)
+
+        pg.draw.line(screen, (40, 40, 45),
+                    (self.handle_rect.left + 1, self.handle_rect.bottom - 1),
+                    (self.handle_rect.right - 1, self.handle_rect.bottom - 1), 1)
+        pg.draw.line(screen, (40, 40, 45),
+                    (self.handle_rect.right - 1, self.handle_rect.top + 1),
+                    (self.handle_rect.right - 1, self.handle_rect.bottom - 1), 1)
+
+        pg.draw.rect(screen, (100, 100, 105), self.handle_rect, 1, border_radius=4)
         screen.blit(self.text_surface, self.text_rect)
 
 class Menu:
@@ -158,18 +282,6 @@ class Menu:
         self.bg_image = pg.transform.scale(self.bg_image, RES)
 
         self.title_font = load_custom_font(72)
-
-        self.title_text = self.title_font.render("Galaxy's Doom", True, (220, 220, 255))
-        self.title_rect = self.title_text.get_rect(center=(HALF_WIDTH, 100))
-        self.underline_width = self.title_rect.width * 0.8
-        self.underline_rect = pg.Rect(
-            HALF_WIDTH - self.underline_width // 2,
-            self.title_rect.bottom + 10,
-            self.underline_width,
-            3
-        )
-
-        # Version and credits
         self.version = "v1.0"
         self.credits = "2025 PRRI-RT Team"
         self.small_font = load_custom_font(16)
@@ -179,7 +291,6 @@ class Menu:
         self.credits_rect = self.credits_text.get_rect(topleft=(40, 20))
 
     def create_menu_buttons(self):
-        """Create the appropriate buttons based on game state"""
         self.main_buttons = []
         is_game_running = hasattr(self.game, 'game_initialized') and self.game.game_initialized
         button_texts = self.pause_menu_texts if is_game_running else self.main_menu_texts
@@ -247,31 +358,17 @@ class Menu:
         self.game.sound.update_sfx_volume()
 
     def draw_title(self, title_text, y_pos=100):
-        """Draw a simplified title"""
-        if isinstance(title_text, str):
-            title_surface = self.title_font.render(title_text, True, (220, 220, 255))
-            title_rect = title_surface.get_rect(center=(HALF_WIDTH, y_pos))
-        else:
-            title_surface = title_text
-            title_rect = self.title_rect
+        if not hasattr(self, 'ui_renderer'):
+            self.ui_renderer = MetallicUIRenderer(self.screen)
 
-        self.screen.blit(title_surface, title_rect)
-        underline_width = title_rect.width * 0.8
-        underline_rect = pg.Rect(
-            HALF_WIDTH - underline_width // 2,
-            title_rect.bottom + 10,
-            underline_width,
-            3
-        )
-        pg.draw.rect(self.screen, (140, 180, 240), underline_rect)
-
-        return underline_rect
+        border_color = self.ui_renderer.bg_color
+        return self.ui_renderer.draw_metallic_text(title_text, self.title_font, (HALF_WIDTH, y_pos), border_color=border_color, bg_alpha=128)
 
     def draw(self):
         self.screen.blit(self.bg_image, (0, 0))
 
         if self.state == 'main':
-            self.draw_title(self.title_text)
+            self.draw_title("Galaxy's Doom", 120)
 
             for button in self.main_buttons:
                 button.draw(self.screen)
