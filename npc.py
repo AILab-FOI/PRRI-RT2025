@@ -21,14 +21,13 @@ class NPC(AnimatedSprite):
         self.alive = True
         self.pain = False
         self.ray_cast_value = False
-        self.death_frame = 0  # Use a consistent name for death animation frame counter
+        self.death_frame = 0
         self.player_search_trigger = False
 
     def update(self):
         self.check_animation_time()
         self.get_sprite()
         self.run_logic()
-        # self.draw_ray_cast()
 
     def check_wall(self, x, y):
         return (x, y) not in self.game.map.world_map
@@ -43,7 +42,6 @@ class NPC(AnimatedSprite):
         next_pos = self.game.pathfinding.get_path(self.map_pos, self.game.player.map_pos)
         next_x, next_y = next_pos
 
-        # pg.draw.rect(self.game.screen, 'blue', (100 * next_x, 100 * next_y, 100, 100))
         if next_pos not in self.game.object_handler.npc_positions:
             angle = math.atan2(next_y + 0.5 - self.y, next_x + 0.5 - self.x)
             dx = math.cos(angle) * self.speed
@@ -58,12 +56,15 @@ class NPC(AnimatedSprite):
 
     def animate_death(self):
         if not self.alive and len(self.death_images) > 0:
-            # Use animation_trigger for smoother animation
             if self.animation_trigger and self.death_frame < len(self.death_images) - 1:
-                # Increment the death frame counter, but only if we haven't reached the last frame
                 self.death_frame += 1
-                # Set the image to the current death frame
                 self.image = self.death_images[self.death_frame]
+                if hasattr(self, '_current_image_id'):
+                    self._current_image_id += 1
+                else:
+                    self._current_image_id = 0
+                if hasattr(self, '_scaled_image_cache'):
+                    self._scaled_image_cache = {}
 
     def animate_pain(self):
         self.animate(self.pain_images)
@@ -80,21 +81,26 @@ class NPC(AnimatedSprite):
                 self.check_health()
 
     def check_health(self):
-        if self.health < 1 and self.alive:  # Check if the enemy is already dead
+        if self.health < 1 and self.alive:
             self.alive = False
 
             if type(self) is NPC:
                 self.game.sound.npc_death.play()
 
-            # Reset death frame counter and set the initial death frame immediately
             self.death_frame = 0
 
             if hasattr(self, 'death_height_shift'):
                 self.SPRITE_HEIGHT_SHIFT = self.death_height_shift
             else:
-                self.SPRITE_HEIGHT_SHIFT = 0.5  # Default value
+                self.SPRITE_HEIGHT_SHIFT = 0.5
             if len(self.death_images) > 0:
                 self.image = self.death_images[0]
+                if hasattr(self, '_current_image_id'):
+                    self._current_image_id += 1
+                else:
+                    self._current_image_id = 0
+                if hasattr(self, '_scaled_image_cache'):
+                    self._scaled_image_cache = {}
 
     def run_logic(self):
         if self.alive:
@@ -195,55 +201,18 @@ class NPC(AnimatedSprite):
             return True
         return False
 
-    # Debug method for visualizing ray casting - not used in production
-    # def draw_ray_cast(self):
-    #     pg.draw.circle(self.game.screen, 'red', (100 * self.x, 100 * self.y), 15)
-    #     if self.ray_cast_player_npc():
-    #         pg.draw.line(self.game.screen, 'orange', (100 * self.game.player.x, 100 * self.game.player.y),
-    #                      (100 * self.x, 100 * self.y), 2)
-
-'''
-class SoldierNPC(NPC):
-    def __init__(self, game, path='resources/sprites/npc/soldier/0.png', pos=(10.5, 5.5),
-                 scale=0.6, shift=0.38, animation_time=180):
-        super().__init__(game, path, pos, scale, shift, animation_time)
-
-
-class CacoDemonNPC(NPC):
-    def __init__(self, game, path='resources/sprites/npc/caco_demon/0.png', pos=(10.5, 6.5),
-                 scale=0.7, shift=0.27, animation_time=250):
-        super().__init__(game, path, pos, scale, shift, animation_time)
-        self.attack_dist = 1.0
-        self.health = 150
-        self.attack_damage = 25
-        self.speed = 0.05
-        self.accuracy = 0.35
-
-class CyberDemonNPC(NPC):
-    def __init__(self, game, path='resources/sprites/npc/cyber_demon/0.png', pos=(11.5, 6.0),
-                 scale=1.0, shift=0.04, animation_time=210):
-        super().__init__(game, path, pos, scale, shift, animation_time)
-        self.attack_dist = 6
-        self.health = 350
-        self.attack_damage = 15
-        self.speed = 0.055
-        self.accuracy = 0.25
-'''
 class KlonoviNPC(NPC):
     def __init__(self, game, path='resources/sprites/npc/klonovi/0.png', pos=(10.5, 5.5),
                  scale=0.6, shift=0.38, animation_time=180):
         super().__init__(game, path, pos, scale, shift, animation_time)
-        # No need to reload death images as they're already loaded in the parent class
-        # Store original height shift for restoration when needed
         self.original_height_shift = self.SPRITE_HEIGHT_SHIFT
-        # Set death height shift (will be applied when enemy dies)
-        self.death_height_shift = 0.7  # Specific value for KlonoviNPC
+        self.death_height_shift = 0.7
 
 class StakorNPC(NPC):
     def __init__(self, game, path='resources/sprites/npc/stakor/0.png', pos=(10.5, 5.5),
                  scale=0.5, shift=0.4, animation_time=200):
         super().__init__(game, path, pos, scale, shift, animation_time)
-        # Posebno učitamo slike za smrt jer imamo drugačiju strukturu direktorija
+
         self.death_images = deque()
         death_path = self.path + '/death'
         for file_name in ['0.png', '1.png']:
@@ -252,7 +221,7 @@ class StakorNPC(NPC):
                 self.death_images.append(img)
         # Death height shift will be applied when enemy dies
         self.death_height_shift = 0.8
-        # Koristimo walk slike za hodanje
+
         self.walk_images = self.get_images(self.path + '/walk')
 
         # Karakteristike štakora
@@ -268,9 +237,117 @@ class StakorNPC(NPC):
             self.game.sound.napad_stakor.play()
             if random() < self.accuracy:
                 self.game.player.get_damage(self.attack_damage)
+    #Smrt štakora
     def check_health(self):
         if self.health < 1 and self.alive:
-            # Play the custom sound for this NPC type
             self.game.sound.stakor_smrt.play()
-            # Call parent method with alive still set to True
             super().check_health()
+
+class TosterNPC(NPC):
+    def __init__(self, game, path='resources/sprites/npc/toster/0.png', pos=(10.5, 5.5),
+                 scale=0.6, shift=0.4, animation_time=180):
+        super().__init__(game, path, pos, scale, shift, animation_time)
+
+        # Death height shift will be applied when enemy dies
+        self.death_height_shift = 0.7
+
+        # Karakteristike tostera
+        self.attack_dist = 4.0     # udaljenost napada (ranged)
+        self.health = 80           # zdravlje
+        self.attack_damage = 8     # Medium damage
+        self.speed = 0.03          # Srednja brzina
+        self.accuracy = 0.25       # točnost za ranged napad
+
+    # Napad tostera
+    def attack(self):
+        if self.animation_trigger:
+            self.game.sound.toster_attack.play()
+            if random() < self.accuracy:
+                self.game.player.get_damage(self.attack_damage)
+    # Smrt tostera
+    def check_health(self):
+        if self.health < 1 and self.alive:
+            self.game.sound.toster_death.play()
+            super().check_health()
+    # Damage tostera
+    def check_hit_in_npc(self):
+        if self.ray_cast_value and self.game.player.shot:
+            if HALF_WIDTH - self.sprite_half_width < self.screen_x < HALF_WIDTH + self.sprite_half_width:
+                self.game.sound.toster_damage.play()
+                self.game.player.shot = False
+                self.pain = True
+                self.health -= self.game.weapon.damage
+                self.check_health()
+
+class ParazitNPC(NPC):
+    def __init__(self, game, path='resources/sprites/npc/parazit/0.png', pos=(10.5, 5.5),
+                 scale=0.5, shift=0.4, animation_time=200):
+        super().__init__(game, path, pos, scale, shift, animation_time)
+
+        # Death height shift will be applied when enemy dies
+        self.death_height_shift = 0.8
+
+        # Karakteristike parazita
+        self.attack_dist = 1.5     # udaljenost napada (melee)
+        self.health = 40           # zdravlje (low)
+        self.attack_damage = 12    # High damage
+        self.speed = 0.06          # Fast
+        self.accuracy = 0.35       # točnost za melee napad
+
+    # Napad parazita
+    def attack(self):
+        if self.animation_trigger:
+            self.game.sound.parazit_attack.play()
+            if random() < self.accuracy:
+                self.game.player.get_damage(self.attack_damage)
+    # Smrt parazita
+    def check_health(self):
+        if self.health < 1 and self.alive:
+            self.game.sound.parazit_death.play()
+            super().check_health()
+
+    # Damage tostera
+    def check_hit_in_npc(self):
+        if self.ray_cast_value and self.game.player.shot:
+            if HALF_WIDTH - self.sprite_half_width < self.screen_x < HALF_WIDTH + self.sprite_half_width:
+                self.game.sound.parazit_damage.play()
+                self.game.player.shot = False
+                self.pain = True
+                self.health -= self.game.weapon.damage
+                self.check_health()
+
+class JazavacNPC(NPC):
+    def __init__(self, game, path='resources/sprites/npc/jazavac/0.png', pos=(10.5, 5.5),
+                 scale=0.6, shift=0.38, animation_time=180):
+        super().__init__(game, path, pos, scale, shift, animation_time)
+
+        # Death height shift will be applied when enemy dies
+        self.death_height_shift = 0.7
+
+        # Karakteristike jazavca
+        self.attack_dist = 2.5     # udaljenost napada (medium range)
+        self.health = 120          # zdravlje (high)
+        self.attack_damage = 15    # High damage
+        self.speed = 0.025         # Slow
+        self.accuracy = 0.3        # točnost za napad
+
+    # Napad jazavca
+    def attack(self):
+        if self.animation_trigger:
+            self.game.sound.jazavac_attack.play()
+            if random() < self.accuracy:
+                self.game.player.get_damage(self.attack_damage)
+    # Smrt jazavca
+    def check_health(self):
+        if self.health < 1 and self.alive:
+            self.game.sound.jazavac_death.play()
+            super().check_health()
+    # Damage jazavca
+    def check_hit_in_npc(self):
+        if self.ray_cast_value and self.game.player.shot:
+            if HALF_WIDTH - self.sprite_half_width < self.screen_x < HALF_WIDTH + self.sprite_half_width:
+                self.game.sound.jazavac_damage.play()
+                self.game.player.shot = False
+                self.pain = True
+                self.health -= self.game.weapon.damage
+                self.check_health()

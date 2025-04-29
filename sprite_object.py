@@ -5,12 +5,28 @@ from collections import deque
 
 
 class SpriteObject:
-    def __init__(self, game, path='resources/sprites/static_sprites/candlebra.png',
+    def __init__(self, game, path=None,
                  pos=(10.5, 3.5), scale=0.7, shift=0.27):
+        if path is None:
+            path = 'resources/sprites/static_sprites/ukras1.png'
         self.game = game
         self.player = game.player
         self.x, self.y = pos
-        self.image = pg.image.load(path).convert_alpha()
+
+        # Add error handling for missing textures
+        try:
+            if os.path.isfile(path):
+                self.image = pg.image.load(path).convert_alpha()
+            else:
+                print(f"Warning: Sprite texture not found at {path}")
+                # Create a small blank/transparent surface instead
+                self.image = pg.Surface((32, 32), pg.SRCALPHA)
+                self.image.fill((0, 0, 0, 0))  # Transparent
+        except Exception as e:
+            print(f"Error loading sprite texture: {e}")
+            # Create a small blank/transparent surface
+            self.image = pg.Surface((32, 32), pg.SRCALPHA)
+            self.image.fill((0, 0, 0, 0))  # Transparent
         self.IMAGE_WIDTH = self.image.get_width()
         self.IMAGE_HALF_WIDTH = self.image.get_width() // 2
         self.IMAGE_RATIO = self.IMAGE_WIDTH / self.image.get_height()
@@ -23,7 +39,26 @@ class SpriteObject:
         proj = SCREEN_DIST / self.norm_dist * self.SPRITE_SCALE
         proj_width, proj_height = proj * self.IMAGE_RATIO, proj
 
-        image = pg.transform.scale(self.image, (proj_width, proj_height))
+        proj_width = round(proj_width)
+        proj_height = round(proj_height)
+
+        if not hasattr(self, '_current_image_id'):
+            self._current_image_id = 0
+
+        cache_key = (proj_width, proj_height, self._current_image_id)
+
+        if not hasattr(self, '_scaled_image_cache'):
+            self._scaled_image_cache = {}
+
+        if cache_key not in self._scaled_image_cache:
+            self._scaled_image_cache = {}
+            self._scaled_image_cache[cache_key] = pg.transform.scale(self.image, (proj_width, proj_height))
+
+            if len(self._scaled_image_cache) > 10:
+                oldest_key = next(iter(self._scaled_image_cache))
+                del self._scaled_image_cache[oldest_key]
+
+        image = self._scaled_image_cache[cache_key]
 
         self.sprite_half_width = proj_width // 2
         height_shift = proj_height * self.SPRITE_HEIGHT_SHIFT
@@ -72,6 +107,12 @@ class AnimatedSprite(SpriteObject):
         if self.animation_trigger:
             images.rotate(-1)
             self.image = images[0]
+            if hasattr(self, '_current_image_id'):
+                self._current_image_id += 1
+            else:
+                self._current_image_id = 0
+            if hasattr(self, '_scaled_image_cache'):
+                self._scaled_image_cache = {}
 
     def check_animation_time(self):
         self.animation_trigger = False
@@ -82,8 +123,29 @@ class AnimatedSprite(SpriteObject):
 
     def get_images(self, path):
         images = deque()
-        for file_name in os.listdir(path):
-            if os.path.isfile(os.path.join(path, file_name)):
-                img = pg.image.load(path + '/' + file_name).convert_alpha()
-                images.append(img)
+        try:
+            if os.path.isdir(path):
+                for file_name in os.listdir(path):
+                    if os.path.isfile(os.path.join(path, file_name)):
+                        try:
+                            img = pg.image.load(path + '/' + file_name).convert_alpha()
+                            images.append(img)
+                        except Exception as e:
+                            print(f"Error loading animation frame {file_name}: {e}")
+            else:
+                print(f"Warning: Animation directory not found at {path}")
+                blank_img = pg.Surface((32, 32), pg.SRCALPHA)
+                blank_img.fill((0, 0, 0, 0))
+                images.append(blank_img)
+        except Exception as e:
+            print(f"Error loading animation frames: {e}")
+            blank_img = pg.Surface((32, 32), pg.SRCALPHA)
+            blank_img.fill((0, 0, 0, 0))
+            images.append(blank_img)
+
+        if not images:
+            blank_img = pg.Surface((32, 32), pg.SRCALPHA)
+            blank_img.fill((0, 0, 0, 0))
+            images.append(blank_img)
+
         return images

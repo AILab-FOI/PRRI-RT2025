@@ -7,7 +7,10 @@ HALF_WIDTH = WIDTH // 2
 HALF_HEIGHT = HEIGHT // 2
 FPS = 0
 
-PLAYER_POS = 1.5, 2.5  # mini_map
+# Default player positions for each level
+PLAYER_POS = 1.5, 2.5  #lvl 1
+PLAYER_POS_LEVEL2 = 1.5, 2.5
+PLAYER_POS_LEVEL3 = 4.5, 3.5
 PLAYER_ANGLE = 0
 PLAYER_SPEED = 0.004
 PLAYER_ROT_SPEED = 0.002
@@ -15,9 +18,13 @@ PLAYER_SIZE_SCALE = 60
 PLAYER_MAX_HEALTH = 100
 
 # dash settings
-PLAYER_DASH_MULTIPLIER = 3.0  # koliko je dash brži od normalnog kretanja
-PLAYER_DASH_DURATION = 200    # trajanje dasha u milisekundama
-PLAYER_DASH_COOLDOWN = 1000   # cooldown dasha u milisekundama
+PLAYER_DASH_MULTIPLIER = 3.0
+PLAYER_DASH_DURATION = 200
+PLAYER_DASH_COOLDOWN = 1000
+
+# powerup settings
+POWERUP_INVULNERABILITY_DURATION = 5000
+POWERUP_PICKUP_DISTANCE = 0.5
 
 MOUSE_SENSITIVITY = 0.0003
 MOUSE_MAX_REL = 40

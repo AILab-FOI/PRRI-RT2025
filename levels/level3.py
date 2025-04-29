@@ -1,0 +1,61 @@
+"""
+Level 3 configuration
+"""
+from npc import KlonoviNPC, StakorNPC
+from levels.base_level import create_base_level_structure
+
+def get_level_data():
+    """Return the complete level 3 data"""
+    level_data = create_base_level_structure()
+
+    # Terminals
+    level_data['terminals'] = [
+        #{
+            #'position': (5, 5),
+            #'code': '9999',
+            #'unlocks_door_id': None
+        #}
+    ]
+
+    # Doors
+    level_data['doors'] = [
+        {
+            'position': (9, 21),
+            'door_id': 1,
+            'requires_code': False,
+            'code': None,
+            'requires_door_id': None
+        },
+        {
+            'position': (19, 21),
+            'door_id': 2,
+            'requires_code': False,
+            'code': None,
+            'requires_door_id': None
+        }
+    ]
+
+    # Decorative sprites
+    level_data['sprites'] = [
+
+    ]
+
+    # Enemy configuration
+    level_data['enemies'] = {
+        'count': 10,  # Many enemies in level 3
+        'types': [StakorNPC],  # Only StakorNPC in this level
+        'weights': [100],  # 100% StakorNPC
+        'restricted_area': {(i, j) for i in range(10) for j in range(10)},  # Larger restricted area like in level 1
+        'fixed_positions': [(15, 5), (15, 15), (10, 10)]  # Some enemies at fixed positions, avoiding player spawn
+    }
+
+    # Dialogue NPCs
+    level_data['dialogue_npcs'] = [
+        #{
+            #'pos': (12.5, 5.5),
+            #'dialogue_id': 'level3_intro',
+            #'path': 'resources/sprites/npc/dialogue_npc/0.png'
+        #}
+    ]
+
+    return level_data

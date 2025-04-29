@@ -1,5 +1,4 @@
 import pygame as pg
-import sys
 from settings import *
 from map import *
 from player import *
@@ -7,14 +6,23 @@ from raycasting import *
 from object_renderer import *
 from sprite_object import *
 from object_handler import *
-from weapon import *
+from weapon import Pistol, SMG
 from sound import *
 from pathfinding import *
+from interaction import Interaction
+from level_manager import LevelManager
+from dialogue import DialogueManager
+from menu import Menu
+from intro_sequence import IntroSequence
+from loading_screen import LoadingScreen
+from level_transition import LevelTransition
+from game_events import GameEvents
 
 
 class Game:
     def __init__(self):
         pg.init()
+        pg.display.set_caption('PRRI-RT2025')
         pg.mouse.set_visible(False)
         self.screen = pg.display.set_mode(RES)
         self.clock = pg.time.Clock()
@@ -22,55 +30,118 @@ class Game:
         self.global_trigger = False
         self.global_event = pg.USEREVENT + 0
         pg.time.set_timer(self.global_event, 40)
-        self.new_game()
+
+        self.sound = Sound(self)
+        self.menu = Menu(self)
+        self.intro_sequence = IntroSequence(self)
+        self.loading_screen = LoadingScreen(self)
+        self.level_transition = LevelTransition(self)
+        self.game_events = GameEvents(self)
+        self.game_initialized = False
+        self.show_menu()
 
     def new_game(self):
-        self.map = Map(self)
+        if not hasattr(self, 'level_manager'):
+            self.level_manager = LevelManager(self)
+
+        if not hasattr(self, 'map'):
+            self.map = Map(self)
+        else:
+            self.map.load_level(self.level_manager.current_level)
+
         self.player = Player(self)
         self.object_renderer = ObjectRenderer(self)
         self.raycasting = RayCasting(self)
-        self.object_handler = ObjectHandler(self)
-        self.weapon = Weapon(self)
-        self.sound = Sound(self)
+
+        if not hasattr(self, 'object_handler'):
+            self.object_handler = ObjectHandler(self)
+        else:
+            self.object_handler.reset()
+
+        # Create the appropriate weapon based on the stored weapon type
+        if hasattr(self, 'level_manager') and self.level_manager.current_weapon_type == 'smg':
+            self.weapon = SMG(self)
+        else:
+            self.weapon = Pistol(self)
         self.pathfinding = PathFinding(self)
-        pg.mixer.music.play(-1)
+        self.interaction = Interaction(self)
+
+        # Initialize dialogue manager
+        if not hasattr(self, 'dialogue_manager'):
+            self.dialogue_manager = DialogueManager(self)
+
+        self.level_manager.setup_dialogue_npcs()
+        self.level_manager.setup_interactive_objects()
+        self.pathfinding.update_graph()
+
+        # Set player position based on level
+        if self.level_manager.current_level == 1:
+            self.player.x, self.player.y = PLAYER_POS
+        elif self.level_manager.current_level == 2:
+            self.player.x, self.player.y = PLAYER_POS_LEVEL2
+        elif self.level_manager.current_level == 3:
+            self.player.x, self.player.y = PLAYER_POS_LEVEL3
+
+        if not pg.mixer.music.get_busy():
+            pg.mixer.music.play(-1)
+
+        if self.level_manager.current_level == 1:
+            self.intro_sequence.start()
 
     def update(self):
+        # Update game components
         self.player.update()
         self.raycasting.update()
         self.object_handler.update()
         self.weapon.update()
+        self.interaction.update()
+        self.dialogue_manager.update()
+
+        self.intro_sequence.update()
+        self.intro_sequence.update_music_fade()
+        self.loading_screen.update()
+        self.level_transition.update()
+
         pg.display.flip()
         self.delta_time = self.clock.tick(FPS)
         pg.display.set_caption(f'{self.clock.get_fps() :.1f}')
 
     def draw(self):
-        # Draw the game scene
+        # Draw game components
         self.object_renderer.draw()
         self.weapon.draw()
-
-        # Debug visualization methods - not used in production
-        # self.screen.fill('black')
-        # self.map.draw()
-        # self.player.draw()
+        self.interaction.draw()
+        self.dialogue_manager.draw()
+        self.intro_sequence.draw()
+        self.loading_screen.draw()
+        self.level_transition.draw()
 
     def check_events(self):
-        self.global_trigger = False
-        for event in pg.event.get():
-            if event.type == pg.QUIT or (event.type == pg.KEYDOWN and event.key == pg.K_ESCAPE):
-                pg.quit()
-                sys.exit()
-            elif event.type == self.global_event:
-                self.global_trigger = True
-            self.player.single_fire_event(event)
+        return self.game_events.process_events()
 
-    def run(self):
+    def next_level(self):
+        """Advance to the next level"""
+        return self.level_transition.transition_to_next_level()
+
+    def show_menu(self):
+        pg.mouse.set_visible(True)
+        self.menu.state = 'main'
+        self.menu.run()
+
+        if not self.game_initialized:
+            self.new_game()
+            self.game_initialized = True
+
+        pg.mouse.set_visible(False)
+        self.game_loop()
+
+    def game_loop(self):
         while True:
-            self.check_events()
+            if self.check_events():
+                return
             self.update()
             self.draw()
 
 
 if __name__ == '__main__':
     game = Game()
-    game.run()
