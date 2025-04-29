@@ -18,6 +18,7 @@ from loading_screen import LoadingScreen
 from level_transition import LevelTransition
 from game_events import GameEvents
 from death_screen import DeathScreen
+from ui import GameUI
 
 
 class Game:
@@ -71,6 +72,7 @@ class Game:
         if not hasattr(self, 'dialogue_manager'):
             self.dialogue_manager = DialogueManager(self)
 
+        self.game_ui = GameUI(self)
         self.level_manager.setup_dialogue_npcs()
         self.level_manager.setup_interactive_objects()
         self.pathfinding.update_graph()
@@ -121,6 +123,7 @@ class Game:
         # Draw game components
         self.object_renderer.draw()
         self.weapon.draw()
+        self.game_ui.draw()
         self.interaction.draw()
         self.dialogue_manager.draw()
         self.intro_sequence.draw()
