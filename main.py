@@ -123,6 +123,12 @@ class Game:
         """Advance to the next level"""
         return self.level_transition.transition_to_next_level()
 
+    def reset_current_level(self):
+        """Reset the current level when player dies"""
+        current_level = self.level_manager.current_level
+        self.map.load_level(current_level)
+        self.new_game()
+
     def show_menu(self):
         pg.mouse.set_visible(True)
         self.menu.state = 'main'
