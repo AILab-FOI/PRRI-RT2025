@@ -208,16 +208,16 @@ class Menu:
 
         # Version and credits
         self.version = "v1.0"
-        self.credits = "© 2025 PRRI-RT Team"
+        self.credits = "2025 PRRI-RT Team"
 
         # Create font for version and credits
         self.small_font = load_custom_font(16)
 
         self.version_text = self.small_font.render(self.version, True, (180, 180, 220))
-        self.version_rect = self.version_text.get_rect(topright=(WIDTH - 20, 20))
+        self.version_rect = self.version_text.get_rect(topright=(WIDTH - 40, 20))
 
         self.credits_text = self.small_font.render(self.credits, True, (180, 180, 220))
-        self.credits_rect = self.credits_text.get_rect(topleft=(20, 20))
+        self.credits_rect = self.credits_text.get_rect(topleft=(40, 20))
 
     def update_start_button_text(self):
         """Update the text of the start button based on game state"""
