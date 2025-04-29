@@ -8,20 +8,14 @@ class DeathScreen:
         self.game = game
         self.screen = game.screen
         self.active = False
-
-        # Load background image (using the same as loading screen)
         self.bg_image = pg.image.load('resources/teksture/loading_bg.png')
         self.bg_image = pg.transform.scale(self.bg_image, RES)
-
-        # Load fonts
         self.title_font = load_custom_font(72)
         self.subtitle_font = load_custom_font(36)
 
-        # Create title text
         self.title_text = self.title_font.render("YOU DIED", True, (220, 50, 50))
         self.title_rect = self.title_text.get_rect(center=(HALF_WIDTH, HALF_HEIGHT - 150))
 
-        # Create buttons - larger size
         button_height = 70
         button_width = 400
         center_x = HALF_WIDTH - button_width // 2
@@ -48,20 +42,15 @@ class DeathScreen:
                 pg.quit()
                 exit()
 
-            # Update and check buttons
             for i, button in enumerate(self.buttons):
                 button.update(mouse_pos, self.game)
                 if button.is_clicked(event, self.game):
-                    if i == 0:  # Reset Level button
+                    if i == 0:
                         self.active = False
-                        try:
-                            # Reset the current level
-                            self.game.reset_current_level()
-                            return False  # Continue the game loop
-                        except Exception as e:
-                            print(f"Error in reset level button: {e}")
-                            return False
-                    elif i == 1:  # Exit button
+                        self.game.reset_current_level()
+                        return False
+
+                    elif i == 1:
                         pg.quit()
                         exit()
 
@@ -77,13 +66,8 @@ class DeathScreen:
         if not self.active:
             return
 
-        # Draw background
         self.screen.blit(self.bg_image, (0, 0))
-
-        # Draw title
         self.screen.blit(self.title_text, self.title_rect)
-
-        # Draw buttons
         for button in self.buttons:
             button.draw(self.screen)
 
