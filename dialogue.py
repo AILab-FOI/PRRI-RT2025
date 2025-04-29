@@ -135,10 +135,14 @@ class DialogueManager:
         screen = self.game.screen
 
         # Calculate dialogue box dimensions
-        box_width = WIDTH - 200
+        # Calculate margin based on percentage
+        margin_x = int(WIDTH * UI_MARGIN_PERCENT_X)
+        margin_y = int(HEIGHT * UI_MARGIN_PERCENT_Y)
+
+        box_width = WIDTH - (margin_x * 4)  # Wider margins for dialogue box
         box_height = self.dialogue_box_height
         box_x = (WIDTH - box_width) // 2
-        box_y = HEIGHT - box_height - 50
+        box_y = HEIGHT - box_height - margin_y - 30
 
         # Draw semi-transparent background
         dialogue_surface = pg.Surface((box_width, box_height), pg.SRCALPHA)
@@ -288,10 +292,13 @@ class DialogueNPC(NPC):
 
         # Circular indicator removed
 
+        # Calculate margin based on percentage
+        margin_y = int(HEIGHT * UI_MARGIN_PERCENT_Y)
+
         # Draw "Press E to talk" text with background
         font = load_custom_font(16)
         text = font.render("Press E to talk", True, (255, 255, 255))
-        text_rect = text.get_rect(center=(screen_x, screen_y - 25))
+        text_rect = text.get_rect(center=(screen_x, screen_y - 25 - margin_y))
 
         # Draw text background
         bg_rect = text_rect.inflate(20, 10)

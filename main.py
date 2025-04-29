@@ -17,6 +17,7 @@ from intro_sequence import IntroSequence
 from loading_screen import LoadingScreen
 from level_transition import LevelTransition
 from game_events import GameEvents
+from death_screen import DeathScreen
 
 
 class Game:
@@ -36,6 +37,7 @@ class Game:
         self.intro_sequence = IntroSequence(self)
         self.loading_screen = LoadingScreen(self)
         self.level_transition = LevelTransition(self)
+        self.death_screen = DeathScreen(self)
         self.game_events = GameEvents(self)
         self.game_initialized = False
         self.show_menu()
@@ -89,6 +91,10 @@ class Game:
             self.intro_sequence.start()
 
     def update(self):
+        if self.death_screen.active:
+            self.death_screen.update()
+            return
+
         # Update game components
         self.player.update()
         self.raycasting.update()
@@ -107,6 +113,10 @@ class Game:
         pg.display.set_caption(f'{self.clock.get_fps() :.1f}')
 
     def draw(self):
+        if self.death_screen.active:
+            self.death_screen.draw()
+            return
+
         # Draw game components
         self.object_renderer.draw()
         self.weapon.draw()
@@ -117,11 +127,21 @@ class Game:
         self.level_transition.draw()
 
     def check_events(self):
+        if self.death_screen.active:
+            return self.death_screen.handle_events()
+
         return self.game_events.process_events()
 
     def next_level(self):
         """Advance to the next level"""
         return self.level_transition.transition_to_next_level()
+
+    def reset_current_level(self):
+        """Reset the current level when player dies"""
+        current_level = self.level_manager.current_level
+        self.map.load_level(current_level)
+        self.new_game()
+        pg.mouse.set_visible(False)
 
     def show_menu(self):
         pg.mouse.set_visible(True)
