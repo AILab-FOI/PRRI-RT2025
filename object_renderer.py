@@ -1,5 +1,5 @@
 import pygame as pg
-from settings import *
+from settings import *  # This imports FLOOR_COLOR and FLOOR_COLORS
 from font_manager import load_custom_font
 
 
@@ -217,8 +217,16 @@ class ObjectRenderer:
         self.sky_offset = (self.sky_offset + 4.5 * self.game.player.rel) % WIDTH
         self.screen.blit(self.sky_image, (-self.sky_offset, 0))
         self.screen.blit(self.sky_image, (-self.sky_offset + WIDTH, 0))
-        # floor
-        pg.draw.rect(self.screen, FLOOR_COLOR, (0, HALF_HEIGHT, WIDTH, HEIGHT))
+
+        # Get floor color based on current level
+        floor_color = FLOOR_COLOR  # Default floor color
+        if hasattr(self.game, 'level_manager'):
+            current_level = self.game.level_manager.current_level
+            if current_level in FLOOR_COLORS:
+                floor_color = FLOOR_COLORS[current_level]
+
+        # Draw floor with the appropriate color
+        pg.draw.rect(self.screen, floor_color, (0, HALF_HEIGHT, WIDTH, HEIGHT))
 
     def render_game_objects(self):
         list_objects = sorted(self.game.raycasting.objects_to_render, key=lambda t: t[0], reverse=True)

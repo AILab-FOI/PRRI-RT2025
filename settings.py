@@ -35,7 +35,15 @@ MOUSE_MAX_REL = 40
 MOUSE_BORDER_LEFT = 100
 MOUSE_BORDER_RIGHT = WIDTH - MOUSE_BORDER_LEFT
 
+# Default floor color
 FLOOR_COLOR = (30, 30, 30)
+
+# Floor colors for different levels
+FLOOR_COLORS = {
+    1: (30, 30, 30),  # Level 1: Dark gray
+    2: (216, 217, 217),  # Level 2: White
+    3: (30, 30, 30),  # Level 3: Dark gray (same as default)
+}
 
 FOV = math.pi / 3
 HALF_FOV = FOV / 2
