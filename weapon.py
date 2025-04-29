@@ -58,7 +58,7 @@ class Pistol(Weapon):
     def __init__(self, game):
         super().__init__(game=game,
                          path='resources/sprites/weapon/pistol/0.png',
-                         scale=0.3,
+                         scale=0.22,
                          animation_time=90,
                          damage=50,
                          name='pistol')
