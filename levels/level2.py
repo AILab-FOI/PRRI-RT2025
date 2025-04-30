@@ -53,14 +53,14 @@ def get_level_data():
             'code': None,  # Uses code from first terminal
             'requires_door_id': None  # Requires second door to be opened
         },
-        {
-            #lijeva soba
-            'position': (7, 16),
-            'door_id': 5,
-            'requires_code': False,
-            'code': None,  # Uses code from first terminal
-            'requires_door_id': None  # Requires second door to be opened
-        },
+        #{
+        #    #lijeva soba
+        #    'position': (7, 16),
+        #    'door_id': 5,
+        #    'requires_code': False,
+        #    'code': None,  # Uses code from first terminal
+        #    'requires_door_id': None  # Requires second door to be opened
+        #},
         {
             #srednja soba lijeva
             'position': (10, 16),
@@ -77,17 +77,17 @@ def get_level_data():
             'code': None,  # Uses code from first terminal
             'requires_door_id': None  # Requires second door to be opened
         },
-        {
-            #desna soba
-            'position': (23, 16),
-            'door_id': 8,
-            'requires_code': False,
-            'code': None,  # Uses code from first terminal
-            'requires_door_id': None  # Requires second door to be opened
-        },
+        #{
+        #    #desna soba
+        #    'position': (23, 16),
+        #    'door_id': 8,
+        #    'requires_code': False,
+        #    'code': None,  # Uses code from first terminal
+        #    'requires_door_id': None  # Requires second door to be opened
+        #},
         {
             #unutarnja soba desne sobe
-            'position': (29, 15),
+            'position': (29, 16),
             'door_id': 9,
             'requires_code': True,
             'code': '42',  # Uses code from first terminal
@@ -137,8 +137,8 @@ def get_level_data():
         #srednja soba 4 stupa
         (('level2', 'ukras1'), (14.9, 15.9)),
         (('level2', 'ukras1'), (16.1, 15.9)),
-        (('level2', 'ukras1'), (14.9, 16.1)),
-        (('level2', 'ukras1'), (16.1, 16.1)),
+        (('level2', 'ukras1'), (14.9, 17.1)),
+        (('level2', 'ukras1'), (16.1, 17.1)),
 
         #srednja soba pored gornja vrata
         (('level2', 'ukras2'), (14.9, 13.1)),
@@ -181,12 +181,12 @@ def get_level_data():
 
         #LIJEVA SOBA
         #lijeva soba vanjska vrata vanjsko
-        (('level2', 'ukras2'), (8.1, 15.9)),
-        (('level2', 'ukras2'), (8.1, 17.1)),
+        #(('level2', 'ukras2'), (8.1, 15.9)),
+        #(('level2', 'ukras2'), (8.1, 17.1)),
 
         #lijeva soba vanjska vrata
-        (('level2', 'ukras2'), (6.9, 15.9)),
-        (('level2', 'ukras2'), (6.9, 17.1)),
+        #(('level2', 'ukras2'), (6.9, 15.9)),
+        #(('level2', 'ukras2'), (6.9, 17.1)),
 
         #lijeva soba unutarnja vrata vanjsko
         (('level2', 'ukras2'), (5.1, 15.9)),
@@ -199,22 +199,23 @@ def get_level_data():
 
         #DESNA SOBA
         #desna soba vanjska vrata vanjsko
-        (('level2', 'ukras2'), (22.9, 15.9)),
-        (('level2', 'ukras2'), (22.9, 17.1)),
+        #(('level2', 'ukras2'), (22.9, 15.9)),
+        #(('level2', 'ukras2'), (22.9, 17.1)),
 
         #desna soba vanjska vrata
-        (('level2', 'ukras2'), (24.1, 15.9)),
-        (('level2', 'ukras2'), (24.1, 17.1)),
+        #(('level2', 'ukras2'), (24.1, 15.9)),
+        #(('level2', 'ukras2'), (24.1, 17.1)),
       
 
         #PROLAZI
+        
         #prvi prolaz ulaz
-        (('level2', 'ukras3'), (12.5, 8.9)),
-        (('level2', 'ukras3'), (18.5, 8.9)),
-
-        #drugi prolaz ulaz
         (('level2', 'ukras3'), (7.5, 8.9)),
         (('level2', 'ukras3'), (10.5, 8.9)),
+
+        #drugi prolaz ulaz
+        (('level2', 'ukras3'), (12.5, 8.9)),
+        (('level2', 'ukras3'), (18.5, 8.9)),
 
         #treći prolaz ulaz
         (('level2', 'ukras3'), (26.5, 8.9)),
@@ -234,22 +235,22 @@ def get_level_data():
 
         #LIJEVI HODNIK
         #ulaz lijevi hodnik
-        (('level2', 'ukras3'), (7.5, 11.9)),
+        #(('level2', 'ukras3'), (7.5, 11.9)),
         (('level2', 'ukras3'), (10.5, 11.9)),
 
         #izlaz lijevi hodnik
-        (('level2', 'ukras3'), (7.5, 21.1)),
+        #(('level2', 'ukras3'), (7.5, 21.1)),
         (('level2', 'ukras3'), (10.5, 21.1)),
 
 
         #DESNO HODNIK
         #ulaz desni hodnik
         (('level2', 'ukras3'), (20.5, 11.9)),
-        (('level2', 'ukras3'), (23.5, 11.9)),
+        #(('level2', 'ukras3'), (23.5, 11.9)),
 
         #izlaz desni hodnik
         (('level2', 'ukras3'), (20.5, 21.1)),
-        (('level2', 'ukras3'), (23.5, 21.1)),
+        #(('level2', 'ukras3'), (23.5, 21.1)),
 
 
         #DUGI HODNIK NAKON SREDNJE SOBE

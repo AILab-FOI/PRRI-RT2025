@@ -144,4 +144,7 @@ class ObjectRenderer:
             28: self.get_texture('resources/teksture/level3/zid4.png'), ## labaratorijski zid sa manje detalja biljka
             29: self.get_texture('resources/teksture/level3/vrata1.png'), ## žučkasta vrata za mapu zatvorena
 
+            30: self.get_texture('resources/teksture/level2/vrataPrelaz2.png'), ## završna vrata na levelu 2
+            31: self.get_texture('resources/teksture/level2/vrataZagonetka.png'), ## vrata za zagonetku
+
         }
