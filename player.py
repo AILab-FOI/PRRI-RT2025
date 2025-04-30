@@ -45,10 +45,7 @@ class Player:
 
     def check_game_over(self):
         if self.health < 1:
-            self.game.object_renderer.game_over()
-            pg.display.flip()
-            pg.time.delay(1500)
-            self.game.new_game()
+            self.game.death_screen.start()
 
     def get_damage(self, damage):
         if self.is_invulnerable:

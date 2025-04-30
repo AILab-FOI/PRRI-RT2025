@@ -6,7 +6,7 @@ from raycasting import *
 from object_renderer import *
 from sprite_object import *
 from object_handler import *
-from weapon import Pistol
+from weapon import Pistol, SMG
 from sound import *
 from pathfinding import *
 from interaction import Interaction
@@ -17,6 +17,8 @@ from intro_sequence import IntroSequence
 from loading_screen import LoadingScreen
 from level_transition import LevelTransition
 from game_events import GameEvents
+from death_screen import DeathScreen
+from ui import GameUI
 
 
 class Game:
@@ -30,12 +32,12 @@ class Game:
         self.global_trigger = False
         self.global_event = pg.USEREVENT + 0
         pg.time.set_timer(self.global_event, 40)
-
         self.sound = Sound(self)
         self.menu = Menu(self)
         self.intro_sequence = IntroSequence(self)
         self.loading_screen = LoadingScreen(self)
         self.level_transition = LevelTransition(self)
+        self.death_screen = DeathScreen(self)
         self.game_events = GameEvents(self)
         self.game_initialized = False
         self.show_menu()
@@ -58,7 +60,11 @@ class Game:
         else:
             self.object_handler.reset()
 
-        self.weapon = Pistol(self)
+        # Create the appropriate weapon based on the stored weapon type
+        if hasattr(self, 'level_manager') and self.level_manager.current_weapon_type == 'smg':
+            self.weapon = SMG(self)
+        else:
+            self.weapon = Pistol(self)
         self.pathfinding = PathFinding(self)
         self.interaction = Interaction(self)
 
@@ -66,6 +72,7 @@ class Game:
         if not hasattr(self, 'dialogue_manager'):
             self.dialogue_manager = DialogueManager(self)
 
+        self.game_ui = GameUI(self)
         self.level_manager.setup_dialogue_npcs()
         self.level_manager.setup_interactive_objects()
         self.pathfinding.update_graph()
@@ -78,6 +85,8 @@ class Game:
         elif self.level_manager.current_level == 3:
             self.player.x, self.player.y = PLAYER_POS_LEVEL3
 
+        self.object_renderer.update_sky_image()
+
         if not pg.mixer.music.get_busy():
             pg.mixer.music.play(-1)
 
@@ -85,6 +94,10 @@ class Game:
             self.intro_sequence.start()
 
     def update(self):
+        if self.death_screen.active:
+            self.death_screen.update()
+            return
+
         # Update game components
         self.player.update()
         self.raycasting.update()
@@ -103,9 +116,14 @@ class Game:
         pg.display.set_caption(f'{self.clock.get_fps() :.1f}')
 
     def draw(self):
+        if self.death_screen.active:
+            self.death_screen.draw()
+            return
+
         # Draw game components
         self.object_renderer.draw()
         self.weapon.draw()
+        self.game_ui.draw()
         self.interaction.draw()
         self.dialogue_manager.draw()
         self.intro_sequence.draw()
@@ -113,11 +131,21 @@ class Game:
         self.level_transition.draw()
 
     def check_events(self):
+        if self.death_screen.active:
+            return self.death_screen.handle_events()
+
         return self.game_events.process_events()
 
     def next_level(self):
         """Advance to the next level"""
         return self.level_transition.transition_to_next_level()
+
+    def reset_current_level(self):
+        """Reset the current level when player dies"""
+        current_level = self.level_manager.current_level
+        self.map.load_level(current_level)
+        self.new_game()
+        pg.mouse.set_visible(False)
 
     def show_menu(self):
         pg.mouse.set_visible(True)
