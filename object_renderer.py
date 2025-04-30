@@ -133,7 +133,7 @@ class ObjectRenderer:
 
             20: self.get_texture('resources/teksture/level2/zagonetka1.png'), ## Zid sa Ultimate
             21: self.get_texture('resources/teksture/level2/zagonetka2.png'), ## Zid sa Six 6
-            22: self.get_texture('resources/teksture/level2/zagonetka3.png'), ## Zid sa BY
+            22: self.get_texture('resources/teksture/level2/zagonetka3.png'), ## Zid sa Multiply
             23: self.get_texture('resources/teksture/level2/zagonetka4.png'), ## Zid sa Seven 7
 
             24: self.get_texture('resources/teksture/level2/zid4.png'), ## bijeli zid s drugacijim paternom
@@ -142,6 +142,11 @@ class ObjectRenderer:
             26: self.get_texture('resources/teksture/level3/zid3.png'), ## sporedni zid za mapu žučkast sa bačvama
             27: self.get_texture('resources/teksture/level3/zid1.png'), ## labaratorijski zid sa najviše detalja alien
             28: self.get_texture('resources/teksture/level3/zid4.png'), ## labaratorijski zid sa manje detalja biljka
-            29: self.get_texture('resources/teksture/level3/vrata1.png'), ## žučkasta vrata za mapu zatvorena
+            29: self.get_texture('resources/teksture/level3/vrata2.jpg'), ## žučkasta vrata za mapu lagano otvorena
+
+            30: self.get_texture('resources/teksture/level2/vrataPrelaz2.png'), ## završna vrata na levelu 2
+            31: self.get_texture('resources/teksture/level2/vrataZagonetka.png'), ## vrata za zagonetku
+
+            32: self.get_texture('resources/teksture/level3/VrataPrijelaz.png')
 
         }

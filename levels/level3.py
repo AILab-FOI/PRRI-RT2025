@@ -19,20 +19,136 @@ def get_level_data():
 
     # Doors
     level_data['doors'] = [
-        {
-            'position': (9, 21),
+
+        { 
+            #glavna vrata prema mini bosss
+            'position': (17, 21),
             'door_id': 1,
             'requires_code': False,
             'code': None,
             'requires_door_id': None
         },
+
+        #prvi lijevi hodnik
         {
-            'position': (19, 21),
+            #prva vrata desno
+            'position': (10, 4),
             'door_id': 2,
             'requires_code': False,
             'code': None,
             'requires_door_id': None
-        }
+        },
+        {
+            #druga vrata desno
+            'position': (4, 4),
+            'door_id': 3,
+            'requires_code': False,
+            'code': None,
+            'requires_door_id': None
+        },
+        {
+            #prva vrata lijevo
+            'position': (6, 7),
+            'door_id': 4,
+            'requires_code': False,
+            'code': None,
+            'requires_door_id': None
+        },
+        {
+            #druga vrata lijevo
+            'position': (3, 7),
+            'door_id': 5,
+            'requires_code': False,
+            'code': None,
+            'requires_door_id': None
+        },
+
+        #prvi desni hodnik
+        {
+            #prva vrata lijevo
+            'position': (24, 4),
+            'door_id': 6,
+            'requires_code': False,
+            'code': None,
+            'requires_door_id': None
+        },
+        {
+            #druga vrata lijevo
+            'position': (30, 4),
+            'door_id': 7,
+            'requires_code': False,
+            'code': None,
+            'requires_door_id': None
+        },
+        {
+            #prva vrata desno
+            'position': (28, 7),
+            'door_id': 8,
+            'requires_code': False,
+            'code': None,
+            'requires_door_id': None
+        },
+        {
+            #druga vrata desno
+            'position': (31, 7),
+            'door_id': 9,
+            'requires_code': False,
+            'code': None,
+            'requires_door_id': None
+        },
+
+        #drugi lijevi hodnik
+        {
+            #prva vrata desno
+            'position': (10, 12),
+            'door_id': 10,
+            'requires_code': False,
+            'code': None,
+            'requires_door_id': None
+        },
+        {
+            #prva vrata lijevo
+            'position': (10, 15),
+            'door_id': 11,
+            'requires_code': False,
+            'code': None,
+            'requires_door_id': None
+        },
+        {
+            #druga vrata lijevo
+            'position': (4, 15),
+            'door_id': 12,
+            'requires_code': False,
+            'code': None,
+            'requires_door_id': None
+        },
+
+        #drugi desni hodnik
+        {
+            #prva vrata lijevo
+            'position': (24, 12),
+            'door_id': 13,
+            'requires_code': False,
+            'code': None,
+            'requires_door_id': None
+        },
+        {
+            #prva vrata desno
+            'position': (24, 15),
+            'door_id': 14,
+            'requires_code': False,
+            'code': None,
+            'requires_door_id': None
+        },
+        {
+            #druga vrata desno
+            'position': (30, 15),
+            'door_id': 15,
+            'requires_code': False,
+            'code': None,
+            'requires_door_id': None
+        },
+
     ]
 
     # Decorative sprites
