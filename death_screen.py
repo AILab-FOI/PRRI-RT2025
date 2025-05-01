@@ -19,7 +19,6 @@ class DeathScreen:
         button_width = 400
         center_x = HALF_WIDTH - button_width // 2
 
-        # Position buttons lower on the screen
         self.buttons = [
             Button(center_x, HALF_HEIGHT + 150, button_width, button_height, "Reset Level", font_size=42),
             Button(center_x, HALF_HEIGHT + 250, button_width, button_height, "Exit", font_size=42)

@@ -155,11 +155,11 @@ def get_level_data():
 
     # Enemy configuration
     level_data['enemies'] = {
-        'count': 5,  # Number of enemies to spawn
-        'types': [KlonoviNPC, StakorNPC, TosterNPC, ParazitNPC, JazavacNPC],  # Types of enemies that can spawn
-        'weights': [20, 20, 20, 20, 20],  # Equal spawn weights for each enemy type
+        'count': 7,  # Number of enemies to spawn
+        'types': [StakorNPC],  # Types of enemies that can spawn
+        'weights': [100],  # Equal spawn weights for each enemy type
         'restricted_area': {(i, j) for i in range(10) for j in range(10)},  # Areas where enemies cannot spawn
-        'fixed_positions': [(20, 20), (25, 25)]  # Optional list of fixed positions for enemies: [(x, y), (x, y), ...]
+        'fixed_positions': []
     }
 
     # Dialogue NPCs
