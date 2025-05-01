@@ -8,7 +8,7 @@ class DeathScreen:
         self.game = game
         self.screen = game.screen
         self.active = False
-        self.bg_image = pg.image.load('resources/teksture/loading_bg.png')
+        self.bg_image = pg.image.load('resources/teksture/theEnd.png')
         self.bg_image = pg.transform.scale(self.bg_image, RES)
         self.title_font = load_custom_font(72)
         self.subtitle_font = load_custom_font(36)
@@ -19,9 +19,10 @@ class DeathScreen:
         button_width = 400
         center_x = HALF_WIDTH - button_width // 2
 
+        # Position buttons lower on the screen
         self.buttons = [
-            Button(center_x, HALF_HEIGHT, button_width, button_height, "Reset Level", font_size=42),
-            Button(center_x, HALF_HEIGHT + 100, button_width, button_height, "Exit", font_size=42)
+            Button(center_x, HALF_HEIGHT + 150, button_width, button_height, "Reset Level", font_size=42),
+            Button(center_x, HALF_HEIGHT + 250, button_width, button_height, "Exit", font_size=42)
         ]
 
     def start(self):
@@ -62,15 +63,6 @@ class DeathScreen:
             return
 
         self.screen.blit(self.bg_image, (0, 0))
-
-
-        self.ui_renderer.draw_metallic_text(
-            "YOU DIED",
-            self.title_font,
-            (HALF_WIDTH, HALF_HEIGHT - 150),
-            bg_alpha=180,
-            border_color=(180, 40, 40)
-        )
 
         for button in self.buttons:
             button.draw(self.screen)
