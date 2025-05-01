@@ -21,7 +21,7 @@ class LoadingScreen:
         self.current_tip = ""
         self.load_tips_and_lore()
 
-        self.bg_image = pg.image.load('resources/teksture/loading_bg.png')
+        self.bg_image = pg.image.load('resources/teksture/pocetna.png')
         self.bg_image = pg.transform.scale(self.bg_image, RES)
 
         self.title_font = load_custom_font(60)
