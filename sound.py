@@ -4,9 +4,21 @@ import pygame as pg
 class Sound:
     def load_sound(self, filename, volume_factor=1.0):
         """Helper method to load a sound and set its volume"""
-        sound = pg.mixer.Sound(self.path + filename)
-        sound.set_volume(volume_factor * self.sfx_volume)
-        return sound
+        try:
+            sound = pg.mixer.Sound(self.path + filename)
+            sound.set_volume(volume_factor * self.sfx_volume)
+            return sound
+        except Exception as e:
+            print(f"Error loading sound {filename}: {e}")
+            # Za sve greške, koristi placeholder
+            try:
+                sound = pg.mixer.Sound(self.path + 'crash.wav')
+                sound.set_volume(volume_factor * self.sfx_volume)
+                return sound
+            except:
+                print("Failed to load placeholder sound")
+                # Ako ni placeholder ne radi, vrati None
+                return None
 
     def __init__(self, game):
         self.game = game
@@ -59,7 +71,10 @@ class Sound:
 
             # Menu sounds
             'menu_hover': 0.3,
-            'menu_click': 0.4
+            'menu_click': 0.4,
+
+            # Dialogue sounds
+            'dialogue_line': 0.7
         }
 
         # ===== WEAPON SOUNDS =====
@@ -109,9 +124,132 @@ class Sound:
         self.menu_hover = self.load_sound('menu_hover.mp3', self.volume_factors['menu_hover'])
         self.menu_click = self.load_sound('menu_klik.wav', self.volume_factors['menu_click'])
 
+        # ===== DIALOGUE SOUNDS =====
+        # Placeholder zvuk za dijalog - koristimo crash.wav za sve linije
+        self.dialogue_line = self.load_sound('crash.wav', self.volume_factors['dialogue_line'])
+
+        # Rječnik za pohranu zvukova dijaloga
+        # Ključevi će biti u formatu 'dialogue_id_line_index' (npr. 'marvin_intro_0')
+        self.dialogue_sounds = {}
+
+        # Inicijaliziraj direktorij za zvučne datoteke dijaloga
+        self.init_dialogue_directories()
+
         # ===== BACKGROUND MUSIC =====
         self.razina1 = pg.mixer.music.load(self.path + 'Pozadinska1.mp3')
         pg.mixer.music.set_volume(self.music_volume)
+
+    def init_dialogue_directories(self):
+        """Initialize directories for dialogue sounds"""
+        import os
+
+        # Glavni direktorij za zvukove dijaloga
+        dialogue_dir = os.path.join(self.path, "dialogues")
+        if not os.path.exists(dialogue_dir):
+            os.makedirs(dialogue_dir, exist_ok=True)
+
+        # Direktoriji za svaki dijalog
+        for dialogue_id in ["marvin_intro", "level2_puzzle", "marvin_ending"]:
+            dialogue_subdir = os.path.join(dialogue_dir, dialogue_id)
+            if not os.path.exists(dialogue_subdir):
+                os.makedirs(dialogue_subdir, exist_ok=True)
+
+        # Kopiraj crash.wav kao placeholder za svaku liniju dijaloga
+        self.create_placeholder_dialogue_sounds()
+
+    def create_placeholder_dialogue_sounds(self):
+        """Create placeholder sound files for each dialogue line"""
+        import os
+        import shutil
+
+        # Putanja do placeholder zvuka
+        placeholder_path = os.path.join(self.path, "crash.wav")
+
+        # Provjeri postoji li placeholder zvuk
+        if not os.path.exists(placeholder_path):
+            print(f"Placeholder sound {placeholder_path} not found")
+            return
+
+        # Dijalozi i broj linija
+        dialogues = {
+            "marvin_intro": 9,
+            "level2_puzzle": 11,
+            "marvin_ending": 11
+        }
+
+        # Kopiraj placeholder zvuk za svaku liniju dijaloga
+        for dialogue_id, num_lines in dialogues.items():
+            dialogue_dir = os.path.join(self.path, "dialogues", dialogue_id)
+            for i in range(num_lines):
+                target_path = os.path.join(dialogue_dir, f"{i}.wav")
+                # Kopiraj samo ako datoteka ne postoji
+                if not os.path.exists(target_path):
+                    try:
+                        shutil.copy(placeholder_path, target_path)
+                    except Exception as e:
+                        print(f"Error copying placeholder sound to {target_path}: {e}")
+
+    def get_dialogue_sound(self, dialogue_id, line_index, speaker=None):
+        """Get sound for a specific dialogue line, loading it if necessary"""
+        sound_key = f"{dialogue_id}_{line_index}"
+
+        # Ako zvuk već postoji u rječniku, vrati ga
+        if sound_key in self.dialogue_sounds:
+            return self.dialogue_sounds[sound_key]
+
+        # Posebna obrada za marvin_intro dijalog
+        if dialogue_id == "marvin_intro" and speaker:
+            try:
+                # Brojimo koliko puta se svaki govornik pojavio do trenutne linije
+                speaker_count = 0
+
+                # Učitaj dijalog iz JSON datoteke
+                import json
+                import os
+                dialogue_path = os.path.join('resources', 'dialogues', f"{dialogue_id}.json")
+                with open(dialogue_path, 'r') as f:
+                    dialogue_data = json.load(f)
+
+                # Broji koliko puta se govornik pojavio do trenutne linije
+                for i in range(line_index + 1):
+                    if i < len(dialogue_data["speakers"]) and dialogue_data["speakers"][i] == speaker:
+                        speaker_count += 1
+
+                # Odredi putanju do zvučne datoteke
+                if speaker == "Arthur":
+                    sound_path = f"Intro_Arthur{speaker_count}.mp3"
+                    print(f"Loading Arthur sound: {sound_path}")
+                elif speaker == "Marvin":
+                    # Koristimo .mp3 format za Marvina
+                    sound_path = f"Intro_Marvin{speaker_count}.mp3"
+                    print(f"Loading Marvin sound: {sound_path}")
+                else:
+                    # Ako govornik nije Arthur ili Marvin, koristi placeholder
+                    print(f"Unknown speaker: {speaker}, using placeholder")
+                    return self.dialogue_line
+
+                # Učitaj zvuk
+                sound = self.load_sound(sound_path, self.volume_factors['dialogue_line'])
+                self.dialogue_sounds[sound_key] = sound
+                return sound
+            except Exception as e:
+                print(f"Couldn't load dialogue sound for {dialogue_id}, line {line_index}, speaker {speaker}: {e}")
+                return self.dialogue_line
+
+        # Za ostale dijaloge, pokušaj učitati zvuk iz direktorija dialogues
+        try:
+            # Putanja do zvučne datoteke: resources/sound/dialogues/dialogue_id/line_index.wav
+            # Npr. resources/sound/dialogues/marvin_intro/0.wav
+            sound_path = f"dialogues/{dialogue_id}/{line_index}.wav"
+
+            # Pokušaj učitati zvuk
+            sound = self.load_sound(sound_path, self.volume_factors['dialogue_line'])
+            self.dialogue_sounds[sound_key] = sound
+            return sound
+        except Exception as e:
+            # Ako zvuk ne postoji, koristi placeholder
+            print(f"Couldn't load dialogue sound {sound_key}: {e}")
+            return self.dialogue_line
 
     def update_sfx_volume(self):
         """Update all sound effect volumes based on sfx_volume setting"""
@@ -158,8 +296,16 @@ class Sound:
 
             # Menu sounds
             'menu_hover': self.menu_hover,
-            'menu_click': self.menu_click
+            'menu_click': self.menu_click,
+
+            # Dialogue sounds
+            'dialogue_line': self.dialogue_line
         }
 
+        # Ažuriraj volumen za sve zvukove u rječniku
         for sound_name, sound in sounds.items():
             sound.set_volume(self.volume_factors[sound_name] * self.sfx_volume)
+
+        # Ažuriraj volumen za sve zvukove dijaloga
+        for sound_key, sound in self.dialogue_sounds.items():
+            sound.set_volume(self.volume_factors['dialogue_line'] * self.sfx_volume)

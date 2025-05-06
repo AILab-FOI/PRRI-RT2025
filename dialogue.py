@@ -17,6 +17,8 @@ class DialogueManager:
         self.current_line_index = 0
         self.dialogue_active = False
         self.last_key_press_time = 0
+        self.current_sound = None
+        self.sound_playing = False
 
         self.font = load_custom_font(20)
         self.title_font = load_custom_font(24)
@@ -56,10 +58,46 @@ class DialogueManager:
             self.current_npc = npc
             self.current_line_index = 0
             self.dialogue_active = True
+
+            # Play sound for the first line
+            self.play_dialogue_sound()
+
             return True
         else:
             print(f"Dialogue {dialogue_id} not found")
             return False
+
+    def play_dialogue_sound(self):
+        """Play sound for the current dialogue line"""
+        if self.current_sound:
+            self.current_sound.stop()
+
+        # Dohvati zvuk za trenutnu liniju dijaloga
+        dialogue_id = self.get_current_dialogue_id()
+
+        # Dohvati trenutnog govornika
+        current_speaker = None
+        if "speakers" in self.current_dialogue and self.current_line_index < len(self.current_dialogue["speakers"]):
+            current_speaker = self.current_dialogue["speakers"][self.current_line_index]
+
+        # Dohvati zvuk s informacijom o govorniku
+        self.current_sound = self.game.sound.get_dialogue_sound(dialogue_id, self.current_line_index, current_speaker)
+
+        # Reproduciraj zvuk samo ako je uspješno učitan
+        if self.current_sound:
+            self.current_sound.play()
+            self.sound_playing = True
+        else:
+            print(f"No sound to play for {dialogue_id}, line {self.current_line_index}, speaker {current_speaker}")
+            self.sound_playing = False
+
+    def get_current_dialogue_id(self):
+        """Get the ID of the current dialogue"""
+        # Pronađi ID dijaloga iz trenutnog dijaloga
+        for dialogue_id, dialogue in self.dialogues.items():
+            if dialogue == self.current_dialogue:
+                return dialogue_id
+        return "unknown"
 
     def next_line(self):
         if not self.dialogue_active:
@@ -69,6 +107,9 @@ class DialogueManager:
         if self.current_line_index >= len(self.current_dialogue["lines"]):
             self.end_dialogue()
             return True
+        else:
+            # Play sound for the next line
+            self.play_dialogue_sound()
         return False
 
     def end_dialogue(self):
@@ -76,6 +117,12 @@ class DialogueManager:
         self.current_dialogue = None
         self.current_npc = None
         self.current_line_index = 0
+
+        # Stop any playing dialogue sound
+        if self.current_sound and self.sound_playing:
+            self.current_sound.stop()
+            self.sound_playing = False
+            self.current_sound = None
 
         pg.mouse.set_pos([HALF_WIDTH, HALF_HEIGHT])
         pg.mouse.get_rel()
@@ -94,9 +141,10 @@ class DialogueManager:
                 self.next_line()
 
     def update(self):
-        # This method is called from the game loop but doesn't need to do anything
-        # We keep it for compatibility
-        pass
+        # Check if the current dialogue sound has finished playing
+        if self.dialogue_active and self.sound_playing and self.current_sound:
+            if not pg.mixer.get_busy():
+                self.sound_playing = False
 
     def draw(self):
         if (hasattr(self.game, 'intro_sequence') and self.game.intro_sequence.active or
