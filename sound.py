@@ -197,8 +197,8 @@ class Sound:
         if sound_key in self.dialogue_sounds:
             return self.dialogue_sounds[sound_key]
 
-        # Posebna obrada za marvin_intro dijalog
-        if dialogue_id == "marvin_intro" and speaker:
+        # Posebna obrada za marvin_intro i level2_puzzle dijaloge
+        if (dialogue_id == "marvin_intro" or dialogue_id == "level2_puzzle") and speaker:
             try:
                 # Brojimo koliko puta se svaki govornik pojavio do trenutne linije
                 speaker_count = 0
@@ -215,14 +215,23 @@ class Sound:
                     if i < len(dialogue_data["speakers"]) and dialogue_data["speakers"][i] == speaker:
                         speaker_count += 1
 
-                # Odredi putanju do zvučne datoteke
+                # Odredi putanju do zvučne datoteke ovisno o dijalogu
+                prefix = ""
+                if dialogue_id == "marvin_intro":
+                    prefix = "Intro_"
+                elif dialogue_id == "level2_puzzle":
+                    prefix = "Puzzle_"
+                else:
+                    # Ako dijalog nije podržan, koristi placeholder
+                    print(f"Unsupported dialogue: {dialogue_id}, using placeholder")
+                    return self.dialogue_line
+
                 if speaker == "Arthur":
-                    sound_path = f"Intro_Arthur{speaker_count}.mp3"
-                    print(f"Loading Arthur sound: {sound_path}")
+                    sound_path = f"{prefix}Arthur{speaker_count}.mp3"
+                    print(f"Loading Arthur sound for {dialogue_id}: {sound_path}")
                 elif speaker == "Marvin":
-                    # Koristimo .mp3 format za Marvina
-                    sound_path = f"Intro_Marvin{speaker_count}.mp3"
-                    print(f"Loading Marvin sound: {sound_path}")
+                    sound_path = f"{prefix}Marvin{speaker_count}.mp3"
+                    print(f"Loading Marvin sound for {dialogue_id}: {sound_path}")
                 else:
                     # Ako govornik nije Arthur ili Marvin, koristi placeholder
                     print(f"Unknown speaker: {speaker}, using placeholder")
