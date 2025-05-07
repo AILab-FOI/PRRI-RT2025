@@ -103,6 +103,10 @@ class LevelTransition:
         self.game.loading_screen.set_custom_message("LOADING LEVEL...")
         pg.display.flip()
 
+        # Ensure disorienting effects are stopped when leaving level 1
+        if self.game.level_manager.current_level == 1 and hasattr(self.game, 'disorienting_effects'):
+            self.game.disorienting_effects.end_effects()
+
         self.game.level_manager.current_level = self.next_level_num
         self.game.map.load_level(self.next_level_num)
         self.game.new_game()

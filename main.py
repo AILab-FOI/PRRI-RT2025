@@ -19,6 +19,7 @@ from level_transition import LevelTransition
 from game_events import GameEvents
 from death_screen import DeathScreen
 from ui import GameUI
+from visual_effects import DisorientingEffects
 
 
 class Game:
@@ -39,6 +40,7 @@ class Game:
         self.level_transition = LevelTransition(self)
         self.death_screen = DeathScreen(self)
         self.game_events = GameEvents(self)
+        self.disorienting_effects = DisorientingEffects(self)
         self.game_initialized = False
         self.show_menu()
 
@@ -116,6 +118,7 @@ class Game:
 
         self.intro_sequence.update()
         self.intro_sequence.update_music_fade()
+        self.disorienting_effects.update()
         self.loading_screen.update()
         self.level_transition.update()
 
@@ -135,6 +138,11 @@ class Game:
         self.game_ui.draw()
         self.interaction.draw()
         self.dialogue_manager.draw()
+        
+        # Apply visual effects
+        self.disorienting_effects.draw()
+        
+        # Draw overlays
         self.intro_sequence.draw()
         self.loading_screen.draw()
         self.level_transition.draw()

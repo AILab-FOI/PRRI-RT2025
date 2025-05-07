@@ -137,6 +137,10 @@ class IntroSequence:
         # Reset mouse position and clear accumulated movement to prevent jerking
         pg.mouse.set_pos([HALF_WIDTH, HALF_HEIGHT])
         pg.mouse.get_rel()
+        
+        # Start disorienting effects ONLY if on level 1
+        if self.game.level_manager.current_level == 1:
+            self.game.disorienting_effects.start()
 
     def draw(self):
         """Draw the intro sequence effects"""

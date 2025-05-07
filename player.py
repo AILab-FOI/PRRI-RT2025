@@ -60,10 +60,6 @@ class Player:
         # Prevent shooting during dialogue or intro sequence
         if self.dialogue_mode or (hasattr(self.game, 'intro_sequence') and self.game.intro_sequence.active):
             return
-        
-        # Don't process firing events if player has no weapon
-        if not self.game.weapon:
-            return
 
         # Handle mouse button down - start firing
         if event.type == pg.MOUSEBUTTONDOWN:
@@ -126,6 +122,7 @@ class Player:
         if keys[pg.K_SPACE] and not self.is_dashing:
             self.dash()
 
+        # Disorienting effects also affect dash speed
         self.check_wall_collision(dx, dy)
         self.angle %= math.tau
 
@@ -223,9 +220,6 @@ class Player:
         self.update_auto_fire()
 
     def update_auto_fire(self):
-        if not self.game.weapon:
-            return
-        
         if self.auto_fire and self.game.weapon.name == 'smg':
             current_time = pg.time.get_ticks()
             if (not self.game.weapon.reloading and
