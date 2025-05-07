@@ -176,7 +176,9 @@ class Interaction:
             self.unlocked_doors.add(self.active_object.door_id)
             self.open_door()
         else:
-            self.message = "Incorrect code!"
+            # Incorrect code - damage the player and play hurt sound
+            self.game.player.get_damage(10)  # Apply 10 damage to player
+            self.message = "Incorrect code! Security system activated!"
             self.message_time = pg.time.get_ticks()
 
         self.input_active = False

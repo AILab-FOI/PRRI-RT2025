@@ -59,7 +59,6 @@ class DialogueManager:
             self.current_line_index = 0
             self.dialogue_active = True
 
-            # Play sound for the first line
             self.play_dialogue_sound()
 
             return True
@@ -68,22 +67,17 @@ class DialogueManager:
             return False
 
     def play_dialogue_sound(self):
-        """Play sound for the current dialogue line"""
         if self.current_sound:
             self.current_sound.stop()
 
-        # Dohvati zvuk za trenutnu liniju dijaloga
         dialogue_id = self.get_current_dialogue_id()
 
-        # Dohvati trenutnog govornika
         current_speaker = None
         if "speakers" in self.current_dialogue and self.current_line_index < len(self.current_dialogue["speakers"]):
             current_speaker = self.current_dialogue["speakers"][self.current_line_index]
 
-        # Dohvati zvuk s informacijom o govorniku
         self.current_sound = self.game.sound.get_dialogue_sound(dialogue_id, self.current_line_index, current_speaker)
 
-        # Reproduciraj zvuk samo ako je uspješno učitan
         if self.current_sound:
             self.current_sound.play()
             self.sound_playing = True
@@ -92,8 +86,6 @@ class DialogueManager:
             self.sound_playing = False
 
     def get_current_dialogue_id(self):
-        """Get the ID of the current dialogue"""
-        # Pronađi ID dijaloga iz trenutnog dijaloga
         for dialogue_id, dialogue in self.dialogues.items():
             if dialogue == self.current_dialogue:
                 return dialogue_id
@@ -108,7 +100,6 @@ class DialogueManager:
             self.end_dialogue()
             return True
         else:
-            # Play sound for the next line
             self.play_dialogue_sound()
         return False
 
@@ -118,7 +109,6 @@ class DialogueManager:
         self.current_npc = None
         self.current_line_index = 0
 
-        # Stop any playing dialogue sound
         if self.current_sound and self.sound_playing:
             self.current_sound.stop()
             self.sound_playing = False
@@ -141,7 +131,6 @@ class DialogueManager:
                 self.next_line()
 
     def update(self):
-        # Check if the current dialogue sound has finished playing
         if self.dialogue_active and self.sound_playing and self.current_sound:
             if not pg.mixer.get_busy():
                 self.sound_playing = False
@@ -160,13 +149,11 @@ class DialogueManager:
         box_x = (WIDTH - box_width) // 2
         box_y = HEIGHT - box_height - margin_y - 30
 
-        # Draw dialogue box
         dialogue_surface = pg.Surface((box_width, box_height), pg.SRCALPHA)
         dialogue_surface.fill((0, 0, 0, 200))
         screen.blit(dialogue_surface, (box_x, box_y))
         pg.draw.rect(screen, (255, 255, 255), (box_x, box_y, box_width, box_height), 2)
 
-        # Draw speaker name if available
         current_speaker = None
         speaker_color = self.default_speaker_color
 
@@ -191,12 +178,10 @@ class DialogueManager:
             text_y = speaker_bg_y + (speaker_bg_height - speaker_text.get_height()) // 2
             screen.blit(speaker_text, (text_x, text_y))
 
-        # Draw dialogue text with word wrapping
         if self.current_line_index < len(self.current_dialogue["lines"]):
             line = self.current_dialogue["lines"][self.current_line_index]
             max_width = box_width - 2 * self.dialogue_box_padding
 
-            # Word wrap
             words = line.split(' ')
             lines = []
             current_line = ""
@@ -212,13 +197,11 @@ class DialogueManager:
             if current_line:
                 lines.append(current_line)
 
-            # Draw each line
             for i, line in enumerate(lines):
                 text_surface = self.font.render(line, True, (255, 255, 255))
                 y_pos = box_y + self.dialogue_box_padding + 40 + i * self.line_spacing
                 screen.blit(text_surface, (box_x + self.dialogue_box_padding, y_pos))
 
-        # Draw prompt
         is_last_line = self.current_line_index == len(self.current_dialogue["lines"]) - 1
         prompt_text = self.font.render(
             "Press E to exit dialogue..." if is_last_line else "Press E to continue...",
@@ -230,6 +213,7 @@ class DialogueManager:
 
 
 class DialogueNPC(NPC):
+
     def __init__(self, game, path=None, pos=(10.5, 5.5),
                  scale=0.6, shift=0.38, animation_time=180, dialogue_id=None, interaction_radius=2.0):
         if path is None:
@@ -237,7 +221,6 @@ class DialogueNPC(NPC):
 
         AnimatedSprite.__init__(self, game, path, pos, scale, shift, animation_time)
 
-        # Basic NPC properties
         self.attack_dist = 0
         self.speed = 0
         self.size = 20
@@ -251,12 +234,16 @@ class DialogueNPC(NPC):
         self.player_search_trigger = False
         self.is_friendly = True
 
-        # Set up animations - use current image for animations we don't need
         self.attack_images = self.death_images = self.pain_images = deque([self.image])
-        self.idle_images = self.get_images(self.path + '/idle')
-        self.walk_images = self.get_images(self.path + '/walk')
 
-        # Dialogue properties
+        idle_images = self.get_images(self.path + '/idle')
+        if idle_images and len(idle_images) > 0:
+            self.static_image = idle_images[0]
+        else:
+            self.static_image = self.image
+
+        self.image = self.static_image
+
         self.dialogue_id = dialogue_id or "marvin_intro"
         self.interaction_radius = interaction_radius
         self.can_interact = True
@@ -264,18 +251,13 @@ class DialogueNPC(NPC):
         self.last_interaction_time = 0
         self.interaction_indicator_visible = False
 
-        # Pre-load font for interaction indicator
         self.indicator_font = load_custom_font(16)
 
     def update(self):
         super().update()
-
+        self.interaction_radius = 1.5
         if self.game.dialogue_manager.dialogue_active:
             self.interaction_indicator_visible = False
-            return
-
-        player_dist = ((self.game.player.x - self.x) ** 2 + (self.game.player.y - self.y) ** 2) ** 0.5
-        self.interaction_indicator_visible = player_dist <= self.interaction_radius
 
     def start_dialogue(self):
         if not self.game.dialogue_manager.dialogue_active:
@@ -299,15 +281,22 @@ class DialogueNPC(NPC):
         bg_rect = text_rect.inflate(20, 10)
         bg_surface = pg.Surface((bg_rect.width, bg_rect.height), pg.SRCALPHA)
         bg_surface.fill((0, 0, 0, 180))
+
         self.game.screen.blit(bg_surface, bg_rect)
         self.game.screen.blit(text, text_rect)
+
+    def animate(self, _):
+        pass
 
     def run_logic(self):
         if self.alive:
             self.ray_cast_value = self.ray_cast_player_npc()
-            self.animate(self.idle_images)
+            self.image = self.static_image
 
-            if self.interaction_indicator_visible:
+            player_dist = ((self.game.player.x - self.x) ** 2 + (self.game.player.y - self.y) ** 2) ** 0.5
+            self.interaction_indicator_visible = player_dist <= self.interaction_radius
+
+            if self.interaction_indicator_visible and not self.game.dialogue_manager.dialogue_active:
                 self.draw_interaction_indicator()
         else:
             self.animate_death()
@@ -316,7 +305,6 @@ class DialogueNPC(NPC):
 def create_dialogue_npcs(game, npc_data):
     npcs = []
     for data in npc_data:
-        # Create NPC with parameters from data dict, using defaults if not specified
         npc = DialogueNPC(
             game=game,
             pos=data.get('pos', (10.5, 5.5)),
@@ -325,7 +313,7 @@ def create_dialogue_npcs(game, npc_data):
             scale=data.get('scale', 0.6),
             shift=data.get('shift', 0.38),
             animation_time=data.get('animation_time', 180),
-            interaction_radius=data.get('interaction_radius', 2.0)
+            interaction_radius=data.get('interaction_radius', 1.5)
         )
         npcs.append(npc)
         game.object_handler.add_npc(npc)

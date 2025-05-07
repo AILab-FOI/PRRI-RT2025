@@ -1,26 +1,26 @@
 """
 Level 2 configuration
 """
-from npc import KlonoviNPC, StakorNPC
+from npc import KlonoviNPC, JazavacNPC
 from levels.base_level import create_base_level_structure
 
 def get_level_data():
     """Return the complete level 2 data"""
     level_data = create_base_level_structure()
-    
+
     # Terminals
     level_data['terminals'] = [
         {
             'position': (47, 17), # Neka pozicija blizu vrata sobe s oružjem (16)
             'code': None,
             'unlocks_door_id': None,
-            
+
         }
     ]
-    
+
     # Doors
     level_data['doors'] = [
-        
+
         {
             #početna
             'position': (5, 2),
@@ -205,10 +205,10 @@ def get_level_data():
         #desna soba vanjska vrata
         #(('level2', 'ukras2'), (24.1, 15.9)),
         #(('level2', 'ukras2'), (24.1, 17.1)),
-      
+
 
         #PROLAZI
-        
+
         #prvi prolaz ulaz
         (('level2', 'ukras3'), (7.5, 8.9)),
         (('level2', 'ukras3'), (10.5, 8.9)),
@@ -299,7 +299,7 @@ def get_level_data():
         #lijevo
         (('level2', 'ukras1'), (1.5, 27.5)),
         (('level2', 'ukras1'), (11.5, 27.5)),
-        
+
         #desno
         (('level2', 'ukras1'), (19.5, 27.5)),
         (('level2', 'ukras1'), (30.5, 27.5)),
@@ -333,16 +333,16 @@ def get_level_data():
         (('level2', 'ukras2'), (30.9, 32.9)),
         (('level2', 'ukras2'), (30.9, 34.1))
     ]
-    
+
     # Enemy configuration
     level_data['enemies'] = {
         'count': 6,  # More enemies in level 2
-        'types': [KlonoviNPC, StakorNPC],
-        'weights': [70, 30],  # More KlonoviNPC in level 2
+        'types': [KlonoviNPC, JazavacNPC],
+        'weights': [60, 40],  # 60% KlonoviNPC, 40% JazavacNPC
         'restricted_area': {(i, j) for i in range(5) for j in range(5)},  # Different restricted area
         'fixed_positions': []  # No fixed positions for this level
     }
-    
+
     #Dialogue NPCs
     level_data['dialogue_npcs'] = [
        {
@@ -351,5 +351,5 @@ def get_level_data():
             'path': 'resources/sprites/npc/dialogue_npc/0.png'
        }
     ]
-    
+
     return level_data

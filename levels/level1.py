@@ -1,7 +1,7 @@
 """
 Level 1 configuration
 """
-from npc import KlonoviNPC, StakorNPC, TosterNPC, ParazitNPC, JazavacNPC
+from npc import StakorNPC
 from levels.base_level import create_base_level_structure
 
 def get_level_data():
@@ -41,26 +41,11 @@ def get_level_data():
         }
     ]
 
-    # Weapon pickups
-    level_data['weapons'] = [
-        {
-            'position': (5, 5),
-            'weapon_type': 'smg',
-            'path': 'resources/sprites/weapon/puska_stand.png'
-        }
-    ]
+    # Weapon pickups - removed for level 1
+    level_data['weapons'] = []
 
-    # Powerups
-    level_data['powerups'] = [
-        {
-            'position': (2, 3.5),
-            'powerup_type': 'invulnerability'
-        },
-        {
-            'position': (18, 18),
-            'powerup_type': 'invulnerability'
-        }
-    ]
+    # Powerups - removed for level 1
+    level_data['powerups'] = []
 
     # Decorative sprites
     level_data['sprites'] = [
