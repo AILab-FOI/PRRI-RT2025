@@ -1,7 +1,7 @@
 from sprite_object import *
 from npc import *
 from powerup import PowerUp
-from random import choices
+from random import choices, shuffle
 
 
 class ObjectHandler:
@@ -14,58 +14,77 @@ class ObjectHandler:
         self.anim_sprite_path = 'resources/sprites/animated_sprites/'
         self.npc_positions = {}
         self.win_message_shown = False
+        self.all_enemies_defeated = False
+
         self.spawn_npc()
         self.load_decorative_sprites()
 
     def spawn_npc(self):
         """Load enemy configuration and spawn NPCs based on the current level"""
-        # Clear existing NPCs
-        self.npc_list = []
-        self.npc_positions = {}
-        self.win_message_shown = False
+        if len(self.npc_list) > 0:
+            self.npc_list = []
+            self.npc_positions = {}
+            self.win_message_shown = False
 
-        # Get enemy configuration from level manager
         enemy_config = self.game.level_manager.get_enemy_config()
-        self.enemies = enemy_config['count']
+        self.enemies_from_pool_count = enemy_config['count']
         self.npc_types = enemy_config['types']
         self.weights = enemy_config['weights']
         self.restricted_area = enemy_config['restricted_area']
-        fixed_positions = enemy_config.get('fixed_positions', [])
+        fixed_positions_config = enemy_config.get('fixed_positions', [])
 
-        # First spawn enemies at fixed positions
-        for pos in fixed_positions:
-            if len(self.npc_list) >= self.enemies:
-                break
+        for item in fixed_positions_config:
+            if isinstance(item, dict):
+                npc_class_to_spawn = item['type']
+                pos_tuple = item['position']
+                x, y = pos_tuple
 
-            x, y = pos
-            # Skip if position is in a wall or restricted area
-            if (pos in self.game.map.world_map) or (pos in self.restricted_area):
-                continue
+                if (pos_tuple in self.game.map.world_map) or (pos_tuple in self.restricted_area):
+                    print(f"Warning: Specific fixed position {pos_tuple} for {npc_class_to_spawn.__name__} is invalid. Skipping.")
+                    continue
 
-            # Choose enemy type based on weights
-            npc_type = choices(self.npc_types, self.weights)[0]
-            self.add_npc(npc_type(self.game, pos=(x + 0.5, y + 0.5)))
+                self.add_npc(npc_class_to_spawn(self.game, pos=(x + 0.5, y + 0.5)))
+                print(f"Spawned specific NPC: {npc_class_to_spawn.__name__} at {(x + 0.5, y + 0.5)}")
 
-        # Then spawn remaining enemies at random positions
-        remaining = self.enemies - len(self.npc_list)
-        if remaining > 0:
-            self._spawn_random_enemies(remaining)
+        enemies_spawned_from_pool_so_far = 0
+        for item in fixed_positions_config:
+            if isinstance(item, tuple):
+                if enemies_spawned_from_pool_so_far >= self.enemies_from_pool_count:
+                    break
+
+                x, y = item
+
+                if (item in self.game.map.world_map) or (item in self.restricted_area):
+                    print(f"Warning: Generic fixed position {item} is invalid. Skipping.")
+                    continue
+
+                if not self.npc_types:
+                    print("Warning: NPC types list is empty for generic fixed spawn.")
+                    continue
+                npc_type_class = choices(self.npc_types, self.weights)[0]
+                self.add_npc(npc_type_class(self.game, pos=(x + 0.5, y + 0.5)))
+                enemies_spawned_from_pool_so_far += 1
+                print(f"Spawned generic fixed NPC: {npc_type_class.__name__} at {(x + 0.5, y + 0.5)}")
+
+        remaining_pool_enemies_to_spawn = self.enemies_from_pool_count - enemies_spawned_from_pool_so_far
+        if remaining_pool_enemies_to_spawn > 0:
+            if not self.npc_types:
+                print("Warning: NPC types list is empty for random spawn. Cannot spawn remaining enemies.")
+            else:
+                self._spawn_random_enemies(remaining_pool_enemies_to_spawn)
+
+        print(f"Total NPCs spawned: {len(self.npc_list)}")
 
     def check_win(self):
-        # Get only hostile NPCs (exclude friendly NPCs like dialogue NPCs)
         hostile_npcs = [npc for npc in self.npc_list if npc.alive and not hasattr(npc, 'is_friendly')]
+        all_enemies_defeated_now = len(hostile_npcs) == 0
 
-        # Check if all hostile enemies are defeated
-        self.all_enemies_defeated = len(hostile_npcs) == 0
-
-        # If all enemies are defeated, show a message and enable the level exit door
-        if self.all_enemies_defeated and not self.win_message_shown:
+        if all_enemies_defeated_now and not self.win_message_shown:
             self.win_message_shown = True
-            # Count only hostile enemies for the message
-            hostile_count = sum(1 for npc in self.npc_list if not hasattr(npc, 'is_friendly'))
-            self.game.object_renderer.show_message(f"All {hostile_count} enemies defeated! Find the exit door.")
-            # Enable the level exit door
+            self.game.object_renderer.show_message(f"All hostile entities neutralized! Find the exit door.")
             self.enable_level_exit()
+
+        self.all_enemies_defeated = all_enemies_defeated_now
 
     def update(self):
         # Update NPC positions, excluding friendly NPCs for win condition checking
@@ -83,12 +102,11 @@ class ObjectHandler:
 
     def enable_level_exit(self):
         """Enable the level exit door after all enemies are defeated"""
-        # Find the level exit door if it exists
         for obj in self.game.interaction.interaction_objects:
             if hasattr(obj, 'is_level_exit') and obj.is_level_exit:
                 obj.is_enabled = True
-                # Show a message that the exit is now open
                 self.game.object_renderer.show_message("The exit door is now open!")
+                break # Assume only one exit door to enable
 
     def add_sprite(self, sprite):
         self.sprite_list.append(sprite)
@@ -101,72 +119,76 @@ class ObjectHandler:
 
     def load_decorative_sprites(self):
         """Load decorative sprites for the current level"""
-        # Get sprite data from level manager
         sprite_data = self.game.level_manager.get_sprite_data()
 
-        # Add all sprites using a loop
         for sprite_info, pos in sprite_data:
-            # Check if sprite_info is a tuple (folder, sprite_type) or just a string (sprite_type)
+            sprite_path_to_load = None
             if isinstance(sprite_info, tuple) and len(sprite_info) == 2:
                 folder, sprite_type = sprite_info
-                # Use the specified folder
                 if folder == 'static':
-                    sprite_path = self.static_sprite_path + sprite_type + '.png'
+                    sprite_path_to_load = self.static_sprite_path + sprite_type + '.png'
                 elif folder == 'level1':
-                    sprite_path = 'resources/teksture/level1/' + sprite_type + '.png'
+                    sprite_path_to_load = 'resources/teksture/level1/' + sprite_type + '.png'
                 elif folder == 'level2':
-                    sprite_path = 'resources/teksture/level2/' + sprite_type + '.png'
+                    sprite_path_to_load = 'resources/teksture/level2/' + sprite_type + '.png'
                 elif folder == 'level3':
-                    sprite_path = 'resources/teksture/level3/' + sprite_type + '.png'
+                    sprite_path_to_load = 'resources/teksture/level3/' + sprite_type + '.png'
                 elif folder == 'level4':
-                    sprite_path = 'resources/teksture/level4/' + sprite_type + '.png'
+                    sprite_path_to_load = 'resources/teksture/level4/' + sprite_type + '.png'
                 elif folder == 'teksture':
-                    sprite_path = 'resources/teksture/' + sprite_type + '.png'
+                    sprite_path_to_load = 'resources/teksture/' + sprite_type + '.png'
                 else:
-                    # Default to static sprites if folder is unknown
-                    sprite_path = self.static_sprite_path + sprite_type + '.png'
-            else:
-                # Backward compatibility: if sprite_info is just a string, use the static sprites folder
+                    print(f"Warning: Unknown folder '{folder}' for sprite type '{sprite_type}'. Defaulting.")
+                    sprite_path_to_load = self.static_sprite_path + sprite_type + '.png'
+            elif isinstance(sprite_info, str):
                 sprite_type = sprite_info
-                sprite_path = self.static_sprite_path + sprite_type + '.png'
+                sprite_path_to_load = self.static_sprite_path + sprite_type + '.png'
+            else:
+                print(f"Warning: Invalid sprite_info format: {sprite_info}")
+                continue
 
-            self.add_sprite(SpriteObject(self.game, path=sprite_path, pos=pos))
+            if sprite_path_to_load:
+                self.add_sprite(SpriteObject(self.game, path=sprite_path_to_load, pos=pos))
 
     def _spawn_random_enemies(self, count):
         """Helper method to spawn a given number of enemies at random positions"""
-        # Create a list of valid spawn positions
+        if not self.npc_types:
+            print("Cannot spawn random enemies: NPC types list is empty.")
+            return
+
         valid_positions = []
         for y in range(self.game.map.rows):
             for x in range(self.game.map.cols):
                 pos = (x, y)
-                if (pos not in self.game.map.world_map) and (pos not in self.restricted_area):
+                if (pos not in self.game.map.world_map) and \
+                   (pos not in self.restricted_area) and \
+                   (pos not in self.npc_positions):
                     valid_positions.append(pos)
 
-        # Shuffle the valid positions to randomize spawning
-        from random import shuffle
         shuffle(valid_positions)
 
-        # Spawn enemies at valid positions
         spawned = 0
         for pos in valid_positions:
             if spawned >= count:
                 break
 
             x, y = pos
-            # Choose enemy type based on weights
-            npc_type = choices(self.npc_types, self.weights)[0]
-            self.add_npc(npc_type(self.game, pos=(x + 0.5, y + 0.5)))
+            npc_type_class = choices(self.npc_types, self.weights)[0]
+            self.add_npc(npc_type_class(self.game, pos=(x + 0.5, y + 0.5)))
             spawned += 1
+            print(f"Spawned random NPC: {npc_type_class.__name__} at {(x + 0.5, y + 0.5)}")
 
-        # If we couldn't spawn all enemies, log a warning
         if spawned < count:
-            print(f"Warning: Could only spawn {spawned} of {count} enemies due to map constraints")
+            print(f"Warning: Could only spawn {spawned} of {count} random enemies due to map constraints or lack of valid positions.")
 
     def reset(self):
-        """Reset the object handler for a new level"""
+        """Reset the object handler for a new level or game start."""
+        print("ObjectHandler reset called.")
         self.sprite_list = []
         self.npc_list = []
         self.npc_positions = {}
         self.win_message_shown = False
+        self.all_enemies_defeated = False
+
         self.spawn_npc()
         self.load_decorative_sprites()

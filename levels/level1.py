@@ -1,7 +1,7 @@
 """
 Level 1 configuration
 """
-from npc import KlonoviNPC, StakorNPC, TosterNPC, ParazitNPC, JazavacNPC
+from npc import StakorNPC
 from levels.base_level import create_base_level_structure
 
 def get_level_data():
@@ -41,26 +41,11 @@ def get_level_data():
         }
     ]
 
-    # Weapon pickups
-    level_data['weapons'] = [
-        {
-            'position': (5, 5),
-            'weapon_type': 'smg',
-            'path': 'resources/sprites/weapon/puska_stand.png'
-        }
-    ]
+    # Weapon pickups - removed for level 1
+    level_data['weapons'] = []
 
-    # Powerups
-    level_data['powerups'] = [
-        {
-            'position': (2, 3.5),
-            'powerup_type': 'invulnerability'
-        },
-        {
-            'position': (18, 18),
-            'powerup_type': 'invulnerability'
-        }
-    ]
+    # Powerups - removed for level 1
+    level_data['powerups'] = []
 
     # Decorative sprites
     level_data['sprites'] = [
@@ -155,11 +140,11 @@ def get_level_data():
 
     # Enemy configuration
     level_data['enemies'] = {
-        'count': 5,  # Number of enemies to spawn
-        'types': [KlonoviNPC, StakorNPC, TosterNPC, ParazitNPC, JazavacNPC],  # Types of enemies that can spawn
-        'weights': [20, 20, 20, 20, 20],  # Equal spawn weights for each enemy type
+        'count': 7,  # Number of enemies to spawn
+        'types': [StakorNPC],  # Types of enemies that can spawn
+        'weights': [100],  # Equal spawn weights for each enemy type
         'restricted_area': {(i, j) for i in range(10) for j in range(10)},  # Areas where enemies cannot spawn
-        'fixed_positions': [(20, 20), (25, 25)]  # Optional list of fixed positions for enemies: [(x, y), (x, y), ...]
+        'fixed_positions': []
     }
 
     # Dialogue NPCs

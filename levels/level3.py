@@ -1,7 +1,7 @@
 """
 Level 3 configuration
 """
-from npc import KlonoviNPC, StakorNPC
+from npc import MadracNPC, ParazitNPC, TosterNPC
 from levels.base_level import create_base_level_structure
 
 def get_level_data():
@@ -20,7 +20,7 @@ def get_level_data():
     # Doors
     level_data['doors'] = [
 
-        { 
+        {
             #glavna vrata prema mini bosss
             'position': (17, 21),
             'door_id': 1,
@@ -158,11 +158,13 @@ def get_level_data():
 
     # Enemy configuration
     level_data['enemies'] = {
-        'count': 10,  # Many enemies in level 3
-        'types': [StakorNPC],  # Only StakorNPC in this level
-        'weights': [100],  # 100% StakorNPC
+        'count': 10,
+        'types': [TosterNPC, MadracNPC],
+        'weights': [50, 50],
         'restricted_area': {(i, j) for i in range(10) for j in range(10)},  # Larger restricted area like in level 1
-        'fixed_positions': [(15, 5), (15, 15), (10, 10)]  # Some enemies at fixed positions, avoiding player spawn
+        'fixed_positions': [
+            {'type': ParazitNPC, 'position': (17, 27)},  # Miniboss Parazit in the arena area
+        ]
     }
 
     # Dialogue NPCs
@@ -172,6 +174,30 @@ def get_level_data():
             #'dialogue_id': 'level3_intro',
             #'path': 'resources/sprites/npc/dialogue_npc/0.png'
         #}
+    ]
+
+    # Powerups in the arena area
+    level_data['powerups'] = [
+        {
+            'position': (10, 27),
+            'powerup_type': 'invulnerability'
+        },
+        {
+            'position': (24, 27),
+            'powerup_type': 'invulnerability'
+        },
+        {
+            'position': (14, 31),
+            'powerup_type': 'invulnerability'
+        },
+        {
+            'position': (20, 31),
+            'powerup_type': 'invulnerability'
+        },
+        {
+            'position': (17, 32),
+            'powerup_type': 'invulnerability'
+        }
     ]
 
     return level_data
