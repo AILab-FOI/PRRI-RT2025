@@ -1,7 +1,7 @@
 """
 Level 3 configuration
 """
-from npc import KlonoviNPC, StakorNPC
+from npc import KlonoviNPC, StakorNPC, MadracNPC
 from levels.base_level import create_base_level_structure
 
 def get_level_data():
@@ -20,7 +20,7 @@ def get_level_data():
     # Doors
     level_data['doors'] = [
 
-        { 
+        {
             #glavna vrata prema mini bosss
             'position': (17, 21),
             'door_id': 1,
@@ -159,8 +159,8 @@ def get_level_data():
     # Enemy configuration
     level_data['enemies'] = {
         'count': 10,  # Many enemies in level 3
-        'types': [StakorNPC],  # Only StakorNPC in this level
-        'weights': [100],  # 100% StakorNPC
+        'types': [StakorNPC, MadracNPC],  # StakorNPC and MadracNPC in this level
+        'weights': [60, 40],  # 60% StakorNPC, 40% MadracNPC
         'restricted_area': {(i, j) for i in range(10) for j in range(10)},  # Larger restricted area like in level 1
         'fixed_positions': [(15, 5), (15, 15), (10, 10)]  # Some enemies at fixed positions, avoiding player spawn
     }

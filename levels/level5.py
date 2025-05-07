@@ -1,7 +1,7 @@
 """
 Level 5 configuration - Final level
 """
-from npc import KlonoviNPC, StakorNPC
+from npc import KlonoviNPC, StakorNPC, MadracNPC
 from levels.base_level import create_base_level_structure
 
 def get_level_data():
@@ -132,8 +132,8 @@ def get_level_data():
     # Enemy configuration - challenging final level
     level_data['enemies'] = {
         'count': 15,  # Many enemies in final level
-        'types': [KlonoviNPC, StakorNPC],
-        'weights': [50, 50],  # Equal mix of both enemy types
+        'types': [KlonoviNPC, StakorNPC, MadracNPC],
+        'weights': [30, 30, 40],  # More Madrac enemies in the final level
         'restricted_area': {(i, j) for i in range(9, 12) for j in range(9, 12)},  # Keep center area clear
         'fixed_positions': [(5, 5), (15, 5), (5, 15), (15, 15), (10, 10)]  # Strategic enemy positions
     }

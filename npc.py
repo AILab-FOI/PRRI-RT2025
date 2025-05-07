@@ -351,3 +351,39 @@ class JazavacNPC(NPC):
                 self.pain = True
                 self.health -= self.game.weapon.damage
                 self.check_health()
+
+class MadracNPC(NPC):
+    def __init__(self, game, path='resources/sprites/npc/madraci/0.png', pos=(10.5, 5.5),
+                 scale=0.6, shift=0.4, animation_time=180):
+        super().__init__(game, path, pos, scale, shift, animation_time)
+
+        # Death height shift will be applied when enemy dies
+        self.death_height_shift = 0.7
+
+        # Karakteristike madraca
+        self.attack_dist = 3.0     # udaljenost napada (medium range)
+        self.health = 90           # zdravlje (medium-high)
+        self.attack_damage = 12    # Medium-high damage
+        self.speed = 0.04          # Medium-fast speed
+        self.accuracy = 0.35       # točnost za napad
+
+    # Napad madraca
+    def attack(self):
+        if self.animation_trigger:
+            self.game.sound.madrac_attack.play()
+            if random() < self.accuracy:
+                self.game.player.get_damage(self.attack_damage)
+    # Smrt madraca
+    def check_health(self):
+        if self.health < 1 and self.alive:
+            self.game.sound.madrac_death.play()
+            super().check_health()
+    # Damage madraca
+    def check_hit_in_npc(self):
+        if self.ray_cast_value and self.game.player.shot:
+            if HALF_WIDTH - self.sprite_half_width < self.screen_x < HALF_WIDTH + self.sprite_half_width:
+                self.game.sound.madrac_damage.play()
+                self.game.player.shot = False
+                self.pain = True
+                self.health -= self.game.weapon.damage
+                self.check_health()

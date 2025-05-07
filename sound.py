@@ -60,6 +60,10 @@ class Sound:
             'jazavac_death': 0.7, # Jazavac death
             'jazavac_damage': 0.5, # Jazavac damage
 
+            'madrac_attack': 0.6,# Madrac attack
+            'madrac_death': 0.7, # Madrac death
+            'madrac_damage': 0.5, # Madrac damage
+
             # Interaction sounds
             'terminal_beep': 0.7,
             'door_open': 0.7,
@@ -110,6 +114,11 @@ class Sound:
         self.jazavac_attack = self.load_sound('jazavac_napad.wav', self.volume_factors['jazavac_attack'])
         self.jazavac_death = self.load_sound('jazavac_smrt.wav', self.volume_factors['jazavac_death'])
         self.jazavac_damage = self.load_sound('jazavac_damage.wav', self.volume_factors['jazavac_damage'])
+
+        # Madrac sounds
+        self.madrac_attack = self.load_sound('madrac_napad.wav', self.volume_factors['madrac_attack'])
+        self.madrac_death = self.load_sound('madrac_smrt.wav', self.volume_factors['madrac_death'])
+        self.madrac_damage = self.load_sound('madrac_damage.wav', self.volume_factors['madrac_damage'])
 
         # ===== INTERACTION SOUNDS =====
         self.terminal_beep = self.load_sound('terminal.wav', self.volume_factors['terminal_beep'])
@@ -293,6 +302,10 @@ class Sound:
             'jazavac_attack': self.jazavac_attack,
             'jazavac_death': self.jazavac_death,
             'jazavac_damage': self.jazavac_damage,
+
+            'madrac_attack': self.madrac_attack,
+            'madrac_death': self.madrac_death,
+            'madrac_damage': self.madrac_damage,
 
             # Interaction sounds
             'terminal_beep': self.terminal_beep,
