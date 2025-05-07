@@ -60,6 +60,10 @@ class Player:
         # Prevent shooting during dialogue or intro sequence
         if self.dialogue_mode or (hasattr(self.game, 'intro_sequence') and self.game.intro_sequence.active):
             return
+        
+        # Don't process firing events if player has no weapon
+        if not self.game.weapon:
+            return
 
         # Handle mouse button down - start firing
         if event.type == pg.MOUSEBUTTONDOWN:
@@ -219,6 +223,9 @@ class Player:
         self.update_auto_fire()
 
     def update_auto_fire(self):
+        if not self.game.weapon:
+            return
+        
         if self.auto_fire and self.game.weapon.name == 'smg':
             current_time = pg.time.get_ticks()
             if (not self.game.weapon.reloading and
