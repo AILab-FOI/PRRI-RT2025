@@ -61,7 +61,10 @@ class Game:
             self.object_handler.reset()
 
         # Create the appropriate weapon based on the stored weapon type
-        if hasattr(self, 'level_manager') and self.level_manager.current_weapon_type == 'smg':
+        if self.level_manager.current_level == 1:
+            # No weapon for level 1 until pickup
+            self.weapon = None
+        elif hasattr(self, 'level_manager') and self.level_manager.current_weapon_type == 'smg':
             self.weapon = SMG(self)
         else:
             self.weapon = Pistol(self)
@@ -84,6 +87,10 @@ class Game:
             self.player.x, self.player.y = PLAYER_POS_LEVEL2
         elif self.level_manager.current_level == 3:
             self.player.x, self.player.y = PLAYER_POS_LEVEL3
+        elif self.level_manager.current_level == 4:
+            self.player.x, self.player.y = PLAYER_POS_LEVEL4
+        elif self.level_manager.current_level == 5:
+            self.player.x, self.player.y = PLAYER_POS_LEVEL5
 
         self.object_renderer.update_sky_image()
 
@@ -102,7 +109,8 @@ class Game:
         self.player.update()
         self.raycasting.update()
         self.object_handler.update()
-        self.weapon.update()
+        if self.weapon:  # Only update weapon if it exists
+            self.weapon.update()
         self.interaction.update()
         self.dialogue_manager.update()
 
@@ -122,7 +130,8 @@ class Game:
 
         # Draw game components
         self.object_renderer.draw()
-        self.weapon.draw()
+        if self.weapon:  # Only draw weapon if it exists
+            self.weapon.draw()
         self.game_ui.draw()
         self.interaction.draw()
         self.dialogue_manager.draw()

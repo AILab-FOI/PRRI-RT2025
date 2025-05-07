@@ -1,72 +1,36 @@
 """
-Level 5 configuration - Final level
+Level 4 configuration
 """
-from npc import KlonoviNPC, StakorNPC, MadracNPC
+from npc import KlonoviNPC, StakorNPC
 from levels.base_level import create_base_level_structure
 
 def get_level_data():
-    """Return the complete level 5 data"""
+    """Return the complete level 4 data"""
     level_data = create_base_level_structure()
-
-    # Level narrative
     level_data['narrative'] = {
         'intro': "Ovo je posljednji nivo. Probij se do mosta broda da oslobodiš posadu i završiš svoju misiju.",
         'conclusion': "Brod je tih i ekrani trepere. Arthur stoji na mostu broda, iscrpljen i pun prašine i osušene krvi, dok kraj njega stoji Marvin gledajući ga pogledom čiste ravnodušnosti. Na ekranu titra poruka: 'IDENTIFIKACIJA POTVRĐENA: VI STE SLUŽBENI KAPETAN SVEMIRSKOG BRODA BESMISLENO BEZNAĐE.'"
     }
-
+    
     # Terminals
     level_data['terminals'] = [
         {
-            'position': (3, 3),
-            'code': '0000',
-            'unlocks_door_id': None
-        },
-        {
-            'position': (17, 3),
-            'code': '1111',
-            'unlocks_door_id': None
-        },
-        {
-            'position': (3, 17),
-            'code': '2222',
+            'position': (5, 5),
+            'code': '6789',
             'unlocks_door_id': None
         }
     ]
-
+    
     # Doors
     level_data['doors'] = [
         {
-            'position': (10, 5),
+            'position': (10, 10),
             'door_id': 1,
             'requires_code': True,
-            'code': '0000'
-        },
-        {
-            'position': (15, 10),
-            'door_id': 2,
-            'requires_code': True,
-            'code': '1111',
-            'requires_door_id': 1
-        },
-        {
-            'position': (10, 15),
-            'door_id': 3,
-            'requires_code': True,
-            'code': '2222',
-            'requires_door_id': 2
+            'code': '6789'
         }
     ]
-
-    # Weapon pickups
-    level_data['weapons'] = [
-        {
-            'position': (5, 5),
-            'weapon_type': 'smg',
-            'path': 'resources/sprites/weapon/puska_stand.png'
-        }
-    ]
-
-    # Powerups - more powerups for the final level
+    
     level_data['powerups'] = [
         {
             'position': (7, 7),
@@ -85,66 +49,51 @@ def get_level_data():
             'powerup_type': 'invulnerability'
         }
     ]
-
-    # Decorative sprites - grand finale design
+    
+    # Decorative sprites - unique to level 4
     level_data['sprites'] = [
-        # Create an X pattern across the level
-        ('ukras2', (5.5, 5.5)),
-        ('ukras2', (6.5, 6.5)),
-        ('ukras2', (7.5, 7.5)),
-        ('ukras2', (8.5, 8.5)),
-        ('ukras2', (9.5, 9.5)),
+        # Create a circular pattern in the center
         ('ukras2', (10.5, 10.5)),
-        ('ukras2', (11.5, 11.5)),
-        ('ukras2', (12.5, 12.5)),
-        ('ukras2', (13.5, 13.5)),
-        ('ukras2', (14.5, 14.5)),
-
-        ('ukras2', (5.5, 14.5)),
-        ('ukras2', (6.5, 13.5)),
-        ('ukras2', (7.5, 12.5)),
-        ('ukras2', (8.5, 11.5)),
-        ('ukras2', (9.5, 10.5)),
-        ('ukras2', (10.5, 9.5)),
-        ('ukras2', (11.5, 8.5)),
-        ('ukras2', (12.5, 7.5)),
-        ('ukras2', (13.5, 6.5)),
-        ('ukras2', (14.5, 5.5)),
-
-        # Add decorations in each corner
-        ('ukras1', (3.5, 3.5)),
-        ('ukras1', (4.5, 3.5)),
-        ('ukras1', (3.5, 4.5)),
-
-        ('ukras1', (15.5, 3.5)),
-        ('ukras1', (16.5, 3.5)),
-        ('ukras1', (16.5, 4.5)),
-
-        ('ukras1', (3.5, 15.5)),
-        ('ukras1', (3.5, 16.5)),
-        ('ukras1', (4.5, 16.5)),
-
-        ('ukras1', (15.5, 16.5)),
-        ('ukras1', (16.5, 15.5)),
-        ('ukras1', (16.5, 16.5)),
+        
+        # Create a ring around the center
+        ('ukras1', (9.5, 9.5)),
+        ('ukras1', (10.5, 9.5)),
+        ('ukras1', (11.5, 9.5)),
+        ('ukras1', (9.5, 10.5)),
+        ('ukras1', (11.5, 10.5)),
+        ('ukras1', (9.5, 11.5)),
+        ('ukras1', (10.5, 11.5)),
+        ('ukras1', (11.5, 11.5)),
+        
+        # Add some decorations along the walls
+        ('ukras2', (2.5, 2.5)),
+        ('ukras2', (2.5, 17.5)),
+        ('ukras2', (17.5, 2.5)),
+        ('ukras2', (17.5, 17.5)),
+        
+        # Add some decorations in the middle of each wall
+        ('ukras1', (10.0, 2.5)),
+        ('ukras1', (10.0, 17.5)),
+        ('ukras1', (2.5, 10.0)),
+        ('ukras1', (17.5, 10.0)),
     ]
-
-    # Enemy configuration - challenging final level
+    
+    # Enemy configuration
     level_data['enemies'] = {
-        'count': 15,  # Many enemies in final level
-        'types': [KlonoviNPC, StakorNPC, MadracNPC],
-        'weights': [30, 30, 40],  # More Madrac enemies in the final level
-        'restricted_area': {(i, j) for i in range(9, 12) for j in range(9, 12)},  # Keep center area clear
-        'fixed_positions': [(5, 5), (15, 5), (5, 15), (15, 15), (10, 10)]  # Strategic enemy positions
+        'count': 8,
+        'types': [KlonoviNPC, StakorNPC],
+        'weights': [40, 60],  # More StakorNPC in this level
+        'restricted_area': {(i, j) for i in range(8, 13) for j in range(8, 13)},  # Keep center area clear
+        'fixed_positions': [(5, 15), (15, 5)]  # Some enemies at fixed positions
     }
-
+    
     # Dialogue NPCs
     level_data['dialogue_npcs'] = [
         {
-            'pos': (10.5, 3.5),
-            'dialogue_id': 'marvin_ending',
+            'pos': (5.5, 5.5),
+            'dialogue_id': 'level4_intro',
             'path': 'resources/sprites/npc/dialogue_npc/0.png'
         }
     ]
-
+    
     return level_data
