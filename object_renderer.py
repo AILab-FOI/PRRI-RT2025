@@ -107,7 +107,7 @@ class ObjectRenderer:
 
     def load_wall_textures(self):
         return {
-
+            #1. level
             1: self.get_texture('resources/teksture/1.jpg'),
             2: self.get_texture('resources/teksture/2.jpg'),
             3: self.get_texture('resources/teksture/3.jpg'),
@@ -125,6 +125,7 @@ class ObjectRenderer:
             14: self.get_texture('resources/teksture/ukras1.png'), ## panel za level 1 crno sivi
             15: self.get_texture('resources/teksture/prozor.jpg'), ## prozor ne korišten nema smisla
 
+            #2. level
             4: self.get_texture('resources/teksture/level2/zid2.png'), ## bijeli zid level 1 / level 2 - prijelaz/vanjski
             16: self.get_texture('resources/teksture/level2/vrata1.png'), ##vrata bijela zatvorena
             17: self.get_texture('resources/teksture/uvod/zid5.jpg'), ## zid sa malo krvi (manje od uvod/zid1)
@@ -137,16 +138,20 @@ class ObjectRenderer:
             23: self.get_texture('resources/teksture/level2/zagonetka4.png'), ## Zid sa Seven 7
 
             24: self.get_texture('resources/teksture/level2/zid4.png'), ## bijeli zid s drugacijim paternom
+            30: self.get_texture('resources/teksture/level2/vrataPrelaz2.png'), ## završna vrata na levelu 2
+            31: self.get_texture('resources/teksture/level2/vrataZagonetka.png'), ## vrata za zagonetku
 
+            #3. level
             25: self.get_texture('resources/teksture/level3/zid2.png'), ## glavni zid za mapu žučkast
             26: self.get_texture('resources/teksture/level3/zid3.png'), ## sporedni zid za mapu žučkast sa bačvama
             27: self.get_texture('resources/teksture/level3/zid1.png'), ## labaratorijski zid sa najviše detalja alien
             28: self.get_texture('resources/teksture/level3/zid4.png'), ## labaratorijski zid sa manje detalja biljka
             29: self.get_texture('resources/teksture/level3/vrata2.jpg'), ## žučkasta vrata za mapu lagano otvorena
+            32: self.get_texture('resources/teksture/level3/VrataPrijelaz.png'), #vrata prijelaz na sljedeci level
 
-            30: self.get_texture('resources/teksture/level2/vrataPrelaz2.png'), ## završna vrata na levelu 2
-            31: self.get_texture('resources/teksture/level2/vrataZagonetka.png'), ## vrata za zagonetku
+            #uvodni level
+            33: self.get_texture('resources/teksture/uvod/zid1.jpg'), #bijeli zid crvena svjetla manja količina krvi u sredini
 
-            32: self.get_texture('resources/teksture/level3/VrataPrijelaz.png')
+            38: self.get_texture('resources/teksture/uvod/vrata5.jpg'),
 
         }

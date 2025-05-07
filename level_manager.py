@@ -151,9 +151,10 @@ class LevelManager:
 
         # Define exit door positions for each level
         exit_positions = {
-            1: (12, 34),
-            2: (31, 33),
-            3: (32, 32)
+            1: (5, 24),
+            2: (12, 34),
+            3: (31, 33),
+            4: (32, 32),
         }
 
         # Add the exit door if we have a position defined for this level
@@ -200,9 +201,10 @@ class LevelManager:
                 elif value == 11:  # Door
                     # Define exit door positions for each level
                     exit_positions = {
-                        1: (12, 34),
-                        2: (31, 33),
-                        3: (32, 32)
+                        1: (5, 24),
+                        2: (12, 34),
+                        3: (31, 33),
+                        4: (32, 32),
                     }
 
                     # Check if this is a level exit door
