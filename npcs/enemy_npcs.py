@@ -49,7 +49,7 @@ class StakorNPC(NPC):
             self.game.sound.napad_stakor.play()
             if random() < self.accuracy:
                 self.game.player.get_damage(self.attack_damage)
-    
+
     # Smrt štakora
     def check_health(self):
         if self.health < 1 and self.alive:
@@ -79,13 +79,13 @@ class TosterNPC(NPC):
             self.game.sound.toster_attack.play()
             if random() < self.accuracy:
                 self.game.player.get_damage(self.attack_damage)
-    
+
     # Smrt tostera
     def check_health(self):
         if self.health < 1 and self.alive:
             self.game.sound.toster_death.play()
             super().check_health()
-    
+
     # Damage tostera
     def check_hit_in_npc(self):
         if self.ray_cast_value and self.game.player.shot:
@@ -98,20 +98,20 @@ class TosterNPC(NPC):
 
 
 class ParazitNPC(NPC):
-    """Parazit enemy type"""
+    """Parazit enemy type - mini-boss in level 3"""
     def __init__(self, game, path='resources/sprites/npc/parazit/0.png', pos=(10.5, 5.5),
-                 scale=0.5, shift=0.4, animation_time=200):
+                 scale=0.8, shift=0.4, animation_time=200):  # Increased scale to make it larger
         super().__init__(game, path, pos, scale, shift, animation_time)
 
         # Death height shift will be applied when enemy dies
         self.death_height_shift = 0.8
 
-        # Karakteristike parazita
-        self.attack_dist = 1.5     # udaljenost napada (melee)
-        self.health = 40           # zdravlje (low)
-        self.attack_damage = 12    # High damage
-        self.speed = 0.06          # Fast
-        self.accuracy = 0.35       # točnost za melee napad
+        # Karakteristike parazita (enhanced for mini-boss role)
+        self.attack_dist = 2.0     # udaljenost napada (melee) - increased range
+        self.health = 200          # zdravlje - significantly increased for mini-boss
+        self.attack_damage = 15    # High damage - increased
+        self.speed = 0.05          # Fast but slightly slower than before
+        self.accuracy = 0.4        # točnost za melee napad - increased
 
     # Napad parazita
     def attack(self):
@@ -119,7 +119,7 @@ class ParazitNPC(NPC):
             self.game.sound.parazit_attack.play()
             if random() < self.accuracy:
                 self.game.player.get_damage(self.attack_damage)
-    
+
     # Smrt parazita
     def check_health(self):
         if self.health < 1 and self.alive:
@@ -159,13 +159,13 @@ class JazavacNPC(NPC):
             self.game.sound.jazavac_attack.play()
             if random() < self.accuracy:
                 self.game.player.get_damage(self.attack_damage)
-    
+
     # Smrt jazavca
     def check_health(self):
         if self.health < 1 and self.alive:
             self.game.sound.jazavac_death.play()
             super().check_health()
-    
+
     # Damage jazavca
     def check_hit_in_npc(self):
         if self.ray_cast_value and self.game.player.shot:
@@ -199,13 +199,13 @@ class MadracNPC(NPC):
             self.game.sound.madrac_attack.play()
             if random() < self.accuracy:
                 self.game.player.get_damage(self.attack_damage)
-    
+
     # Smrt madraca
     def check_health(self):
         if self.health < 1 and self.alive:
             self.game.sound.madrac_death.play()
             super().check_health()
-    
+
     # Damage madraca
     def check_hit_in_npc(self):
         if self.ray_cast_value and self.game.player.shot:
