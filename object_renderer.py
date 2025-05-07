@@ -26,9 +26,11 @@ class ObjectRenderer:
         self.wall_textures = self.load_wall_textures()
 
         self.sky_images = {
-            1: self.get_texture('resources/teksture/level1/sky1.png', (WIDTH, HALF_HEIGHT)),
-            2: self.get_texture('resources/teksture/level2/sky2.png', (WIDTH, HALF_HEIGHT)),
-            3: self.get_texture('resources/textures/sky.png', (WIDTH, HALF_HEIGHT))
+            1: self.get_texture('resources/teksture/level2/sky2.png', (WIDTH, HALF_HEIGHT)),
+            2: self.get_texture('resources/teksture/level1/sky1.png', (WIDTH, HALF_HEIGHT)),
+            3: self.get_texture('resources/teksture/level2/sky2.png', (WIDTH, HALF_HEIGHT)),
+            4: self.get_texture('resources/teksture/level3/sky.png', (WIDTH, HALF_HEIGHT)),
+            5: self.get_texture('resources/textures/sky.png', (WIDTH, HALF_HEIGHT))
         }
         self.sky_image = self.sky_images[1]
         self.sky_offset = 0
@@ -151,7 +153,10 @@ class ObjectRenderer:
 
             #uvodni level
             33: self.get_texture('resources/teksture/uvod/zid1.jpg'), #bijeli zid crvena svjetla manja količina krvi u sredini
-
+            34: self.get_texture('resources/teksture/uvod/zid2.jpg'), #bijeli zid s srednjom količinom krvi
+            35: self.get_texture('resources/teksture/uvod/zid3.jpg'), #bijeli zid s velikom količinom krvi
+            36: self.get_texture('resources/teksture/uvod/zid4.jpg'), #bijeli zid s krvavom rukom u sredini
+            37: self.get_texture('resources/teksture/uvod/zid5.jpg'), #bijeli zid s manjom količinom krvi niže od prvog zida
             38: self.get_texture('resources/teksture/uvod/vrata5.jpg'),
 
         }
