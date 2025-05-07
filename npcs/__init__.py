@@ -1,12 +1,11 @@
 """
-NPC module - imports from the npcs package for backward compatibility.
+NPC package for the game.
+This package contains all NPC-related classes.
 """
 
-# Import all NPC classes from the npcs package
-from npcs import (
-    NPC,
-    StaticNPC,
-    DialogueNPC,
+from npcs.base_npc import NPC, StaticNPC
+from npcs.dialogue_npc import DialogueNPC
+from npcs.enemy_npcs import (
     KlonoviNPC,
     StakorNPC,
     TosterNPC,

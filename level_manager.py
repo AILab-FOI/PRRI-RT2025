@@ -1,7 +1,7 @@
 import os
 from interaction import InteractiveObject
 from npc import KlonoviNPC, StakorNPC, TosterNPC, ParazitNPC, JazavacNPC
-from dialogue import create_dialogue_npcs
+from npcs.dialogue_npc import create_dialogue_npcs
 
 class LevelManager:
     def __init__(self, game):
