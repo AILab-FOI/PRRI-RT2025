@@ -46,9 +46,7 @@ def get_level_data():
         'types': [KlonoviNPC, StakorNPC, MadracNPC],
         'weights': [30, 30, 40],  # More Madrac enemies in the final level
         'restricted_area': {(i, j) for i in range(9, 12) for j in range(9, 12)},  # Keep center area clear
-        'fixed_positions': [
-            {'type': StakorNPC, 'position': (1.5, 21.5)},
-            {'type': StakorNPC, 'position': (9.5, 21.5)},]  # Strategic enemy positions
+        'fixed_positions': []  # Strategic enemy positions
     }
 
     # Dialogue NPCs
