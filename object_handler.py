@@ -109,7 +109,7 @@ class ObjectHandler:
                 obj.is_enabled = True
                 if show_message:
                     self.game.object_renderer.show_message("The exit door is now open!")
-                break # Assume only one exit door to enable
+                break
 
     def add_sprite(self, sprite):
         self.sprite_list.append(sprite)
