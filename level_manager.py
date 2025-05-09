@@ -153,7 +153,7 @@ class LevelManager:
         exit_positions = {
             1: (5, 24),
             2: (12, 34),
-            3: (31, 33),
+            3: (17, 34),
             4: (32, 32),
         }
 
@@ -203,7 +203,7 @@ class LevelManager:
                     exit_positions = {
                         1: (5, 24),
                         2: (12, 34),
-                        3: (31, 33),
+                        3: (17, 34),
                         4: (32, 32),
                     }
 
@@ -282,7 +282,7 @@ class LevelManager:
             # Ensure disorienting effects are stopped when leaving level 1
             if self.current_level == 1 and hasattr(self.game, 'disorienting_effects'):
                 self.game.disorienting_effects.end_effects()
-            
+
             self.current_level = self._next_level
             self.game.map.load_level(self.current_level)
             return True
@@ -295,7 +295,7 @@ class LevelManager:
             # Ensure disorienting effects are stopped when leaving level 1
             if self.current_level == 1 and hasattr(self.game, 'disorienting_effects'):
                 self.game.disorienting_effects.end_effects()
-            
+
             self.current_level = next_level
             self.game.map.load_level(next_level)
             self.game.new_game()
