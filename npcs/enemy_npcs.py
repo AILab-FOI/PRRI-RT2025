@@ -1,7 +1,3 @@
-"""
-Enemy NPC classes for the game.
-"""
-
 import pygame as pg
 import os
 from collections import deque

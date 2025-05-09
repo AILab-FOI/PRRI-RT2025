@@ -14,7 +14,6 @@ from npcs.dialogue_npc import DialogueNPC
 
 
 class NPCFactory:
-    """Factory for creating NPCs with appropriate configurations"""
 
     NPC_TYPES = {
         'klonovi': KlonoviNPC,
