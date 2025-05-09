@@ -1,0 +1,24 @@
+{
+  "tips": [
+    "Press E to interact with objects and NPCs.",
+    "Defeat all enemies to unlock the exit door.",
+    "Use cover to avoid enemy attacks.",
+    "The SMG fires automatically when you hold down the mouse button.",
+    "Look for terminals to find door codes.",
+    "Powerups can give you temporary invulnerability.",
+    "Your health regenerates slowly over time.",
+    "Press SPACE to dash and avoid enemy attacks.",
+    "Different weapons have different damage and fire rates."
+  ],
+  "lore": [
+    "The Vogons attacked the ship while most of the crew was asleep.",
+    "Arthur Dent was the only crew member who managed to escape capture.",
+    "Marvin the robot has been on the ship for over 37 times the age of the universe.",
+    "The ship's computer system was compromised during the attack.",
+    "The clones were created as part of a failed experiment in the science bay.",
+    "The ship was originally on a mission to explore the outer reaches of the galaxy.",
+    "Rumors suggest there's a secret stash of tea somewhere on the ship.",
+    "The ship's emergency protocols were activated during the attack.",
+    "The mutants were created by exposure to experimental radiation in the engine room."
+  ]
+}

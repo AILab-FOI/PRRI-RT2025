@@ -2,49 +2,332 @@ import pygame as pg
 
 
 class Sound:
+    def load_sound(self, filename, volume_factor=1.0):
+        """Helper method to load a sound and set its volume"""
+        try:
+            sound = pg.mixer.Sound(self.path + filename)
+            sound.set_volume(volume_factor * self.sfx_volume)
+            return sound
+        except Exception as e:
+            print(f"Error loading sound {filename}: {e}")
+            # Za sve greške, koristi placeholder
+            try:
+                sound = pg.mixer.Sound(self.path + 'crash.wav')
+                sound.set_volume(volume_factor * self.sfx_volume)
+                return sound
+            except:
+                print("Failed to load placeholder sound")
+                # Ako ni placeholder ne radi, vrati None
+                return None
+
     def __init__(self, game):
         self.game = game
         pg.mixer.init()
         self.path = 'resources/sound/'
 
-        # Volume settings
-        self.music_volume = 0.3
-        self.sfx_volume = 0.5
+        self.music_volume = 0.1
+        self.sfx_volume = 0.7
 
-        # Sound effects
-        self.pistolj = pg.mixer.Sound(self.path + 'Pistolj.wav')
-        self.npc_pain = pg.mixer.Sound(self.path + 'npc_pain.wav')
-        self.npc_death = pg.mixer.Sound(self.path + 'npc_death.wav')
-        self.npc_attack = pg.mixer.Sound(self.path + 'npc_attack.wav')
+        # Sound volume factors
+        self.volume_factors = {
+            # Weapon sounds
+            'pistolj': 0.7,
+            'smg': 0.4,
+            'weapon_pickup': 0.7,
 
-        # Štakor sounds
-        self.napad_stakor = pg.mixer.Sound(self.path + 'stakor_napad.mp3')
-        self.stakor_smrt = pg.mixer.Sound(self.path + 'stakor_smrt.mp3')
+            # Player sounds
+            'igrac_damage': 0.7,
+            'player_dash': 0.5,
 
-        # Player sounds
-        self.igrac_damage = pg.mixer.Sound(self.path + 'Igrac_damage.wav')
-        self.player_dash = pg.mixer.Sound(self.path + 'Dash.wav')
+            # Generic NPC sounds
+            'npc_pain': 0.5,
+            'npc_death': 0.7,
+            'npc_attack': 0.5,
 
-        # Menu sounds - using existing sounds as placeholders
-        # In a real game, you'd use dedicated UI sound effects
-        self.menu_click = self.player_dash  # Button click sound
-        self.menu_hover = self.pistolj      # Button hover sound
-        self.menu_hover.set_volume(0.1)     # Lower volume for hover sound
+            # Enemy-specific sounds
+            'napad_stakor': 0.6,  # Stakor attack
+            'stakor_smrt': 0.7,   # Stakor death
 
-        # Load background music
+            'toster_attack': 0.5, # Toster attack
+            'toster_death': 0.7,  # Toster death
+            'toster_damage': 0.5,  # Toster damage
+
+            'parazit_attack': 0.6,# Parazit attack
+            'parazit_death': 0.7, # Parazit death
+            'parazit_damage': 0.5, # Parazit damage
+
+            'jazavac_attack': 0.5,# Jazavac attack
+            'jazavac_death': 0.7, # Jazavac death
+            'jazavac_damage': 0.5, # Jazavac damage
+
+            'madrac_attack': 0.6,# Madrac attack
+            'madrac_death': 0.7, # Madrac death
+            'madrac_damage': 0.5, # Madrac damage
+
+            # Interaction sounds
+            'terminal_beep': 0.7,
+            'door_open': 0.7,
+
+            # Powerup sounds
+            'powerup_pickup': 0.7,
+            'powerup_active': 0.7,
+            'powerup_end': 0.6,
+
+            # Menu sounds
+            'menu_hover': 0.3,
+            'menu_click': 0.4,
+
+            # Dialogue sounds
+            'dialogue_line': 0.7
+        }
+
+        # ===== WEAPON SOUNDS =====
+        self.pistolj = self.load_sound('Pistolj.wav', self.volume_factors['pistolj'])
+        self.smg = self.load_sound('Puska.wav', self.volume_factors['smg'])
+        self.weapon_pickup = self.load_sound('podizanje_oruzja.wav', self.volume_factors['weapon_pickup'])
+
+        # ===== PLAYER SOUNDS =====
+        self.igrac_damage = self.load_sound('Igrac_damage.wav', self.volume_factors['igrac_damage'])
+        self.player_dash = self.load_sound('Dash.wav', self.volume_factors['player_dash'])
+
+        # ===== ENEMY SOUNDS =====
+        # Generic NPC sounds
+        self.npc_pain = self.load_sound('npc_pain.wav', self.volume_factors['npc_pain'])
+        self.npc_death = self.load_sound('npc_death.wav', self.volume_factors['npc_death'])
+        self.npc_attack = self.load_sound('npc_attack.wav', self.volume_factors['npc_attack'])
+
+        # Stakor sounds
+        self.napad_stakor = self.load_sound('stakor_napad.mp3', self.volume_factors['napad_stakor'])
+        self.stakor_smrt = self.load_sound('stakor_smrt.mp3', self.volume_factors['stakor_smrt'])
+
+        # Toster sounds
+        self.toster_attack = self.load_sound('toster_napad.wav', self.volume_factors['toster_attack'])
+        self.toster_death = self.load_sound('toster_smrt.mp3', self.volume_factors['toster_death'])
+        self.toster_damage = self.load_sound('toster_damage.wav', self.volume_factors['toster_damage'])
+
+        # Parazit sounds
+        self.parazit_attack = self.load_sound('parazit_napad.mp3', self.volume_factors['parazit_attack'])
+        self.parazit_death = self.load_sound('parazit_smrt.wav', self.volume_factors['parazit_death'])
+        self.parazit_damage = self.load_sound('parazit_damage.mp3', self.volume_factors['parazit_damage'])
+
+        # Jazavac sounds (reusing existing sounds but with different volume factors)
+        self.jazavac_attack = self.load_sound('jazavac_napad.wav', self.volume_factors['jazavac_attack'])
+        self.jazavac_death = self.load_sound('jazavac_smrt.wav', self.volume_factors['jazavac_death'])
+        self.jazavac_damage = self.load_sound('jazavac_damage.wav', self.volume_factors['jazavac_damage'])
+
+        # Madrac sounds
+        self.madrac_attack = self.load_sound('madrac_napad.wav', self.volume_factors['madrac_attack'])
+        self.madrac_death = self.load_sound('madrac_smrt.wav', self.volume_factors['madrac_death'])
+        self.madrac_damage = self.load_sound('madrac_damage.wav', self.volume_factors['madrac_damage'])
+
+        # ===== INTERACTION SOUNDS =====
+        self.terminal_beep = self.load_sound('terminal.wav', self.volume_factors['terminal_beep'])
+        self.door_open = self.load_sound('vrata.wav', self.volume_factors['door_open'])
+
+        # ===== POWERUP SOUNDS =====
+        self.powerup_pickup = self.load_sound('powerup_pickup.wav', self.volume_factors['powerup_pickup'])
+        self.powerup_active = self.load_sound('powerup1_trajanje.wav', self.volume_factors['powerup_active'])
+        self.powerup_end = self.load_sound('powerup_gasenje.wav', self.volume_factors['powerup_end'])
+
+        # ===== MENU SOUNDS =====
+        self.menu_hover = self.load_sound('menu_hover.mp3', self.volume_factors['menu_hover'])
+        self.menu_click = self.load_sound('menu_klik.wav', self.volume_factors['menu_click'])
+
+        # ===== DIALOGUE SOUNDS =====
+        # Placeholder zvuk za dijalog - koristimo crash.wav za sve linije
+        self.dialogue_line = self.load_sound('crash.wav', self.volume_factors['dialogue_line'])
+
+        # Rječnik za pohranu zvukova dijaloga
+        # Ključevi će biti u formatu 'dialogue_id_line_index' (npr. 'marvin_intro_0')
+        self.dialogue_sounds = {}
+
+        # Inicijaliziraj direktorij za zvučne datoteke dijaloga
+        self.init_dialogue_directories()
+
+        # ===== BACKGROUND MUSIC =====
         self.razina1 = pg.mixer.music.load(self.path + 'Pozadinska1.mp3')
-
-        # Set initial volumes
-        self.update_sfx_volume()
         pg.mixer.music.set_volume(self.music_volume)
+
+    def init_dialogue_directories(self):
+        """Initialize directories for dialogue sounds"""
+        import os
+
+        # Glavni direktorij za zvukove dijaloga
+        dialogue_dir = os.path.join(self.path, "dialogues")
+        if not os.path.exists(dialogue_dir):
+            os.makedirs(dialogue_dir, exist_ok=True)
+
+        # Direktoriji za svaki dijalog
+        for dialogue_id in ["marvin_intro", "level2_puzzle", "marvin_ending"]:
+            dialogue_subdir = os.path.join(dialogue_dir, dialogue_id)
+            if not os.path.exists(dialogue_subdir):
+                os.makedirs(dialogue_subdir, exist_ok=True)
+
+        # Kopiraj crash.wav kao placeholder za svaku liniju dijaloga
+        self.create_placeholder_dialogue_sounds()
+
+    def create_placeholder_dialogue_sounds(self):
+        """Create placeholder sound files for each dialogue line"""
+        import os
+        import shutil
+
+        # Putanja do placeholder zvuka
+        placeholder_path = os.path.join(self.path, "crash.wav")
+
+        # Provjeri postoji li placeholder zvuk
+        if not os.path.exists(placeholder_path):
+            print(f"Placeholder sound {placeholder_path} not found")
+            return
+
+        # Dijalozi i broj linija
+        dialogues = {
+            "marvin_intro": 9,
+            "level2_puzzle": 11,
+            "marvin_ending": 11
+        }
+
+        # Kopiraj placeholder zvuk za svaku liniju dijaloga
+        for dialogue_id, num_lines in dialogues.items():
+            dialogue_dir = os.path.join(self.path, "dialogues", dialogue_id)
+            for i in range(num_lines):
+                target_path = os.path.join(dialogue_dir, f"{i}.wav")
+                # Kopiraj samo ako datoteka ne postoji
+                if not os.path.exists(target_path):
+                    try:
+                        shutil.copy(placeholder_path, target_path)
+                    except Exception as e:
+                        print(f"Error copying placeholder sound to {target_path}: {e}")
+
+    def get_dialogue_sound(self, dialogue_id, line_index, speaker=None):
+        """Get sound for a specific dialogue line, loading it if necessary"""
+        sound_key = f"{dialogue_id}_{line_index}"
+
+        # Ako zvuk već postoji u rječniku, vrati ga
+        if sound_key in self.dialogue_sounds:
+            return self.dialogue_sounds[sound_key]
+
+        # Posebna obrada za marvin_intro i level2_puzzle dijaloge
+        if (dialogue_id == "marvin_intro" or dialogue_id == "level2_puzzle") and speaker:
+            try:
+                # Brojimo koliko puta se svaki govornik pojavio do trenutne linije
+                speaker_count = 0
+
+                # Učitaj dijalog iz JSON datoteke
+                import json
+                import os
+                dialogue_path = os.path.join('resources', 'dialogues', f"{dialogue_id}.json")
+                with open(dialogue_path, 'r') as f:
+                    dialogue_data = json.load(f)
+
+                # Broji koliko puta se govornik pojavio do trenutne linije
+                for i in range(line_index + 1):
+                    if i < len(dialogue_data["speakers"]) and dialogue_data["speakers"][i] == speaker:
+                        speaker_count += 1
+
+                # Odredi putanju do zvučne datoteke ovisno o dijalogu
+                prefix = ""
+                if dialogue_id == "marvin_intro":
+                    prefix = "Intro_"
+                elif dialogue_id == "level2_puzzle":
+                    prefix = "Puzzle_"
+                else:
+                    # Ako dijalog nije podržan, koristi placeholder
+                    print(f"Unsupported dialogue: {dialogue_id}, using placeholder")
+                    return self.dialogue_line
+
+                if speaker == "Arthur":
+                    sound_path = f"{prefix}Arthur{speaker_count}.mp3"
+                    print(f"Loading Arthur sound for {dialogue_id}: {sound_path}")
+                elif speaker == "Marvin":
+                    sound_path = f"{prefix}Marvin{speaker_count}.mp3"
+                    print(f"Loading Marvin sound for {dialogue_id}: {sound_path}")
+                else:
+                    # Ako govornik nije Arthur ili Marvin, koristi placeholder
+                    print(f"Unknown speaker: {speaker}, using placeholder")
+                    return self.dialogue_line
+
+                # Učitaj zvuk
+                sound = self.load_sound(sound_path, self.volume_factors['dialogue_line'])
+                self.dialogue_sounds[sound_key] = sound
+                return sound
+            except Exception as e:
+                print(f"Couldn't load dialogue sound for {dialogue_id}, line {line_index}, speaker {speaker}: {e}")
+                return self.dialogue_line
+
+        # Za ostale dijaloge, pokušaj učitati zvuk iz direktorija dialogues
+        try:
+            # Putanja do zvučne datoteke: resources/sound/dialogues/dialogue_id/line_index.wav
+            # Npr. resources/sound/dialogues/marvin_intro/0.wav
+            sound_path = f"dialogues/{dialogue_id}/{line_index}.wav"
+
+            # Pokušaj učitati zvuk
+            sound = self.load_sound(sound_path, self.volume_factors['dialogue_line'])
+            self.dialogue_sounds[sound_key] = sound
+            return sound
+        except Exception as e:
+            # Ako zvuk ne postoji, koristi placeholder
+            print(f"Couldn't load dialogue sound {sound_key}: {e}")
+            return self.dialogue_line
 
     def update_sfx_volume(self):
         """Update all sound effect volumes based on sfx_volume setting"""
-        self.pistolj.set_volume(self.sfx_volume)
-        self.npc_pain.set_volume(self.sfx_volume * 0.5)
-        self.npc_death.set_volume(self.sfx_volume)
-        self.npc_attack.set_volume(self.sfx_volume * 0.5)
-        self.napad_stakor.set_volume(self.sfx_volume * 0.6)
-        self.stakor_smrt.set_volume(self.sfx_volume)
-        self.igrac_damage.set_volume(self.sfx_volume)
-        self.player_dash.set_volume(self.sfx_volume * 0.5)
+        # Use a dictionary to map sound attributes to their volume factors
+        sounds = {
+            # Weapon sounds
+            'pistolj': self.pistolj,
+            'smg': self.smg,
+            'weapon_pickup': self.weapon_pickup,
+
+            # Player sounds
+            'igrac_damage': self.igrac_damage,
+            'player_dash': self.player_dash,
+
+            # Generic NPC sounds
+            'npc_pain': self.npc_pain,
+            'npc_death': self.npc_death,
+            'npc_attack': self.npc_attack,
+
+            # Enemy-specific sounds
+            'napad_stakor': self.napad_stakor,
+            'stakor_smrt': self.stakor_smrt,
+
+            'toster_attack': self.toster_attack,
+            'toster_death': self.toster_death,
+            'toster_damage': self.toster_damage,
+
+            'parazit_attack': self.parazit_attack,
+            'parazit_death': self.parazit_death,
+            'parazit_damage': self.parazit_damage,
+
+            'jazavac_attack': self.jazavac_attack,
+            'jazavac_death': self.jazavac_death,
+            'jazavac_damage': self.jazavac_damage,
+
+            'madrac_attack': self.madrac_attack,
+            'madrac_death': self.madrac_death,
+            'madrac_damage': self.madrac_damage,
+
+            # Interaction sounds
+            'terminal_beep': self.terminal_beep,
+            'door_open': self.door_open,
+
+            # Powerup sounds
+            'powerup_pickup': self.powerup_pickup,
+            'powerup_active': self.powerup_active,
+            'powerup_end': self.powerup_end,
+
+            # Menu sounds
+            'menu_hover': self.menu_hover,
+            'menu_click': self.menu_click,
+
+            # Dialogue sounds
+            'dialogue_line': self.dialogue_line
+        }
+
+        # Ažuriraj volumen za sve zvukove u rječniku
+        for sound_name, sound in sounds.items():
+            sound.set_volume(self.volume_factors[sound_name] * self.sfx_volume)
+
+        # Ažuriraj volumen za sve zvukove dijaloga
+        for sound_key, sound in self.dialogue_sounds.items():
+            sound.set_volume(self.volume_factors['dialogue_line'] * self.sfx_volume)
