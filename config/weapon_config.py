@@ -1,0 +1,38 @@
+# Pistol Configuration
+# Role: Starting weapon that provides reliable, accurate damage against single targets
+PISTOL_CONFIG = {
+    'name': 'pistol',
+    'path': 'resources/sprites/weapon/pistol/0.png',
+    'scale': 0.22,
+    'animation_time': 90,  # Time between shots in milliseconds (higher = slower fire rate)
+    'damage': 30,  # Damage per shot (30 damage requires ~3-4 shots for standard 100 HP enemy)
+    'accuracy': 0.95,  # High precision with minimal spread (not currently used but prepared for future implementation)
+    'auto_fire': False,  # Whether the weapon can be fired automatically by holding the mouse button
+    'sound': 'pistolj',  # Sound effect to play when firing
+    'description': 'Standard issue sidearm. Reliable and accurate.'
+}
+
+# SMG (Submachine Gun) Configuration
+# Role: Rapid-fire weapon for crowd control and high burst damage at close range
+SMG_CONFIG = {
+    'name': 'smg',
+    'path': 'resources/sprites/weapon/smg/0.png',
+    'scale': 1.2,
+    'animation_time': 40,  # Faster fire rate than pistol
+    'damage': 15,  # Lower per-shot damage than pistol
+    'accuracy': 0.75,  # Less accurate than pistol (not currently used but prepared for future implementation)
+    'auto_fire': True,  # Can be fired automatically by holding the mouse button
+    'auto_fire_delay': 120,  # Delay between auto-fired shots in milliseconds
+    'sound': 'smg',  # Sound effect to play when firing
+    'right_offset': 230,  # Horizontal offset for weapon positioning
+    'description': 'Rapid-fire weapon ideal for close quarters combat.'
+}
+
+# Dictionary mapping weapon names to their configurations
+WEAPON_CONFIGS = {
+    'pistol': PISTOL_CONFIG,
+    'smg': SMG_CONFIG,
+}
+
+def get_weapon_config(weapon_name):
+    return WEAPON_CONFIGS.get(weapon_name.lower())

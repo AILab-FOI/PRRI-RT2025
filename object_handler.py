@@ -79,10 +79,12 @@ class ObjectHandler:
         hostile_npcs = [npc for npc in self.npc_list if npc.alive and not hasattr(npc, 'is_friendly')]
         all_enemies_defeated_now = len(hostile_npcs) == 0
 
-        if all_enemies_defeated_now and not self.win_message_shown:
+        if all_enemies_defeated_now and not self.win_message_shown and (self.enemies_from_pool_count > 0 or any(isinstance(item, dict) for item in self.game.level_manager.get_enemy_config().get('fixed_positions', []))):
             self.win_message_shown = True
             self.game.object_renderer.show_message(f"All hostile entities neutralized! Find the exit door.")
             self.enable_level_exit()
+        elif all_enemies_defeated_now and self.enemies_from_pool_count == 0 and not any(isinstance(item, dict) for item in self.game.level_manager.get_enemy_config().get('fixed_positions', [])):
+            self.enable_level_exit(show_message=False)
 
         self.all_enemies_defeated = all_enemies_defeated_now
 
@@ -100,12 +102,13 @@ class ObjectHandler:
     def add_npc(self, npc):
         self.npc_list.append(npc)
 
-    def enable_level_exit(self):
+    def enable_level_exit(self, show_message=True):
         """Enable the level exit door after all enemies are defeated"""
         for obj in self.game.interaction.interaction_objects:
             if hasattr(obj, 'is_level_exit') and obj.is_level_exit:
                 obj.is_enabled = True
-                self.game.object_renderer.show_message("The exit door is now open!")
+                if show_message:
+                    self.game.object_renderer.show_message("The exit door is now open!")
                 break # Assume only one exit door to enable
 
     def add_sprite(self, sprite):
