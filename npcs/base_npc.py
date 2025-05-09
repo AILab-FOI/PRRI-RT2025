@@ -13,18 +13,13 @@ class StaticNPC(AnimatedSprite):
     def __init__(self, game, path='resources/sprites/npc/dialogue_npc/0.png', pos=(10.5, 5.5),
                  scale=0.6, shift=0.38, animation_time=180):
         super().__init__(game, path, pos, scale, shift, animation_time)
-
-        # Basic properties
         self.size = 20
         self.alive = True
-
-        # Load static image
         idle_images = self.get_images(self.path + '/idle')
         if idle_images and len(idle_images) > 0:
             self.static_image = idle_images[0]
         else:
             self.static_image = self.image
-
         self.image = self.static_image
 
     def update(self):
@@ -49,25 +44,55 @@ class StaticNPC(AnimatedSprite):
 class NPC(AnimatedSprite):
     """Base class for enemy NPCs that can move and attack"""
     def __init__(self, game, path='resources/sprites/npc/soldier/0.png', pos=(10.5, 5.5),
-                 scale=0.6, shift=0.38, animation_time=180):
+                 scale=0.6, shift=0.38, animation_time=180, config=None):
         super().__init__(game, path, pos, scale, shift, animation_time)
-        self.attack_images = self.get_images(self.path + '/attack')
-        self.death_images = self.get_images(self.path + '/death')
-        self.idle_images = self.get_images(self.path + '/idle')
-        self.pain_images = self.get_images(self.path + '/pain')
-        self.walk_images = self.get_images(self.path + '/walk')
-
-        self.attack_dist = randint(3, 6)
-        self.speed = 0.03
-        self.size = 20
-        self.health = 100
-        self.attack_damage = 10
-        self.accuracy = 0.15
+        self.config = {
+            'attack_dist': randint(3, 6),
+            'speed': 0.03,
+            'size': 20,
+            'health': 100,
+            'attack_damage': 10,
+            'accuracy': 0.15,
+            'death_height_shift': 0.5,
+            'behavior': 'basic',
+            'sounds': {
+                'attack': 'npc_attack',
+                'pain': 'npc_pain',
+                'death': 'npc_death'
+            }
+        }
+        if config:
+            self._update_config_recursive(self.config, config)
+        self._load_animations()
+        self.attack_dist = self.config['attack_dist']
+        self.speed = self.config['speed']
+        self.size = self.config['size']
+        self.health = self.config['health']
+        self.attack_damage = self.config['attack_damage']
+        self.accuracy = self.config['accuracy']
+        self.death_height_shift = self.config['death_height_shift']
+        self.behavior = self.config['behavior']
         self.alive = True
         self.pain = False
         self.ray_cast_value = False
         self.death_frame = 0
         self.player_search_trigger = False
+
+    def _update_config_recursive(self, target, source):
+        """Recursively update nested configuration dictionaries"""
+        for key, value in source.items():
+            if key in target and isinstance(target[key], dict) and isinstance(value, dict):
+                self._update_config_recursive(target[key], value)
+            else:
+                target[key] = value
+
+    def _load_animations(self):
+        """Load all animation sequences"""
+        self.attack_images = self.get_images(self.path + '/attack')
+        self.death_images = self.get_images(self.path + '/death')
+        self.idle_images = self.get_images(self.path + '/idle')
+        self.pain_images = self.get_images(self.path + '/pain')
+        self.walk_images = self.get_images(self.path + '/walk')
 
     def update(self):
         self.check_animation_time()
@@ -86,7 +111,6 @@ class NPC(AnimatedSprite):
     def movement(self):
         next_pos = self.game.pathfinding.get_path(self.map_pos, self.game.player.map_pos)
         next_x, next_y = next_pos
-
         if next_pos not in self.game.object_handler.npc_positions:
             angle = math.atan2(next_y + 0.5 - self.y, next_x + 0.5 - self.x)
             dx = math.cos(angle) * self.speed
@@ -94,8 +118,11 @@ class NPC(AnimatedSprite):
             self.check_wall_collision(dx, dy)
 
     def attack(self):
+        """Handle attack logic and sound effects"""
         if self.animation_trigger:
-            self.game.sound.npc_attack.play()
+            sound_name = self.config['sounds']['attack']
+            if hasattr(self.game.sound, sound_name):
+                getattr(self.game.sound, sound_name).play()
             if random() < self.accuracy:
                 self.game.player.get_damage(self.attack_damage)
 
@@ -117,27 +144,26 @@ class NPC(AnimatedSprite):
             self.pain = False
 
     def check_hit_in_npc(self):
+        """Check if player's shot hits this NPC"""
         if self.ray_cast_value and self.game.player.shot:
             if HALF_WIDTH - self.sprite_half_width < self.screen_x < HALF_WIDTH + self.sprite_half_width:
-                self.game.sound.npc_pain.play()
+                sound_name = self.config['sounds']['pain']
+                if hasattr(self.game.sound, sound_name):
+                    getattr(self.game.sound, sound_name).play()
                 self.game.player.shot = False
                 self.pain = True
                 self.health -= self.game.weapon.damage
                 self.check_health()
 
     def check_health(self):
+        """Check if NPC is dead and handle death animation"""
         if self.health < 1 and self.alive:
             self.alive = False
-
-            if type(self) is NPC:
-                self.game.sound.npc_death.play()
-
+            sound_name = self.config['sounds']['death']
+            if hasattr(self.game.sound, sound_name):
+                getattr(self.game.sound, sound_name).play()
             self.death_frame = 0
-
-            if hasattr(self, 'death_height_shift'):
-                self.SPRITE_HEIGHT_SHIFT = self.death_height_shift
-            else:
-                self.SPRITE_HEIGHT_SHIFT = 0.5
+            self.SPRITE_HEIGHT_SHIFT = self.death_height_shift
             if len(self.death_images) > 0:
                 self.image = self.death_images[0]
                 if hasattr(self, '_current_image_id'):
@@ -148,31 +174,81 @@ class NPC(AnimatedSprite):
                     self._scaled_image_cache = {}
 
     def run_logic(self):
-        if self.alive:
-            self.ray_cast_value = self.ray_cast_player_npc()
-            self.check_hit_in_npc()
+        """Run the appropriate behavior logic based on NPC state and behavior type"""
+        if not self.alive:
+            self.animate_death()
+            return
+        self.ray_cast_value = self.ray_cast_player_npc()
+        self.check_hit_in_npc()
+        if self.pain:
+            self.animate_pain()
+            return
+        if self.behavior == 'ranged':
+            self._run_ranged_behavior()
+        elif self.behavior == 'melee':
+            self._run_melee_behavior()
+        else:
+            self._run_basic_behavior()
 
-            if self.pain:
-                self.animate_pain()
-
-            elif self.ray_cast_value:
-                self.player_search_trigger = True
-
-                if self.dist < self.attack_dist:
-                    self.animate(self.attack_images)
-                    self.attack()
-                else:
-                    self.animate(self.walk_images)
-                    self.movement()
-
-            elif self.player_search_trigger:
+    def _run_basic_behavior(self):
+        """Default behavior for NPCs"""
+        if self.ray_cast_value:
+            self.player_search_trigger = True
+            if self.dist < self.attack_dist:
+                self.animate(self.attack_images)
+                self.attack()
+            else:
                 self.animate(self.walk_images)
                 self.movement()
-
-            else:
-                self.animate(self.idle_images)
+        elif self.player_search_trigger:
+            self.animate(self.walk_images)
+            self.movement()
         else:
-            self.animate_death()
+            self.animate(self.idle_images)
+
+    def _run_ranged_behavior(self):
+        """Ranged attack behavior - keep distance from player"""
+        if self.ray_cast_value:
+            self.player_search_trigger = True
+            if self.dist < self.attack_dist * 0.5:
+                self._retreat_from_player()
+            elif self.dist < self.attack_dist:
+                self.animate(self.attack_images)
+                self.attack()
+            else:
+                self.animate(self.walk_images)
+                self.movement()
+        elif self.player_search_trigger:
+            self.animate(self.walk_images)
+            self.movement()
+        else:
+            self.animate(self.idle_images)
+
+    def _run_melee_behavior(self):
+        """Melee attack behavior - aggressive approach"""
+        if self.ray_cast_value:
+            self.player_search_trigger = True
+            if self.dist < self.attack_dist:
+                self.animate(self.attack_images)
+                self.attack()
+            else:
+                self.speed = self.config['speed'] * 1.2
+                self.animate(self.walk_images)
+                self.movement()
+        elif self.player_search_trigger:
+            self.speed = self.config['speed']
+            self.animate(self.walk_images)
+            self.movement()
+        else:
+            self.animate(self.idle_images)
+
+    def _retreat_from_player(self):
+        """Move away from player"""
+        angle = math.atan2(self.y - self.game.player.y, self.x - self.game.player.x)
+        dx = math.cos(angle) * self.speed
+        dy = math.sin(angle) * self.speed
+        self.check_wall_collision(dx, dy)
+        self.animate(self.walk_images)
 
     @property
     def map_pos(self):
