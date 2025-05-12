@@ -13,7 +13,8 @@ from npcs import (
     ParazitNPC,
     JazavacNPC,
     MadracNPC,
-    NPCFactory
+    NPCFactory,
+    BossNPC
 )
 
 # For backwards compatibility
@@ -27,5 +28,6 @@ __all__ = [
     'ParazitNPC',
     'JazavacNPC',
     'MadracNPC',
-    'NPCFactory'
+    'NPCFactory',
+    'BossNPC'
 ]

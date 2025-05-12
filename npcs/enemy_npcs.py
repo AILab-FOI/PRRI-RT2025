@@ -129,3 +129,23 @@ class MadracNPC(NPC):
             }
         }
         super().__init__(game, path, pos, scale, shift, animation_time, config)
+
+
+class BossNPC(NPC):
+    def __init__(self, game, path='resources/sprites/npc/boss/0.png', pos=(10.5, 5.5),
+                 scale=1.5, shift=0, animation_time=220):
+        config = {
+            'attack_dist': 3.5,
+            'health': 500,
+            'attack_damage': 10,
+            'speed': 0.04,
+            'accuracy': 0.4,
+            'death_height_shift': 0.3,
+            'behavior': 'melee',
+            'sounds': {
+                'attack': 'boss_attack',
+                'pain': 'boss_damage',
+                'death': 'boss_death'
+            }
+        }
+        super().__init__(game, path, pos, scale, shift, animation_time, config)

@@ -8,7 +8,8 @@ from npcs.enemy_npcs import (
     TosterNPC,
     ParazitNPC,
     JazavacNPC,
-    MadracNPC
+    MadracNPC,
+    BossNPC
 )
 from npcs.dialogue_npc import DialogueNPC
 
@@ -22,7 +23,8 @@ class NPCFactory:
         'parazit': ParazitNPC,
         'jazavac': JazavacNPC,
         'madrac': MadracNPC,
-        'dialogue': DialogueNPC
+        'dialogue': DialogueNPC,
+        'boss': BossNPC
     }
 
     @staticmethod
