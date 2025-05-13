@@ -41,28 +41,32 @@ class Sound:
 
             # Generic NPC sounds
             'npc_pain': 0.5,
-            'npc_death': 0.7,
+            'npc_death': 0.9,
             'npc_attack': 0.5,
 
             # Enemy-specific sounds
             'napad_stakor': 0.6,  # Stakor attack
-            'stakor_smrt': 0.7,   # Stakor death
+            'stakor_smrt': 0.9,   # Stakor death
 
             'toster_attack': 0.5, # Toster attack
-            'toster_death': 0.7,  # Toster death
+            'toster_death': 0.9,  # Toster death
             'toster_damage': 0.5,  # Toster damage
 
             'parazit_attack': 0.6,# Parazit attack
-            'parazit_death': 0.7, # Parazit death
+            'parazit_death': 0.9, # Parazit death
             'parazit_damage': 0.5, # Parazit damage
 
             'jazavac_attack': 0.5,# Jazavac attack
-            'jazavac_death': 0.7, # Jazavac death
+            'jazavac_death': 0.9, # Jazavac death
             'jazavac_damage': 0.5, # Jazavac damage
 
             'madrac_attack': 0.6,# Madrac attack
-            'madrac_death': 0.7, # Madrac death
+            'madrac_death': 0.9, # Madrac death
             'madrac_damage': 0.5, # Madrac damage
+
+            'boss_attack': 0.7,# Boss attack
+            'boss_death': 1.0, # Boss death
+            'boss_damage': 0.6, # Boss damage
 
             # Interaction sounds
             'terminal_beep': 0.7,
@@ -119,6 +123,11 @@ class Sound:
         self.madrac_attack = self.load_sound('madrac_napad.wav', self.volume_factors['madrac_attack'])
         self.madrac_death = self.load_sound('madrac_smrt.wav', self.volume_factors['madrac_death'])
         self.madrac_damage = self.load_sound('madrac_damage.wav', self.volume_factors['madrac_damage'])
+
+        # Boss sounds
+        self.boss_attack = self.load_sound('boss_napad.wav', self.volume_factors['boss_attack'])
+        self.boss_death = self.load_sound('boss_smrt.wav', self.volume_factors['boss_death'])
+        self.boss_damage = self.load_sound('boss_damage.wav', self.volume_factors['boss_damage'])
 
         # ===== INTERACTION SOUNDS =====
         self.terminal_beep = self.load_sound('terminal.wav', self.volume_factors['terminal_beep'])
@@ -306,6 +315,10 @@ class Sound:
             'madrac_attack': self.madrac_attack,
             'madrac_death': self.madrac_death,
             'madrac_damage': self.madrac_damage,
+
+            'boss_attack': self.boss_attack,
+            'boss_death': self.boss_death,
+            'boss_damage': self.boss_damage,
 
             # Interaction sounds
             'terminal_beep': self.terminal_beep,

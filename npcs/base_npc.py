@@ -77,6 +77,8 @@ class NPC(AnimatedSprite):
         self.ray_cast_value = False
         self.death_frame = 0
         self.player_search_trigger = False
+        self.play_death_sound = False
+        self.death_sound_delay = 0
 
     def _update_config_recursive(self, target, source):
         """Recursively update nested configuration dictionaries"""
@@ -128,6 +130,16 @@ class NPC(AnimatedSprite):
 
     def animate_death(self):
         if not self.alive and len(self.death_images) > 0:
+            # Reproduciraj zvuk smrti nakon određenog kašnjenja
+            if hasattr(self, 'play_death_sound') and self.play_death_sound:
+                if hasattr(self, 'death_sound_delay'):
+                    self.death_sound_delay -= 1
+                    if self.death_sound_delay <= 0:
+                        sound_name = self.config['sounds']['death']
+                        if hasattr(self.game.sound, sound_name):
+                            getattr(self.game.sound, sound_name).play()
+                        self.play_death_sound = False
+
             if self.animation_trigger and self.death_frame < len(self.death_images) - 1:
                 self.death_frame += 1
                 self.image = self.death_images[self.death_frame]
@@ -159,9 +171,10 @@ class NPC(AnimatedSprite):
         """Check if NPC is dead and handle death animation"""
         if self.health < 1 and self.alive:
             self.alive = False
-            sound_name = self.config['sounds']['death']
-            if hasattr(self.game.sound, sound_name):
-                getattr(self.game.sound, sound_name).play()
+            # Postavi zastavicu za reprodukciju zvuka smrti u sljedećem frame-u
+            # kako bi se izbjeglo preklapanje sa zvukom boli
+            self.play_death_sound = True
+            self.death_sound_delay = 5  # Broj frame-ova za čekanje prije reprodukcije zvuka smrti
             self.death_frame = 0
             self.SPRITE_HEIGHT_SHIFT = self.death_height_shift
             if len(self.death_images) > 0:
