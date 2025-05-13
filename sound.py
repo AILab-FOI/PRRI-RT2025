@@ -154,7 +154,18 @@ class Sound:
         self.init_dialogue_directories()
 
         # ===== BACKGROUND MUSIC =====
-        self.razina1 = pg.mixer.music.load(self.path + 'Pozadinska1.mp3')
+        # Putanje do pozadinskih glazbi za svaku razinu
+        self.background_music = {
+            1: 'Pozadinska1.mp3',
+            2: 'Pozadinska2.wav',
+            3: 'Pozadinska3.mp3',
+            4: 'Pozadinska4.wav',
+            5: 'Pozadinska5.wav'
+        }
+
+        # Učitaj glazbu za prvu razinu kao početnu
+        self.current_music_level = 1
+        pg.mixer.music.load(self.path + self.background_music[1])
         pg.mixer.music.set_volume(self.music_volume)
 
     def init_dialogue_directories(self):
@@ -344,3 +355,22 @@ class Sound:
         # Ažuriraj volumen za sve zvukove dijaloga
         for sound_key, sound in self.dialogue_sounds.items():
             sound.set_volume(self.volume_factors['dialogue_line'] * self.sfx_volume)
+
+    def update_music_volume(self):
+        """Update background music volume based on music_volume setting"""
+        pg.mixer.music.set_volume(self.music_volume)
+
+    def change_music_for_level(self, level):
+        """Change background music based on the current level"""
+        if level in self.background_music and level != self.current_music_level:
+            print(f"Changing music to level {level}: {self.background_music[level]}")
+            # Zaustavi trenutnu glazbu
+            pg.mixer.music.stop()
+            # Učitaj novu glazbu
+            pg.mixer.music.load(self.path + self.background_music[level])
+            # Postavi volumen
+            pg.mixer.music.set_volume(self.music_volume)
+            # Pokreni glazbu
+            pg.mixer.music.play(-1)  # -1 znači beskonačno ponavljanje
+            # Ažuriraj trenutnu razinu glazbe
+            self.current_music_level = level
