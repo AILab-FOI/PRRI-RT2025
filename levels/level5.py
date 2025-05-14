@@ -41,21 +41,14 @@ def get_level_data():
     
     level_data['powerups'] = [
         {
-            'position': (7, 7),
+            'position': (6, 11),
             'powerup_type': 'invulnerability'
         },
         {
-            'position': (13, 7),
+            'position': (20, 22),
             'powerup_type': 'invulnerability'
         },
-        {
-            'position': (7, 13),
-            'powerup_type': 'invulnerability'
-        },
-        {
-            'position': (13, 13),
-            'powerup_type': 'invulnerability'
-        }
+        
     ]
     
     # Decorative sprites - unique to level 4
