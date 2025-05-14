@@ -162,7 +162,7 @@ class ObjectRenderer:
             38: self.get_texture('resources/teksture/uvod/vrata5.jpg'),
 
             #boss level (zadnji level)
-            40: self.get_texture('resources/teksture/level5/zid1.png'), #base zid
-            41: self.get_texture('resources/teksture/level5/zid2.png'), #base zid sa malim prozorom
+            40: self.get_texture('resources/teksture/level4/zid1.png'), #base zid
+            41: self.get_texture('resources/teksture/level4/zid2.png'), #base zid sa malim prozorom
 
         }
