@@ -1,6 +1,7 @@
 from settings import *
 import pygame as pg
 import math
+from config.weapon_config import get_weapon_config
 
 
 class Player:
@@ -14,21 +15,17 @@ class Player:
         self.health_recovery_delay = 700
         self.time_prev = pg.time.get_ticks()
 
-        # Dash
         self.is_dashing = False
         self.dash_direction = (0, 0)
         self.dash_start_time = 0
         self.last_dash_time = 0
 
-        # Dialogue mode - when active, player can't move
         self.dialogue_mode = False
 
-        # Automatic weapon firing properties
         self.auto_fire = False
         self.auto_fire_delay = 150
         self.last_auto_fire_time = 0
 
-        # Invulnerability powerup properties
         self.is_invulnerable = False
         self.invulnerability_start_time = 0
         self.invulnerability_time_left = 0
@@ -57,37 +54,40 @@ class Player:
         self.check_game_over()
 
     def single_fire_event(self, event):
-        # Prevent shooting during dialogue or intro sequence
         if self.dialogue_mode or (hasattr(self.game, 'intro_sequence') and self.game.intro_sequence.active):
             return
 
-        # Handle mouse button down - start firing
         if event.type == pg.MOUSEBUTTONDOWN:
             if event.button == 1 and not self.shot and not self.game.weapon.reloading:
-                # For SMG, start auto-firing mode
-                if self.game.weapon.name == 'smg':
+                if hasattr(self.game.weapon, 'auto_fire') and self.game.weapon.auto_fire:
                     self.auto_fire = True
-                    self.fire_weapon()
-                else:  # For pistol, just fire once
-                    self.fire_weapon()
+                    weapon_config = get_weapon_config(self.game.weapon.name)
+                    if weapon_config and 'auto_fire_delay' in weapon_config:
+                        self.auto_fire_delay = weapon_config['auto_fire_delay']
+                self.fire_weapon()
 
-        # Handle mouse button up - stop auto-firing
         elif event.type == pg.MOUSEBUTTONUP:
             if event.button == 1:
                 self.auto_fire = False
 
     def fire_weapon(self):
-        # Play the appropriate sound based on weapon type
-        if self.game.weapon.name == 'smg':
-            self.game.sound.smg.play()
+        weapon_config = get_weapon_config(self.game.weapon.name)
+
+        if weapon_config and 'sound' in weapon_config:
+            sound_name = weapon_config['sound']
+            if hasattr(self.game.sound, sound_name):
+                getattr(self.game.sound, sound_name).play()
         else:
-            self.game.sound.pistolj.play()
+            if self.game.weapon.name == 'smg':
+                self.game.sound.smg.play()
+            else:
+                self.game.sound.pistolj.play()
+
         self.shot = True
         self.game.weapon.reloading = True
         self.last_auto_fire_time = pg.time.get_ticks()
 
     def movement(self):
-        # Prevent movement during dialogue or intro sequence
         if self.dialogue_mode or (hasattr(self.game, 'intro_sequence') and self.game.intro_sequence.active):
             return
 
@@ -112,7 +112,6 @@ class Player:
             dx += -speed_sin
             dy += speed_cos
 
-        # Spremi normalizirani smjer kretanja za dash
         if dx != 0 or dy != 0:
             length = math.sqrt(dx * dx + dy * dy)
             self.dash_direction = (dx / length, dy / length)
@@ -122,7 +121,6 @@ class Player:
         if keys[pg.K_SPACE] and not self.is_dashing:
             self.dash()
 
-        # Disorienting effects also affect dash speed
         self.check_wall_collision(dx, dy)
         self.angle %= math.tau
 
@@ -137,7 +135,6 @@ class Player:
             self.y += dy
 
     def mouse_control(self):
-        # Prevent camera movement during dialogue or intro sequence
         if self.dialogue_mode or (hasattr(self.game, 'intro_sequence') and self.game.intro_sequence.active):
             return
 
@@ -149,20 +146,16 @@ class Player:
         self.angle += self.rel * MOUSE_SENSITIVITY * self.game.delta_time
 
     def dash(self):
-        # Prevent dashing during intro sequence
         if hasattr(self.game, 'intro_sequence') and self.game.intro_sequence.active:
             return False
 
-        # Provjeri je li dash na cooldownu
         current_time = pg.time.get_ticks()
         if current_time - self.last_dash_time < PLAYER_DASH_COOLDOWN:
             return False
 
-        # Provjeri ima li smjer kretanja
         if self.dash_direction == (0, 0):
             return False
 
-        # Započni dash
         self.is_dashing = True
         self.dash_start_time = current_time
         self.last_dash_time = current_time
@@ -175,18 +168,15 @@ class Player:
             return
 
         current_time = pg.time.get_ticks()
-        # Provjeri je li dash završio
         if current_time - self.dash_start_time > PLAYER_DASH_DURATION:
             self.is_dashing = False
             return
 
-        # Primijeni dash kretanje
         dx, dy = self.dash_direction
         dash_speed = PLAYER_SPEED * PLAYER_DASH_MULTIPLIER * self.game.delta_time
         self.check_wall_collision(dx * dash_speed, dy * dash_speed)
 
     def activate_invulnerability(self):
-        """Activate invulnerability powerup"""
         self.is_invulnerable = True
         self.invulnerability_start_time = pg.time.get_ticks()
         self.invulnerability_time_left = POWERUP_INVULNERABILITY_DURATION
@@ -194,17 +184,14 @@ class Player:
         self.game.sound.powerup_active.play(-1)
 
     def update_invulnerability(self):
-        """Update invulnerability state"""
         if not self.is_invulnerable:
             return
 
         current_time = pg.time.get_ticks()
         elapsed = current_time - self.invulnerability_start_time
 
-        # Calculate time left in seconds (rounded up)
         self.invulnerability_time_left = max(0, POWERUP_INVULNERABILITY_DURATION - elapsed)
 
-        # Check if invulnerability has expired
         if self.invulnerability_time_left <= 0:
             self.is_invulnerable = False
             self.game.sound.powerup_active.stop()
@@ -220,10 +207,9 @@ class Player:
         self.update_auto_fire()
 
     def update_auto_fire(self):
-        if self.auto_fire and self.game.weapon.name == 'smg':
+        if self.auto_fire and hasattr(self.game.weapon, 'auto_fire') and self.game.weapon.auto_fire:
             current_time = pg.time.get_ticks()
-            if (not self.game.weapon.reloading and
-                current_time - self.last_auto_fire_time >= self.auto_fire_delay):
+            if not self.game.weapon.reloading and current_time - self.last_auto_fire_time >= self.auto_fire_delay:
                 self.fire_weapon()
 
     @property

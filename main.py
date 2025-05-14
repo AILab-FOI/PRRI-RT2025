@@ -96,8 +96,8 @@ class Game:
 
         self.object_renderer.update_sky_image()
 
-        if not pg.mixer.music.get_busy():
-            pg.mixer.music.play(-1)
+        # Promijeni glazbu ovisno o trenutnoj razini
+        self.sound.change_music_for_level(self.level_manager.current_level)
 
         if self.level_manager.current_level == 1:
             self.intro_sequence.start()
@@ -138,10 +138,10 @@ class Game:
         self.game_ui.draw()
         self.interaction.draw()
         self.dialogue_manager.draw()
-        
+
         # Apply visual effects
         self.disorienting_effects.draw()
-        
+
         # Draw overlays
         self.intro_sequence.draw()
         self.loading_screen.draw()
@@ -161,7 +161,7 @@ class Game:
         """Reset the current level when player dies"""
         current_level = self.level_manager.current_level
         self.map.load_level(current_level)
-        self.new_game()
+        self.new_game()  # new_game() će promijeniti glazbu
         pg.mouse.set_visible(False)
 
     def show_menu(self):

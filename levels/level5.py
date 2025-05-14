@@ -1,7 +1,7 @@
 """
 Level 4 configuration
 """
-from npc import KlonoviNPC, StakorNPC
+from npc import BossNPC
 from levels.base_level import create_base_level_structure
 
 def get_level_data():
@@ -81,8 +81,8 @@ def get_level_data():
     # Enemy configuration
     level_data['enemies'] = {
         'count': 8,
-        'types': [KlonoviNPC, StakorNPC],
-        'weights': [40, 60],  # More StakorNPC in this level
+        'types': [BossNPC],
+        'weights': [100],  # More StakorNPC in this level
         'restricted_area': {(i, j) for i in range(8, 13) for j in range(8, 13)},  # Keep center area clear
         'fixed_positions': [(5, 15), (15, 5)]  # Some enemies at fixed positions
     }

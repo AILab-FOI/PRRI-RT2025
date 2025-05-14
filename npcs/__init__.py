@@ -11,8 +11,10 @@ from npcs.enemy_npcs import (
     TosterNPC,
     ParazitNPC,
     JazavacNPC,
-    MadracNPC
+    MadracNPC,
+    BossNPC
 )
+from npcs.npc_factory import NPCFactory
 
 # For backwards compatibility
 __all__ = [
@@ -24,5 +26,7 @@ __all__ = [
     'TosterNPC',
     'ParazitNPC',
     'JazavacNPC',
-    'MadracNPC'
+    'MadracNPC',
+    'NPCFactory',
+    'BossNPC'
 ]

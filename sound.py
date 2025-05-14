@@ -41,28 +41,32 @@ class Sound:
 
             # Generic NPC sounds
             'npc_pain': 0.5,
-            'npc_death': 0.7,
+            'npc_death': 0.9,
             'npc_attack': 0.5,
 
             # Enemy-specific sounds
             'napad_stakor': 0.6,  # Stakor attack
-            'stakor_smrt': 0.7,   # Stakor death
+            'stakor_smrt': 0.9,   # Stakor death
 
             'toster_attack': 0.5, # Toster attack
-            'toster_death': 0.7,  # Toster death
+            'toster_death': 0.9,  # Toster death
             'toster_damage': 0.5,  # Toster damage
 
             'parazit_attack': 0.6,# Parazit attack
-            'parazit_death': 0.7, # Parazit death
+            'parazit_death': 0.9, # Parazit death
             'parazit_damage': 0.5, # Parazit damage
 
             'jazavac_attack': 0.5,# Jazavac attack
-            'jazavac_death': 0.7, # Jazavac death
+            'jazavac_death': 0.9, # Jazavac death
             'jazavac_damage': 0.5, # Jazavac damage
 
             'madrac_attack': 0.6,# Madrac attack
-            'madrac_death': 0.7, # Madrac death
+            'madrac_death': 0.9, # Madrac death
             'madrac_damage': 0.5, # Madrac damage
+
+            'boss_attack': 0.7,# Boss attack
+            'boss_death': 1.0, # Boss death
+            'boss_damage': 0.6, # Boss damage
 
             # Interaction sounds
             'terminal_beep': 0.7,
@@ -120,6 +124,11 @@ class Sound:
         self.madrac_death = self.load_sound('madrac_smrt.wav', self.volume_factors['madrac_death'])
         self.madrac_damage = self.load_sound('madrac_damage.wav', self.volume_factors['madrac_damage'])
 
+        # Boss sounds
+        self.boss_attack = self.load_sound('boss_napad.wav', self.volume_factors['boss_attack'])
+        self.boss_death = self.load_sound('boss_smrt.wav', self.volume_factors['boss_death'])
+        self.boss_damage = self.load_sound('boss_damage.wav', self.volume_factors['boss_damage'])
+
         # ===== INTERACTION SOUNDS =====
         self.terminal_beep = self.load_sound('terminal.wav', self.volume_factors['terminal_beep'])
         self.door_open = self.load_sound('vrata.wav', self.volume_factors['door_open'])
@@ -145,7 +154,18 @@ class Sound:
         self.init_dialogue_directories()
 
         # ===== BACKGROUND MUSIC =====
-        self.razina1 = pg.mixer.music.load(self.path + 'Pozadinska1.mp3')
+        # Putanje do pozadinskih glazbi za svaku razinu
+        self.background_music = {
+            1: 'Pozadinska1.mp3',
+            2: 'Pozadinska2.wav',
+            3: 'Pozadinska3.mp3',
+            4: 'Pozadinska4.wav',
+            5: 'Pozadinska5.wav'
+        }
+
+        # Učitaj glazbu za prvu razinu kao početnu
+        self.current_music_level = 1
+        pg.mixer.music.load(self.path + self.background_music[1])
         pg.mixer.music.set_volume(self.music_volume)
 
     def init_dialogue_directories(self):
@@ -307,6 +327,10 @@ class Sound:
             'madrac_death': self.madrac_death,
             'madrac_damage': self.madrac_damage,
 
+            'boss_attack': self.boss_attack,
+            'boss_death': self.boss_death,
+            'boss_damage': self.boss_damage,
+
             # Interaction sounds
             'terminal_beep': self.terminal_beep,
             'door_open': self.door_open,
@@ -331,3 +355,22 @@ class Sound:
         # Ažuriraj volumen za sve zvukove dijaloga
         for sound_key, sound in self.dialogue_sounds.items():
             sound.set_volume(self.volume_factors['dialogue_line'] * self.sfx_volume)
+
+    def update_music_volume(self):
+        """Update background music volume based on music_volume setting"""
+        pg.mixer.music.set_volume(self.music_volume)
+
+    def change_music_for_level(self, level):
+        """Change background music based on the current level"""
+        if level in self.background_music and level != self.current_music_level:
+            print(f"Changing music to level {level}: {self.background_music[level]}")
+            # Zaustavi trenutnu glazbu
+            pg.mixer.music.stop()
+            # Učitaj novu glazbu
+            pg.mixer.music.load(self.path + self.background_music[level])
+            # Postavi volumen
+            pg.mixer.music.set_volume(self.music_volume)
+            # Pokreni glazbu
+            pg.mixer.music.play(-1)  # -1 znači beskonačno ponavljanje
+            # Ažuriraj trenutnu razinu glazbe
+            self.current_music_level = level

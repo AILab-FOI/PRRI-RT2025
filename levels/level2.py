@@ -18,7 +18,7 @@ def get_level_data():
     level_data['terminals'] = [
         {
             'position': (2, 14),
-            'code': '1337',
+            'code': '8332',
             'unlocks_door_id': None,  # Terminal doesn't automatically unlock any doors
             #W'dialogue_id': None
         }
@@ -30,13 +30,13 @@ def get_level_data():
             'position': (15, 9),
             'door_id': 1,
             'requires_code': True,
-            'code': '1337'  # First door uses code 1337
+            'code': '8332'
         },
         {
             'position': (15, 24),
             'door_id': 2,
             'requires_code': True,
-            'code': '1337',  # Second door also uses code 1337
+            'code': '8332',
             'requires_door_id': 1  # This door requires door 1 to be opened first
         }
     ]

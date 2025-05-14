@@ -1,4 +1,5 @@
 from sprite_object import *
+from config.weapon_config import get_weapon_config
 
 class Weapon(AnimatedSprite):
     def __init__(self, game, path='resources/sprites/weapon/pistol/0.png', scale=0.4, animation_time=90, damage=50, name='pistol'):
@@ -12,6 +13,8 @@ class Weapon(AnimatedSprite):
         self.frame_counter = 0
         self.damage = damage
         self.name = name
+        self.accuracy = 1.0
+        self.auto_fire = False
 
     def animate_shot(self):
         if self.reloading:
@@ -43,25 +46,39 @@ class Weapon(AnimatedSprite):
 
 class SMG(Weapon):
     def __init__(self, game):
-        super().__init__(game=game,
-                         path='resources/sprites/weapon/smg/0.png',
-                         scale=1.2,
-                         animation_time=40,
-                         damage=15,
-                         name='smg')
+        # Get SMG configuration
+        config = get_weapon_config('smg')
 
-        right_offset = 230
+        super().__init__(game=game,
+                         path=config['path'],
+                         scale=config['scale'],
+                         animation_time=config['animation_time'],
+                         damage=config['damage'],
+                         name=config['name'])
+        self.accuracy = config['accuracy']
+        self.auto_fire = config['auto_fire']
+
+        # Set weapon position with right offset
+        right_offset = config.get('right_offset', 230)
         self.weapon_pos = (HALF_WIDTH - self.images[0].get_width() // 2 + right_offset,
                           HEIGHT - self.images[0].get_height())
 
 class Pistol(Weapon):
     def __init__(self, game):
-        super().__init__(game=game,
-                         path='resources/sprites/weapon/pistol/0.png',
-                         scale=0.22,
-                         animation_time=90,
-                         damage=50,
-                         name='pistol')
+        # Get pistol configuration
+        config = get_weapon_config('pistol')
 
+        super().__init__(game=game,
+                         path=config['path'],
+                         scale=config['scale'],
+                         animation_time=config['animation_time'],
+                         damage=config['damage'],
+                         name=config['name'])
+
+        # Set additional properties from config
+        self.accuracy = config['accuracy']
+        self.auto_fire = config['auto_fire']
+
+        # Set weapon position
         self.weapon_pos = (HALF_WIDTH - self.images[0].get_width() // 2,
                           HEIGHT - self.images[0].get_height())
