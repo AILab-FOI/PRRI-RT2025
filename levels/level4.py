@@ -171,7 +171,10 @@ def get_level_data():
         'count': 10,
         'types': [TosterNPC, MadracNPC],
         'weights': [50, 50],
-        'restricted_area': {(i, j) for i in range(10) for j in range(10)},  # Larger restricted area like in level 1
+        'restricted_area': {
+            #*{(i, j) for i in range(10) for j in range(10)
+            *{(i, j) for i in range(15, 20) for j in range(6)}
+            },  # Larger restricted area like in level 1
         'fixed_positions': [
             {'type': ParazitNPC, 'position': (17, 27)},  # Miniboss Parazit in the arena area
         ]
