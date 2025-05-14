@@ -30,7 +30,7 @@ class ObjectRenderer:
             2: self.get_texture('resources/teksture/level1/sky1.png', (WIDTH, HALF_HEIGHT)),
             3: self.get_texture('resources/teksture/level2/sky2.png', (WIDTH, HALF_HEIGHT)),
             4: self.get_texture('resources/teksture/level3/sky.png', (WIDTH, HALF_HEIGHT)),
-            5: self.get_texture('resources/textures/level4/sky1.png', (WIDTH, HALF_HEIGHT))
+            5: self.get_texture('resources/teksture/level4/sky1.png', (WIDTH, HALF_HEIGHT))
         }
         self.sky_image = self.sky_images[1]
         self.sky_offset = 0
