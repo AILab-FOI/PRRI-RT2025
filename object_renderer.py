@@ -161,4 +161,8 @@ class ObjectRenderer:
             37: self.get_texture('resources/teksture/uvod/zid5.jpg'), #bijeli zid s manjom količinom krvi niže od prvog zida
             38: self.get_texture('resources/teksture/uvod/vrata5.jpg'),
 
+            #boss level (zadnji level)
+            40: self.get_texture('resources/teksture/level5/zid1.png'), #base zid
+            41: self.get_texture('resources/teksture/level5/zid2.png'), #base zid sa malim prozorom
+
         }
