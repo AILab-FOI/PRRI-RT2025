@@ -14,20 +14,28 @@ def get_level_data():
     
     # Terminals
     level_data['terminals'] = [
-        {
-            'position': (5, 5),
-            'code': '6789',
-            'unlocks_door_id': None
-        }
+        #{
+            #'position': (5, 5),
+            #'code': '6789',
+            #'unlocks_door_id': None
+        #}
     ]
     
     # Doors
     level_data['doors'] = [
         {
-            'position': (10, 10),
+            'position': (7, 14),
             'door_id': 1,
-            'requires_code': True,
-            'code': '6789'
+            'requires_code': False,
+            'code': None,
+            'requires_door_id': None
+        },
+        {
+            'position': (27, 14),
+            'door_id': 2,
+            'requires_code': False,
+            'code': None,
+            'requires_door_id': None
         }
     ]
     
@@ -52,45 +60,24 @@ def get_level_data():
     
     # Decorative sprites - unique to level 4
     level_data['sprites'] = [
-        # Create a circular pattern in the center
-        ('ukras2', (10.5, 10.5)),
         
-        # Create a ring around the center
-        ('ukras1', (9.5, 9.5)),
-        ('ukras1', (10.5, 9.5)),
-        ('ukras1', (11.5, 9.5)),
-        ('ukras1', (9.5, 10.5)),
-        ('ukras1', (11.5, 10.5)),
-        ('ukras1', (9.5, 11.5)),
-        ('ukras1', (10.5, 11.5)),
-        ('ukras1', (11.5, 11.5)),
-        
-        # Add some decorations along the walls
-        ('ukras2', (2.5, 2.5)),
-        ('ukras2', (2.5, 17.5)),
-        ('ukras2', (17.5, 2.5)),
-        ('ukras2', (17.5, 17.5)),
-        
-        # Add some decorations in the middle of each wall
-        ('ukras1', (10.0, 2.5)),
-        ('ukras1', (10.0, 17.5)),
-        ('ukras1', (2.5, 10.0)),
-        ('ukras1', (17.5, 10.0)),
     ]
     
     # Enemy configuration
     level_data['enemies'] = {
-        'count': 8,
+        'count': 0,
         'types': [BossNPC],
-        'weights': [100],  # More StakorNPC in this level
-        'restricted_area': {(i, j) for i in range(8, 13) for j in range(8, 13)},  # Keep center area clear
-        'fixed_positions': [(5, 15), (15, 5)]  # Some enemies at fixed positions
+        'weights': [50, 50],
+        'restricted_area': {(i, j) for i in range(10) for j in range(10)},  
+        'fixed_positions': [
+            {'type': BossNPC, 'position': (17, 14)},  # Boss
+        ]
     }
     
     # Dialogue NPCs
     level_data['dialogue_npcs'] = [
         {
-            'pos': (5.5, 5.5),
+            'pos': (3.5, 11.5),
             'dialogue_id': 'level4_intro',
             'path': 'resources/sprites/npc/dialogue_npc/0.png'
         }
