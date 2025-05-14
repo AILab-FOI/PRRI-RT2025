@@ -48,7 +48,7 @@ def get_level_data():
             'position': (20, 22),
             'powerup_type': 'invulnerability'
         },
-        
+        đ
     ]
     
     # Decorative sprites - unique to level 4
@@ -71,7 +71,7 @@ def get_level_data():
     level_data['dialogue_npcs'] = [
         {
             'pos': (9.5, 3.5),
-            'dialogue_id': 'level4_intro',
+            'dialogue_id': 'marivn_ending',
             'path': 'resources/sprites/npc/dialogue_npc/0.png'
         }
     ]
