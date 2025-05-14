@@ -12,7 +12,7 @@ PLAYER_POS = 5.5, 1.5           #uvodni level
 PLAYER_POS_LEVEL2 = 1.5, 2.5    #lvl 1
 PLAYER_POS_LEVEL3 = 1.5, 2.5    #lvl 2
 PLAYER_POS_LEVEL4 = 17.5, 1.5   #lvl 3
-PLAYER_POS_LEVEL5 = 4.5, 3.5   #lvl 3
+PLAYER_POS_LEVEL5 = 13.5, 1.5   #lvl 4
 
 PLAYER_ANGLE = 0
 PLAYER_SPEED = 0.004
@@ -47,6 +47,7 @@ FLOOR_COLORS = {
     2: (30, 30, 30),  # Level 1: Dark gray
     3: (216, 217, 217),  # Level 2: White
     4: (30, 30, 30),  # Level 3: Dark gray (same as default)
+    5: (30, 30, 30),  # Level 3: Dark gray (same as default)
 }
 
 FOV = math.pi / 3
