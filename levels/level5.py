@@ -24,14 +24,14 @@ def get_level_data():
     # Doors
     level_data['doors'] = [
         {
-            'position': (7, 14),
+            'position': (13, 7),
             'door_id': 1,
             'requires_code': False,
             'code': None,
             'requires_door_id': None
         },
         {
-            'position': (27, 14),
+            'position': (13, 27),
             'door_id': 2,
             'requires_code': False,
             'code': None,
@@ -70,14 +70,14 @@ def get_level_data():
         'weights': [50, 50],
         'restricted_area': {(i, j) for i in range(10) for j in range(10)},  
         'fixed_positions': [
-            {'type': BossNPC, 'position': (17, 14)},  # Boss
+            {'type': BossNPC, 'position': (13, 17)},  # Boss
         ]
     }
     
     # Dialogue NPCs
     level_data['dialogue_npcs'] = [
         {
-            'pos': (3.5, 11.5),
+            'pos': (9.5, 3.5),
             'dialogue_id': 'level4_intro',
             'path': 'resources/sprites/npc/dialogue_npc/0.png'
         }

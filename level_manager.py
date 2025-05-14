@@ -155,6 +155,7 @@ class LevelManager:
             2: (12, 34),
             3: (17, 34),
             4: (32, 32),
+            5: (34, 14)
         }
 
         # Add the exit door if we have a position defined for this level
@@ -205,6 +206,7 @@ class LevelManager:
                         2: (12, 34),
                         3: (17, 34),
                         4: (32, 32),
+                        5: (34, 14)
                     }
 
                     # Check if this is a level exit door
