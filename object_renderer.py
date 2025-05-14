@@ -30,7 +30,7 @@ class ObjectRenderer:
             2: self.get_texture('resources/teksture/level1/sky1.png', (WIDTH, HALF_HEIGHT)),
             3: self.get_texture('resources/teksture/level2/sky2.png', (WIDTH, HALF_HEIGHT)),
             4: self.get_texture('resources/teksture/level3/sky.png', (WIDTH, HALF_HEIGHT)),
-            5: self.get_texture('resources/textures/sky.png', (WIDTH, HALF_HEIGHT))
+            5: self.get_texture('resources/textures/level4/sky1.png', (WIDTH, HALF_HEIGHT))
         }
         self.sky_image = self.sky_images[1]
         self.sky_offset = 0
@@ -164,5 +164,8 @@ class ObjectRenderer:
             #boss level (zadnji level)
             40: self.get_texture('resources/teksture/level4/zid1.png'), #base zid
             41: self.get_texture('resources/teksture/level4/zid2.png'), #base zid sa malim prozorom
+            42: self.get_texture('resources/teksture/level4/zid3.png'), #base zid s konzolom i prozor
+            43: self.get_texture('resources/teksture/level4/zid4.png'), #base zid s velikim prozorom
+
 
         }
