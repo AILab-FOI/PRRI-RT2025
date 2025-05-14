@@ -16,6 +16,16 @@ def get_level_data():
             #'unlocks_door_id': None
         #}
     ]
+    level_data['powerups'] = [
+        {
+            'position': (24, 27),
+            'powerup_type': 'invulnerability'
+        },
+        {
+            'position': (10, 27),
+            'powerup_type': 'invulnerability'
+        },
+    ]
 
     # Doors
     level_data['doors'] = [
