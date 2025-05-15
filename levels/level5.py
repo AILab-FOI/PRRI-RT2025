@@ -48,7 +48,7 @@ def get_level_data():
             'position': (20, 22),
             'powerup_type': 'invulnerability'
         },
-        đ
+        
     ]
     
     # Decorative sprites - unique to level 4
