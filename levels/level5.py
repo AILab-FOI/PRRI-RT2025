@@ -71,7 +71,7 @@ def get_level_data():
     level_data['dialogue_npcs'] = [
         {
             'pos': (9.5, 3.5),
-            'dialogue_id': 'marivn_ending',
+            'dialogue_id': 'marvin_ending',
             'path': 'resources/sprites/npc/dialogue_npc/0.png'
         }
     ]
