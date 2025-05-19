@@ -57,6 +57,10 @@ class Player:
         if self.dialogue_mode or (hasattr(self.game, 'intro_sequence') and self.game.intro_sequence.active):
             return
 
+        # Check if weapon exists before processing fire events
+        if not hasattr(self.game, 'weapon') or self.game.weapon is None:
+            return
+
         if event.type == pg.MOUSEBUTTONDOWN:
             if event.button == 1 and not self.shot and not self.game.weapon.reloading:
                 if hasattr(self.game.weapon, 'auto_fire') and self.game.weapon.auto_fire:
@@ -71,6 +75,10 @@ class Player:
                 self.auto_fire = False
 
     def fire_weapon(self):
+        # Check if weapon exists before firing
+        if not hasattr(self.game, 'weapon') or self.game.weapon is None:
+            return
+
         weapon_config = get_weapon_config(self.game.weapon.name)
 
         if weapon_config and 'sound' in weapon_config:
@@ -207,6 +215,10 @@ class Player:
         self.update_auto_fire()
 
     def update_auto_fire(self):
+        # Check if weapon exists before processing auto-fire
+        if not hasattr(self.game, 'weapon') or self.game.weapon is None:
+            return
+
         if self.auto_fire and hasattr(self.game.weapon, 'auto_fire') and self.game.weapon.auto_fire:
             current_time = pg.time.get_ticks()
             if not self.game.weapon.reloading and current_time - self.last_auto_fire_time >= self.auto_fire_delay:
