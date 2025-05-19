@@ -28,10 +28,27 @@ SMG_CONFIG = {
     'description': 'Rapid-fire weapon ideal for close quarters combat.'
 }
 
+# Plasma Gun Configuration
+# Role: Ultimate weapon with high damage and fast fire rate for the final level
+PLASMA_GUN_CONFIG = {
+    'name': 'plasmagun',
+    'path': 'resources/sprites/weapon/plasmagun/0.png',
+    'scale': 15.0,
+    'animation_time': 30,  # Fastest fire rate of all weapons
+    'damage': 50,  # Highest damage per shot
+    'accuracy': 0.9,  # High accuracy
+    'auto_fire': True,  # Can be fired automatically by holding the mouse button
+    'auto_fire_delay': 80,  # Delay between auto-fired shots in milliseconds
+    'sound': 'plasmagun',  # Sound effect to play when firing
+    'right_offset': 200,  # Horizontal offset for weapon positioning
+    'description': 'Advanced plasma weapon with devastating firepower.'
+}
+
 # Dictionary mapping weapon names to their configurations
 WEAPON_CONFIGS = {
     'pistol': PISTOL_CONFIG,
     'smg': SMG_CONFIG,
+    'plasmagun': PLASMA_GUN_CONFIG,
 }
 
 def get_weapon_config(weapon_name):

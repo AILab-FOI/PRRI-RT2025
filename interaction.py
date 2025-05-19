@@ -2,7 +2,7 @@ import pygame as pg
 import math
 from settings import *
 from sprite_object import SpriteObject
-from weapon import Pistol, SMG
+from weapon import Pistol, SMG, PlasmaGun
 from font_manager import load_custom_font
 
 class Interaction:
@@ -214,6 +214,8 @@ class Interaction:
 
         if weapon_type == "smg":
             new_weapon = SMG(self.game)
+        elif weapon_type == "plasmagun":
+            new_weapon = PlasmaGun(self.game)
         else:
             new_weapon = Pistol(self.game)
             weapon_type = "pistol"

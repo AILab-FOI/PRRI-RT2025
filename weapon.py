@@ -82,3 +82,24 @@ class Pistol(Weapon):
         # Set weapon position
         self.weapon_pos = (HALF_WIDTH - self.images[0].get_width() // 2,
                           HEIGHT - self.images[0].get_height())
+
+class PlasmaGun(Weapon):
+    def __init__(self, game):
+        # Get plasma gun configuration
+        config = get_weapon_config('plasmagun')
+
+        super().__init__(game=game,
+                         path=config['path'],
+                         scale=config['scale'],
+                         animation_time=config['animation_time'],
+                         damage=config['damage'],
+                         name=config['name'])
+
+        # Set additional properties from config
+        self.accuracy = config['accuracy']
+        self.auto_fire = config['auto_fire']
+
+        # Set weapon position with right offset
+        right_offset = config.get('right_offset', 200)
+        self.weapon_pos = (HALF_WIDTH - self.images[0].get_width() // 2 + right_offset,
+                          HEIGHT - self.images[0].get_height())
