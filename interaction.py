@@ -56,7 +56,11 @@ class Interaction:
 
             # Get appropriate prompt text
             if self.active_object.interaction_type == "level_door":
-                prompt_text = "Press 'E' to go to the next level"
+                # For the last level (level 5), show "Finish the game" instead of "Go to next level"
+                if hasattr(self.game, 'level_manager') and self.game.level_manager.current_level == 5:
+                    prompt_text = "Press 'E' to finish the game"
+                else:
+                    prompt_text = "Press 'E' to go to the next level"
             elif self.active_object.interaction_type == "door":
                 prompt_text = "Press 'E' to open the door"
             elif self.active_object.interaction_type == "terminal":
