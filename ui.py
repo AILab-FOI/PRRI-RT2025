@@ -1,6 +1,8 @@
 import pygame as pg
+import os
+import sys
 from settings import *
-from font_manager import load_custom_font
+from font_manager import load_custom_font, resource_path
 from menu import MetallicUIRenderer
 
 
@@ -33,7 +35,9 @@ class GameUI:
         self.powerup_icon = self.load_texture('resources/teksture/level1/powerup.png', (100, 100))
 
     def load_texture(self, path, res):
-        texture = pg.image.load(path).convert_alpha()
+        texture_path = resource_path(path)
+        print(f"Loading UI texture: {texture_path}")
+        texture = pg.image.load(texture_path).convert_alpha()
         return pg.transform.scale(texture, res)
 
     def load_digit_images(self):

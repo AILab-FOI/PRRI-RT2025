@@ -2,6 +2,18 @@ import pygame as pg
 import time
 from settings import *
 import math
+import os
+import sys
+
+def resource_path(relative_path):
+    """Get absolute path to resource, works for dev and for PyInstaller"""
+    try:
+        # PyInstaller creates a temp folder and stores path in _MEIPASS
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+
+    return os.path.join(base_path, relative_path)
 
 class IntroSequence:
 
@@ -23,11 +35,14 @@ class IntroSequence:
 
         # Load sounds
         try:
-            self.crash_sound = pg.mixer.Sound('resources/sound/crash.wav')
-            self.high_pitch_sound = pg.mixer.Sound('resources/sound/high_pitch.wav')
+            crash_sound_path = resource_path('resources/sound/crash.wav')
+            high_pitch_sound_path = resource_path('resources/sound/high_pitch.wav')
+            print(f"Loading intro sounds: {crash_sound_path}, {high_pitch_sound_path}")
+            self.crash_sound = pg.mixer.Sound(crash_sound_path)
+            self.high_pitch_sound = pg.mixer.Sound(high_pitch_sound_path)
             self.sounds_loaded = True
-        except:
-            print("Warning: Sound files for intro sequence not found. Using silent mode.")
+        except Exception as e:
+            print(f"Warning: Sound files for intro sequence not found: {e}. Using silent mode.")
             self.sounds_loaded = False
 
         # Create surfaces for effects
@@ -40,7 +55,7 @@ class IntroSequence:
         self.blur_surface = pg.Surface((self.screen_width, self.screen_height), pg.SRCALPHA)
 
         # Pulsing effect parameters
-        self.pulse_frequency = 0.8  # Pulses per second 
+        self.pulse_frequency = 0.8  # Pulses per second
         self.pulse_amplitude = 1.0  # Maximum pulse intensity
 
     def start(self):
@@ -137,7 +152,7 @@ class IntroSequence:
         # Reset mouse position and clear accumulated movement to prevent jerking
         pg.mouse.set_pos([HALF_WIDTH, HALF_HEIGHT])
         pg.mouse.get_rel()
-        
+
         # Start disorienting effects ONLY if on level 1
         if self.game.level_manager.current_level == 1:
             self.game.disorienting_effects.start()

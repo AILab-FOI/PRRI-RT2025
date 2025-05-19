@@ -2,7 +2,8 @@ import pygame as pg
 from settings import *
 import json
 import os
-from font_manager import load_custom_font
+import sys
+from font_manager import load_custom_font, resource_path
 
 
 class DialogueManager:
@@ -34,16 +35,21 @@ class DialogueManager:
         self.load_dialogues()
 
     def load_dialogues(self):
-        dialogue_dir = 'resources/dialogues'
-        for filename in os.listdir(dialogue_dir):
-            if filename.endswith('.json'):
-                dialogue_id = filename[:-5]
-                file_path = os.path.join(dialogue_dir, filename)
-                try:
-                    with open(file_path, 'r') as f:
-                        self.dialogues[dialogue_id] = json.load(f)
-                except Exception as e:
-                    print(f"Error loading dialogue {filename}: {e}")
+        dialogue_dir = resource_path('resources/dialogues')
+        print(f"Loading dialogues from: {dialogue_dir}")
+        try:
+            for filename in os.listdir(dialogue_dir):
+                if filename.endswith('.json'):
+                    dialogue_id = filename[:-5]
+                    file_path = os.path.join(dialogue_dir, filename)
+                    print(f"Loading dialogue: {file_path}")
+                    try:
+                        with open(file_path, 'r') as f:
+                            self.dialogues[dialogue_id] = json.load(f)
+                    except Exception as e:
+                        print(f"Error loading dialogue {filename}: {e}")
+        except Exception as e:
+            print(f"Error accessing dialogue directory: {e}")
 
     def start_dialogue(self, dialogue_id, npc):
         if dialogue_id in self.dialogues:

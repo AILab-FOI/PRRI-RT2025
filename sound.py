@@ -1,29 +1,46 @@
 import pygame as pg
+import os
+import sys
+
+
+def resource_path(relative_path):
+    """Get absolute path to resource, works for dev and for PyInstaller"""
+    try:
+        # PyInstaller creates a temp folder and stores path in _MEIPASS
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+
+    return os.path.join(base_path, relative_path)
 
 
 class Sound:
     def load_sound(self, filename, volume_factor=1.0):
         """Helper method to load a sound and set its volume"""
         try:
-            sound = pg.mixer.Sound(self.path + filename)
+            sound_path = resource_path(os.path.join(self.path, filename))
+            print(f"Loading sound: {sound_path}")
+            sound = pg.mixer.Sound(sound_path)
             sound.set_volume(volume_factor * self.sfx_volume)
             return sound
         except Exception as e:
             print(f"Error loading sound {filename}: {e}")
             # Za sve greške, koristi placeholder
             try:
-                sound = pg.mixer.Sound(self.path + 'crash.wav')
+                sound_path = resource_path(os.path.join(self.path, 'crash.wav'))
+                print(f"Loading placeholder sound: {sound_path}")
+                sound = pg.mixer.Sound(sound_path)
                 sound.set_volume(volume_factor * self.sfx_volume)
                 return sound
-            except:
-                print("Failed to load placeholder sound")
+            except Exception as e:
+                print(f"Failed to load placeholder sound: {e}")
                 # Ako ni placeholder ne radi, vrati None
                 return None
 
     def __init__(self, game):
         self.game = game
         pg.mixer.init()
-        self.path = 'resources/sound/'
+        self.path = 'resources/sound'
 
         self.music_volume = 0.1
         self.sfx_volume = 0.7
@@ -165,13 +182,19 @@ class Sound:
 
         # Učitaj glazbu za prvu razinu kao početnu
         self.current_music_level = 1
-        pg.mixer.music.load(self.path + self.background_music[1])
+        music_path = resource_path(os.path.join(self.path, self.background_music[1]))
+        print(f"Loading music: {music_path}")
+        pg.mixer.music.load(music_path)
         pg.mixer.music.set_volume(self.music_volume)
 
     def init_dialogue_directories(self):
         """Initialize directories for dialogue sounds"""
-        import os
+        # When running as executable, we don't need to create directories
+        # as all resources are already packaged
+        if getattr(sys, 'frozen', False):
+            return
 
+        # Only create directories when running in development mode
         # Glavni direktorij za zvukove dijaloga
         dialogue_dir = os.path.join(self.path, "dialogues")
         if not os.path.exists(dialogue_dir):
@@ -235,7 +258,8 @@ class Sound:
                 # Učitaj dijalog iz JSON datoteke
                 import json
                 import os
-                dialogue_path = os.path.join('resources', 'dialogues', f"{dialogue_id}.json")
+                dialogue_path = resource_path(os.path.join('resources', 'dialogues', f"{dialogue_id}.json"))
+                print(f"Loading dialogue data from: {dialogue_path}")
                 with open(dialogue_path, 'r') as f:
                     dialogue_data = json.load(f)
 
@@ -367,7 +391,9 @@ class Sound:
             # Zaustavi trenutnu glazbu
             pg.mixer.music.stop()
             # Učitaj novu glazbu
-            pg.mixer.music.load(self.path + self.background_music[level])
+            music_path = resource_path(os.path.join(self.path, self.background_music[level]))
+            print(f"Loading music for level {level}: {music_path}")
+            pg.mixer.music.load(music_path)
             # Postavi volumen
             pg.mixer.music.set_volume(self.music_volume)
             # Pokreni glazbu

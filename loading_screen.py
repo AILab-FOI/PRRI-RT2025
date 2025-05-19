@@ -3,8 +3,10 @@ import time
 import math
 import json
 import random
+import os
+import sys
 from settings import *
-from font_manager import load_custom_font
+from font_manager import load_custom_font, resource_path
 from menu import MetallicUIRenderer, Button
 
 class LoadingScreen:
@@ -21,7 +23,9 @@ class LoadingScreen:
         self.current_tip = ""
         self.load_tips_and_lore()
 
-        self.bg_image = pg.image.load('resources/teksture/pocetna.png')
+        bg_image_path = resource_path('resources/teksture/pocetna.png')
+        print(f"Loading loading screen background: {bg_image_path}")
+        self.bg_image = pg.image.load(bg_image_path)
         self.bg_image = pg.transform.scale(self.bg_image, RES)
 
         self.title_font = load_custom_font(60)
@@ -50,7 +54,9 @@ class LoadingScreen:
 
     def load_tips_and_lore(self):
         try:
-            with open('resources/loading_tips.json', 'r') as f:
+            tips_path = resource_path('resources/loading_tips.json')
+            print(f"Loading tips and lore: {tips_path}")
+            with open(tips_path, 'r') as f:
                 data = json.load(f)
                 self.tips = data.get('tips', [])
                 self.lore = data.get('lore', [])

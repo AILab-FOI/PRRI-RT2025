@@ -1,6 +1,8 @@
 import pygame as pg
+import os
+import sys
 from settings import *
-from font_manager import load_custom_font
+from font_manager import load_custom_font, resource_path
 
 class MetallicUIRenderer:
     def __init__(self, screen):
@@ -278,7 +280,9 @@ class Menu:
                    self.game.sound.sfx_volume, "SFX Volume")
         ]
 
-        self.bg_image = pg.image.load('resources/teksture/pocetna.png')
+        bg_image_path = resource_path('resources/teksture/pocetna.png')
+        print(f"Loading menu background: {bg_image_path}")
+        self.bg_image = pg.image.load(bg_image_path)
         self.bg_image = pg.transform.scale(self.bg_image, RES)
 
         self.title_font = load_custom_font(72)
@@ -335,7 +339,7 @@ class Menu:
                             self.state = 'settings'
                         elif button.text == "Exit":
                             pg.quit()
-                            exit()
+                            sys.exit()
 
             elif self.state == 'settings':
                 for button in self.settings_buttons:
