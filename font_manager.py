@@ -14,5 +14,4 @@ def resource_path(relative_path):
 
 def load_custom_font(size):
     font_path = resource_path('resources/fonts/kenvector_future.ttf')
-    print(f"Loading font: {font_path}")
     return pg.font.Font(font_path, size)

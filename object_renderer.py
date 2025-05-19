@@ -1,6 +1,4 @@
 import pygame as pg
-import os
-import sys
 from settings import *
 from font_manager import load_custom_font, resource_path
 
@@ -107,7 +105,6 @@ class ObjectRenderer:
     @staticmethod
     def get_texture(path, res=(TEXTURE_SIZE, TEXTURE_SIZE)):
         texture_path = resource_path(path)
-        print(f"Loading texture: {texture_path}")
         texture = pg.image.load(texture_path).convert_alpha()
         return pg.transform.scale(texture, res)
 

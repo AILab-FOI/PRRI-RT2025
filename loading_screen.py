@@ -24,7 +24,6 @@ class LoadingScreen:
         self.load_tips_and_lore()
 
         bg_image_path = resource_path('resources/teksture/pocetna.png')
-        print(f"Loading loading screen background: {bg_image_path}")
         self.bg_image = pg.image.load(bg_image_path)
         self.bg_image = pg.transform.scale(self.bg_image, RES)
 
@@ -55,13 +54,11 @@ class LoadingScreen:
     def load_tips_and_lore(self):
         try:
             tips_path = resource_path('resources/loading_tips.json')
-            print(f"Loading tips and lore: {tips_path}")
             with open(tips_path, 'r') as f:
                 data = json.load(f)
                 self.tips = data.get('tips', [])
                 self.lore = data.get('lore', [])
-        except Exception as e:
-            print(f"Error loading tips and lore: {e}")
+        except Exception:
             self.tips = ["Press E to interact with objects."]
             self.lore = ["The ship was attacked by Vogons."]
 

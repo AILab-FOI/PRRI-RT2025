@@ -40,11 +40,9 @@ class ObjectHandler:
                 x, y = pos_tuple
 
                 if (pos_tuple in self.game.map.world_map) or (pos_tuple in self.restricted_area):
-                    print(f"Warning: Specific fixed position {pos_tuple} for {npc_class_to_spawn.__name__} is invalid. Skipping.")
                     continue
 
                 self.add_npc(npc_class_to_spawn(self.game, pos=(x + 0.5, y + 0.5)))
-                print(f"Spawned specific NPC: {npc_class_to_spawn.__name__} at {(x + 0.5, y + 0.5)}")
 
         enemies_spawned_from_pool_so_far = 0
         for item in fixed_positions_config:
@@ -55,25 +53,18 @@ class ObjectHandler:
                 x, y = item
 
                 if (item in self.game.map.world_map) or (item in self.restricted_area):
-                    print(f"Warning: Generic fixed position {item} is invalid. Skipping.")
                     continue
 
                 if not self.npc_types:
-                    print("Warning: NPC types list is empty for generic fixed spawn.")
                     continue
                 npc_type_class = choices(self.npc_types, self.weights)[0]
                 self.add_npc(npc_type_class(self.game, pos=(x + 0.5, y + 0.5)))
                 enemies_spawned_from_pool_so_far += 1
-                print(f"Spawned generic fixed NPC: {npc_type_class.__name__} at {(x + 0.5, y + 0.5)}")
 
         remaining_pool_enemies_to_spawn = self.enemies_from_pool_count - enemies_spawned_from_pool_so_far
         if remaining_pool_enemies_to_spawn > 0:
-            if not self.npc_types:
-                print("Warning: NPC types list is empty for random spawn. Cannot spawn remaining enemies.")
-            else:
+            if self.npc_types:
                 self._spawn_random_enemies(remaining_pool_enemies_to_spawn)
-
-        print(f"Total NPCs spawned: {len(self.npc_list)}")
 
     def check_win(self):
         hostile_npcs = [npc for npc in self.npc_list if npc.alive and not hasattr(npc, 'is_friendly')]
@@ -156,7 +147,6 @@ class ObjectHandler:
     def _spawn_random_enemies(self, count):
         """Helper method to spawn a given number of enemies at random positions"""
         if not self.npc_types:
-            print("Cannot spawn random enemies: NPC types list is empty.")
             return
 
         valid_positions = []
@@ -179,14 +169,9 @@ class ObjectHandler:
             npc_type_class = choices(self.npc_types, self.weights)[0]
             self.add_npc(npc_type_class(self.game, pos=(x + 0.5, y + 0.5)))
             spawned += 1
-            print(f"Spawned random NPC: {npc_type_class.__name__} at {(x + 0.5, y + 0.5)}")
-
-        if spawned < count:
-            print(f"Warning: Could only spawn {spawned} of {count} random enemies due to map constraints or lack of valid positions.")
 
     def reset(self):
         """Reset the object handler for a new level or game start."""
-        print("ObjectHandler reset called.")
         self.sprite_list = []
         self.npc_list = []
         self.npc_positions = {}

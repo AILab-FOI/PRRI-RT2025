@@ -26,14 +26,11 @@ class LevelManager:
 
                     # Get the level data from the module
                     self.level_data[level_num] = level_module.get_level_data()
-                    print(f"Loaded level {level_num} data successfully")
-                except ImportError as e:
-                    print(f"Error loading level {level_num}: {e}")
+                except ImportError:
                     # Create an empty level structure as fallback
                     from levels.base_level import create_base_level_structure
                     self.level_data[level_num] = create_base_level_structure()
-        except Exception as e:
-            print(f"Error initializing levels: {e}")
+        except Exception:
             # Fallback to empty level data
             self.level_data = {i: {} for i in range(1, self.max_level + 1)}
 
@@ -43,7 +40,6 @@ class LevelManager:
             self.current_level = level_number
             return self.level_data[level_number]
         else:
-            print(f"Error: Level {level_number} not found")
             return None
 
     def get_current_level_data(self):
@@ -89,15 +85,7 @@ class LevelManager:
         level_door_path = 'resources/sprites/static_sprites/level_door.png'
 
         # Make sure the files exist before trying to load them
-        if not os.path.isfile(terminal_path):
-            print(f"Warning: Terminal texture not found at {terminal_path}")
-
-        if not os.path.isfile(door_path):
-            print(f"Warning: Door texture not found at {door_path}")
-            # Don't set a fallback
-
         if not os.path.isfile(level_door_path):
-            print(f"Warning: Level door texture not found at {level_door_path}")
             level_door_path = door_path
 
         # Add terminals
@@ -181,14 +169,7 @@ class LevelManager:
         door_path = 'resources/sprites/static_sprites/door.png'
 
 
-        # Make sure the files exist before trying to load them
-        if not os.path.isfile(terminal_path):
-            print(f"Warning: Terminal texture not found at {terminal_path}")
-            # Don't set a fallback - better to have no sprite than wrong sprite
 
-        if not os.path.isfile(door_path):
-            print(f"Warning: Door texture not found at {door_path}")
-            # Don't set a fallback
 
         # Scan the map for terminal (14), door (11), and level exit door objects
         terminal_positions = []
@@ -274,7 +255,6 @@ class LevelManager:
             self._next_level = next_level
             return True
         elif next_level > self.max_level:
-            print("Congratulations! You have completed all levels!")
             return False
         return False
 
@@ -313,6 +293,5 @@ class LevelManager:
             self.game.new_game()
             return True
         elif next_level > self.max_level:
-            print("Congratulations! You have completed all levels!")
             return False
         return False

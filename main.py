@@ -64,7 +64,7 @@ class Game:
         else:
             self.object_handler.reset()
 
-    
+
         # Create the appropriate weapon based on the stored weapon type
         if self.level_manager.current_level == 1:
             # No weapon for level 1 until pickup
@@ -78,7 +78,7 @@ class Game:
                 self.weapon = Pistol(self)
         else:
             self.weapon = Pistol(self)
-            
+
         self.pathfinding = PathFinding(self)
         self.interaction = Interaction(self)
 
@@ -143,7 +143,6 @@ class Game:
 
         pg.display.flip()
         self.delta_time = self.clock.tick(FPS)
-        pg.display.set_caption(f'{self.clock.get_fps() :.1f}')
 
     def draw(self):
         if self.death_screen.active:

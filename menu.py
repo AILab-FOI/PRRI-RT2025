@@ -281,7 +281,6 @@ class Menu:
         ]
 
         bg_image_path = resource_path('resources/teksture/pocetna.png')
-        print(f"Loading menu background: {bg_image_path}")
         self.bg_image = pg.image.load(bg_image_path)
         self.bg_image = pg.transform.scale(self.bg_image, RES)
 

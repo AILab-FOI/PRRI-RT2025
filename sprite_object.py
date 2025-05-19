@@ -1,7 +1,6 @@
 import pygame as pg
 from settings import *
 import os
-import sys
 from collections import deque
 from font_manager import resource_path
 
@@ -18,10 +17,8 @@ class SpriteObject:
         # Add error handling for missing textures
         try:
             sprite_path = resource_path(path)
-            print(f"Loading sprite texture: {sprite_path}")
             self.image = pg.image.load(sprite_path).convert_alpha()
-        except Exception as e:
-            print(f"Error loading sprite texture {path}: {e}")
+        except Exception:
             # Create a small blank/transparent surface
             self.image = pg.Surface((32, 32), pg.SRCALPHA)
             self.image.fill((0, 0, 0, 0))  # Transparent
@@ -124,25 +121,21 @@ class AnimatedSprite(SpriteObject):
         try:
             # Check if path exists in the filesystem
             real_path = resource_path(path)
-            print(f"Loading animation frames from: {real_path}")
 
             if os.path.isdir(real_path):
                 for file_name in sorted(os.listdir(real_path)):
                     if os.path.isfile(os.path.join(real_path, file_name)):
                         try:
                             frame_path = os.path.join(real_path, file_name)
-                            print(f"Loading animation frame: {frame_path}")
                             img = pg.image.load(frame_path).convert_alpha()
                             images.append(img)
-                        except Exception as e:
-                            print(f"Error loading animation frame {file_name}: {e}")
+                        except Exception:
+                            pass
             else:
-                print(f"Warning: Animation directory not found at {real_path}")
                 blank_img = pg.Surface((32, 32), pg.SRCALPHA)
                 blank_img.fill((0, 0, 0, 0))
                 images.append(blank_img)
-        except Exception as e:
-            print(f"Error loading animation frames: {e}")
+        except Exception:
             blank_img = pg.Surface((32, 32), pg.SRCALPHA)
             blank_img.fill((0, 0, 0, 0))
             images.append(blank_img)

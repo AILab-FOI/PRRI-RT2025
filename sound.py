@@ -19,21 +19,17 @@ class Sound:
         """Helper method to load a sound and set its volume"""
         try:
             sound_path = resource_path(os.path.join(self.path, filename))
-            print(f"Loading sound: {sound_path}")
             sound = pg.mixer.Sound(sound_path)
             sound.set_volume(volume_factor * self.sfx_volume)
             return sound
-        except Exception as e:
-            print(f"Error loading sound {filename}: {e}")
+        except Exception:
             # Za sve greške, koristi placeholder
             try:
                 sound_path = resource_path(os.path.join(self.path, 'crash.wav'))
-                print(f"Loading placeholder sound: {sound_path}")
                 sound = pg.mixer.Sound(sound_path)
                 sound.set_volume(volume_factor * self.sfx_volume)
                 return sound
-            except Exception as e:
-                print(f"Failed to load placeholder sound: {e}")
+            except Exception:
                 # Ako ni placeholder ne radi, vrati None
                 return None
 
@@ -185,7 +181,6 @@ class Sound:
         # Učitaj glazbu za prvu razinu kao početnu
         self.current_music_level = 1
         music_path = resource_path(os.path.join(self.path, self.background_music[1]))
-        print(f"Loading music: {music_path}")
         pg.mixer.music.load(music_path)
         pg.mixer.music.set_volume(self.music_volume)
 
@@ -221,7 +216,6 @@ class Sound:
 
         # Provjeri postoji li placeholder zvuk
         if not os.path.exists(placeholder_path):
-            print(f"Placeholder sound {placeholder_path} not found")
             return
 
         # Dijalozi i broj linija
@@ -240,8 +234,8 @@ class Sound:
                 if not os.path.exists(target_path):
                     try:
                         shutil.copy(placeholder_path, target_path)
-                    except Exception as e:
-                        print(f"Error copying placeholder sound to {target_path}: {e}")
+                    except Exception:
+                        pass
 
     def get_dialogue_sound(self, dialogue_id, line_index, speaker=None):
         """Get sound for a specific dialogue line, loading it if necessary"""
@@ -261,7 +255,6 @@ class Sound:
                 import json
                 import os
                 dialogue_path = resource_path(os.path.join('resources', 'dialogues', f"{dialogue_id}.json"))
-                print(f"Loading dialogue data from: {dialogue_path}")
                 with open(dialogue_path, 'r') as f:
                     dialogue_data = json.load(f)
 
@@ -278,26 +271,21 @@ class Sound:
                     prefix = "Puzzle_"
                 else:
                     # Ako dijalog nije podržan, koristi placeholder
-                    print(f"Unsupported dialogue: {dialogue_id}, using placeholder")
                     return self.dialogue_line
 
                 if speaker == "Arthur":
                     sound_path = f"{prefix}Arthur{speaker_count}.mp3"
-                    print(f"Loading Arthur sound for {dialogue_id}: {sound_path}")
                 elif speaker == "Marvin":
                     sound_path = f"{prefix}Marvin{speaker_count}.mp3"
-                    print(f"Loading Marvin sound for {dialogue_id}: {sound_path}")
                 else:
                     # Ako govornik nije Arthur ili Marvin, koristi placeholder
-                    print(f"Unknown speaker: {speaker}, using placeholder")
                     return self.dialogue_line
 
                 # Učitaj zvuk
                 sound = self.load_sound(sound_path, self.volume_factors['dialogue_line'])
                 self.dialogue_sounds[sound_key] = sound
                 return sound
-            except Exception as e:
-                print(f"Couldn't load dialogue sound for {dialogue_id}, line {line_index}, speaker {speaker}: {e}")
+            except Exception:
                 return self.dialogue_line
 
         # Za ostale dijaloge, pokušaj učitati zvuk iz direktorija dialogues
@@ -310,9 +298,8 @@ class Sound:
             sound = self.load_sound(sound_path, self.volume_factors['dialogue_line'])
             self.dialogue_sounds[sound_key] = sound
             return sound
-        except Exception as e:
+        except Exception:
             # Ako zvuk ne postoji, koristi placeholder
-            print(f"Couldn't load dialogue sound {sound_key}: {e}")
             return self.dialogue_line
 
     def update_sfx_volume(self):
@@ -390,12 +377,10 @@ class Sound:
     def change_music_for_level(self, level):
         """Change background music based on the current level"""
         if level in self.background_music and level != self.current_music_level:
-            print(f"Changing music to level {level}: {self.background_music[level]}")
             # Zaustavi trenutnu glazbu
             pg.mixer.music.stop()
             # Učitaj novu glazbu
             music_path = resource_path(os.path.join(self.path, self.background_music[level]))
-            print(f"Loading music for level {level}: {music_path}")
             pg.mixer.music.load(music_path)
             # Postavi volumen
             pg.mixer.music.set_volume(self.music_volume)

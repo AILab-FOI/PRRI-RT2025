@@ -1,6 +1,4 @@
 import pygame as pg
-import os
-import sys
 from settings import *
 from font_manager import load_custom_font, resource_path
 from menu import Button, MetallicUIRenderer
@@ -11,7 +9,6 @@ class DeathScreen:
         self.screen = game.screen
         self.active = False
         bg_image_path = resource_path('resources/teksture/theEnd.png')
-        print(f"Loading death screen background: {bg_image_path}")
         self.bg_image = pg.image.load(bg_image_path)
         self.bg_image = pg.transform.scale(self.bg_image, RES)
         self.title_font = load_custom_font(72)

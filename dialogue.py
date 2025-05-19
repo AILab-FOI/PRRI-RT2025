@@ -2,7 +2,6 @@ import pygame as pg
 from settings import *
 import json
 import os
-import sys
 from font_manager import load_custom_font, resource_path
 
 
@@ -36,20 +35,18 @@ class DialogueManager:
 
     def load_dialogues(self):
         dialogue_dir = resource_path('resources/dialogues')
-        print(f"Loading dialogues from: {dialogue_dir}")
         try:
             for filename in os.listdir(dialogue_dir):
                 if filename.endswith('.json'):
                     dialogue_id = filename[:-5]
                     file_path = os.path.join(dialogue_dir, filename)
-                    print(f"Loading dialogue: {file_path}")
                     try:
                         with open(file_path, 'r') as f:
                             self.dialogues[dialogue_id] = json.load(f)
-                    except Exception as e:
-                        print(f"Error loading dialogue {filename}: {e}")
-        except Exception as e:
-            print(f"Error accessing dialogue directory: {e}")
+                    except Exception:
+                        pass
+        except Exception:
+            pass
 
     def start_dialogue(self, dialogue_id, npc):
         if dialogue_id in self.dialogues:
@@ -66,7 +63,6 @@ class DialogueManager:
 
             return True
         else:
-            print(f"Dialogue {dialogue_id} not found")
             return False
 
     def play_dialogue_sound(self):
@@ -85,7 +81,6 @@ class DialogueManager:
             self.current_sound.play()
             self.sound_playing = True
         else:
-            print(f"No sound to play for {dialogue_id}, line {self.current_line_index}, speaker {current_speaker}")
             self.sound_playing = False
 
     def get_current_dialogue_id(self):
