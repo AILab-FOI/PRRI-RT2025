@@ -54,9 +54,8 @@ class GameUI:
 
         # Check if the level-specific digit folder exists
         level_digit_path_abs = resource_path(level_digit_path)
-        if os.path.exists(level_digit_path_abs) and os.path.isdir(level_digit_path_abs):
-            print(f"Loading level-specific digits from {level_digit_path}")
 
+        if os.path.exists(level_digit_path_abs) and os.path.isdir(level_digit_path_abs):
             for i in range(11):
                 # Check if the specific digit exists in the level folder
                 digit_file = f'{level_digit_path}/{i}.png'
@@ -68,12 +67,10 @@ class GameUI:
                 else:
                     # If a specific digit is missing, use level1's digit as fallback
                     fallback_digit = f'{fallback_digit_path}/{i}.png'
-                    print(f"Digit {i} not found in {level_digit_path}, using fallback from {fallback_digit_path}")
                     img = self.load_texture(fallback_digit, [self.digit_size] * 2)
                     digits[str(i)] = img
         else:
             # If level-specific folder doesn't exist, use level1's digits
-            print(f"Level-specific digits folder not found for level {self.current_level}, using level1 digits")
             for i in range(11):
                 img = self.load_texture(f'{fallback_digit_path}/{i}.png', [self.digit_size] * 2)
                 digits[str(i)] = img
@@ -178,7 +175,6 @@ class GameUI:
     def update_level(self, level_number):
         """Update UI elements when the level changes"""
         if self.current_level != level_number:
-            print(f"UI updating for level {level_number}")
             self.current_level = level_number
             # Reload digit images for the new level
             self.digit_images = self.load_digit_images()

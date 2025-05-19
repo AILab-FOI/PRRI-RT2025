@@ -18,6 +18,7 @@ from loading_screen import LoadingScreen
 from level_transition import LevelTransition
 from game_events import GameEvents
 from death_screen import DeathScreen
+from victory_screen import VictoryScreen
 from ui import GameUI
 from visual_effects import DisorientingEffects
 
@@ -39,6 +40,7 @@ class Game:
         self.loading_screen = LoadingScreen(self)
         self.level_transition = LevelTransition(self)
         self.death_screen = DeathScreen(self)
+        self.victory_screen = VictoryScreen(self)
         self.game_events = GameEvents(self)
         self.disorienting_effects = DisorientingEffects(self)
         self.game_initialized = False
@@ -113,6 +115,10 @@ class Game:
             self.death_screen.update()
             return
 
+        if self.victory_screen.active:
+            self.victory_screen.update()
+            return
+
         # Update game components
         self.player.update()
         self.raycasting.update()
@@ -137,6 +143,10 @@ class Game:
             self.death_screen.draw()
             return
 
+        if self.victory_screen.active:
+            self.victory_screen.draw()
+            return
+
         # Draw game components
         self.object_renderer.draw()
         if self.weapon:  # Only draw weapon if it exists
@@ -157,6 +167,9 @@ class Game:
         if self.death_screen.active:
             return self.death_screen.handle_events()
 
+        if self.victory_screen.active:
+            return self.victory_screen.handle_events()
+
         return self.game_events.process_events()
 
     def next_level(self):
@@ -167,11 +180,6 @@ class Game:
         """Reset the current level when player dies"""
         current_level = self.level_manager.current_level
         self.map.load_level(current_level)
-
-        # Update UI for the current level
-        if hasattr(self, 'game_ui'):
-            self.game_ui.update_level(current_level)
-
         self.new_game()  # new_game() će promijeniti glazbu
         pg.mouse.set_visible(False)
 

@@ -73,12 +73,20 @@ class LevelTransition:
 
         if self.next_level_num > self.game.level_manager.max_level:
             print("Congratulations! You have completed all levels!")
-            return False
+            # Show victory screen when player completes the final level
+            self.screen_transitions.start_fade_in(speed=8, callback=self._show_victory_screen)
+            return True
 
         self.transition_state = "fade_out"
         self.screen_transitions.start_fade_in(speed=8, callback=self._show_loading_screen)
 
         return True
+
+    def _show_victory_screen(self):
+        """Show the victory screen after completing all levels"""
+        self.game.victory_screen.start()
+        self.transition_state = None
+        self.screen_transitions.start_fade_out(speed=5)
 
     def _show_loading_screen(self):
         """Show the loading screen after fade out"""
