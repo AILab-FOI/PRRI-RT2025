@@ -287,6 +287,11 @@ class LevelManager:
 
             self.current_level = self._next_level
             self.game.map.load_level(self.current_level)
+
+            # Update UI for the new level
+            if hasattr(self.game, 'game_ui'):
+                self.game.game_ui.update_level(self.current_level)
+
             return True
         return False
 
@@ -300,6 +305,11 @@ class LevelManager:
 
             self.current_level = next_level
             self.game.map.load_level(next_level)
+
+            # Update UI for the new level
+            if hasattr(self.game, 'game_ui'):
+                self.game.game_ui.update_level(self.current_level)
+
             self.game.new_game()
             return True
         elif next_level > self.max_level:

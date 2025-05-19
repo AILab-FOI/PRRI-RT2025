@@ -77,7 +77,13 @@ class Game:
         if not hasattr(self, 'dialogue_manager'):
             self.dialogue_manager = DialogueManager(self)
 
-        self.game_ui = GameUI(self)
+        # Initialize or update UI
+        if not hasattr(self, 'game_ui'):
+            self.game_ui = GameUI(self)
+        else:
+            # Update UI for the current level
+            self.game_ui.update_level(self.level_manager.current_level)
+
         self.level_manager.setup_dialogue_npcs()
         self.level_manager.setup_interactive_objects()
         self.pathfinding.update_graph()
@@ -161,6 +167,11 @@ class Game:
         """Reset the current level when player dies"""
         current_level = self.level_manager.current_level
         self.map.load_level(current_level)
+
+        # Update UI for the current level
+        if hasattr(self, 'game_ui'):
+            self.game_ui.update_level(current_level)
+
         self.new_game()  # new_game() će promijeniti glazbu
         pg.mouse.set_visible(False)
 
