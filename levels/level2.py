@@ -1,5 +1,5 @@
 """
-Level 1 configuration
+Level 2 configuration
 """
 from npc import StakorNPC
 from levels.base_level import create_base_level_structure

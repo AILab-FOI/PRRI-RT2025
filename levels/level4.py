@@ -1,5 +1,5 @@
 """
-Level 3 configuration
+Level 4 configuration
 """
 from npc import MadracNPC, ParazitNPC, TosterNPC
 from levels.base_level import create_base_level_structure

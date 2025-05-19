@@ -1,5 +1,5 @@
 """
-Level 2 configuration
+Level 3 configuration
 """
 from npc import KlonoviNPC, JazavacNPC
 from levels.base_level import create_base_level_structure

@@ -1,5 +1,5 @@
 """
-Level 5 configuration - Final level
+Level 1 configuration
 """
 from npc import KlonoviNPC, StakorNPC, MadracNPC
 from levels.base_level import create_base_level_structure

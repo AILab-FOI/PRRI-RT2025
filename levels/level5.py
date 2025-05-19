@@ -1,5 +1,5 @@
 """
-Level 4 configuration
+Level 5 configuration
 """
 from npc import BossNPC
 from levels.base_level import create_base_level_structure
