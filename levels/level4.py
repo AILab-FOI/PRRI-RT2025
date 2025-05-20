@@ -173,10 +173,10 @@ def get_level_data():
         'weights': [50, 50],
         'restricted_area': {
             #*{(i, j) for i in range(10) for j in range(10)
-            *{(i, j) for i in range(15, 20) for j in range(6)}
+            *{(i, j) for i in range(14, 21) for j in range(8)}
             },  # Larger restricted area like in level 1
         'fixed_positions': [
-            {'type': ParazitNPC, 'position': (22, 28)},  # Miniboss Parazit in the arena area
+            {'type': ParazitNPC, 'position': (24, 28)},  # Miniboss Parazit in the arena area
         ]
     }
 

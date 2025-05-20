@@ -17,7 +17,7 @@ class KlonoviNPC(NPC):
             'speed': 0.04,
             'accuracy': 0.25,
             'death_height_shift': 0.7,
-            'behavior': 'basic',
+            'behavior': 'ranged',
             'sounds': {
                 'attack': 'npc_attack',
                 'pain': 'npc_pain',
@@ -86,7 +86,7 @@ class ParazitNPC(NPC):
             'attack_dist': 2.0,
             'health': 525,
             'attack_damage': 15,
-            'speed': 0.05,
+            'speed': 0.055,
             'accuracy': 0.4,
             'death_height_shift': 0.8,
             'behavior': 'melee',
@@ -149,7 +149,7 @@ class BossNPC(NPC):
             'health': 1000,
             'attack_damage': 20,
             'speed': 0.06,
-            'accuracy': 0.5,
+            'accuracy': 0.45,
             'death_height_shift': 0.3,
             'behavior': 'melee',
             'sounds': {
