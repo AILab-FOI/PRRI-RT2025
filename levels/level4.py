@@ -5,7 +5,7 @@ from npc import MadracNPC, ParazitNPC, TosterNPC
 from levels.base_level import create_base_level_structure
 
 def get_level_data():
-    """Return the complete level 3 data"""
+    """Return the complete level 4 data"""
     level_data = create_base_level_structure()
 
     # Terminals
@@ -189,28 +189,6 @@ def get_level_data():
         #}
     ]
 
-    # Powerups in the arena area
-    level_data['powerups'] = [
-        {
-            'position': (10, 27),
-            'powerup_type': 'invulnerability'
-        },
-        {
-            'position': (24, 27),
-            'powerup_type': 'invulnerability'
-        },
-        {
-            'position': (14, 31),
-            'powerup_type': 'invulnerability'
-        },
-        {
-            'position': (20, 31),
-            'powerup_type': 'invulnerability'
-        },
-        {
-            'position': (17, 32),
-            'powerup_type': 'invulnerability'
-        }
-    ]
+    
 
     return level_data

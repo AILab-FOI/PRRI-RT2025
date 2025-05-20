@@ -21,10 +21,10 @@ def get_level_data():
         #}
     ]
 
-    # Doors - only keeping the exit door which is handled by level_manager.py
+    
     level_data['doors'] = []
 
-    # Add the plasma gun at the beginning of level 5
+    
     level_data['weapons'] = [
         {
 

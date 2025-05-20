@@ -5,7 +5,7 @@ from npc import StakorNPC
 from levels.base_level import create_base_level_structure
 
 def get_level_data():
-    """Return the complete level 1 data"""
+    """Return the complete level 2 data"""
     level_data = create_base_level_structure()
 
     # Level narrative
@@ -57,9 +57,6 @@ def get_level_data():
         ## pored vrata
         (('level2', 'ukras2'), (12.9, 33.5)),
         (('level2', 'ukras2'), (12.1, 33.5)),
-
-        # Using level1 folder
-        (('level1', 'powerup'), (1.5, 26.1)),
 
         # Using static sprites folder
         ('ukras2', (1.9, 26.1)),
