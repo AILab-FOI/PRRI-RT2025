@@ -35,8 +35,8 @@ class StakorNPC(NPC):
         config = {
             'attack_dist': 1.5,
             'health': 50,
-            'attack_damage': 7,
-            'speed': 0.04,
+            'attack_damage': 6,
+            'speed': 0.035,
             'accuracy': 0.3,
             'death_height_shift': 0.8,
             'behavior': 'melee',
@@ -66,7 +66,7 @@ class TosterNPC(NPC):
             'health': 80,
             'attack_damage': 7,
             'speed': 0.035,
-            'accuracy': 0.35,
+            'accuracy': 0.3,
             'death_height_shift': 0.7,
             'behavior': 'ranged',
             'sounds': {
@@ -84,9 +84,9 @@ class ParazitNPC(NPC):
                  scale=0.8, shift=0.4, animation_time=200):
         config = {
             'attack_dist': 2.0,
-            'health': 550,
+            'health': 450,
             'attack_damage': 15,
-            'speed': 0.055,
+            'speed': 0.05,
             'accuracy': 0.4,
             'death_height_shift': 0.8,
             'behavior': 'melee',
@@ -126,8 +126,8 @@ class MadracNPC(NPC):
                  scale=0.6, shift=0.4, animation_time=180):
         config = {
             'attack_dist': 1.5,
-            'health': 250,
-            'attack_damage': 12,
+            'health': 180,
+            'attack_damage': 10,
             'speed': 0.03,
             'accuracy': 0.3,
             'death_height_shift': 0.7,
@@ -146,10 +146,10 @@ class BossNPC(NPC):
                  scale=1.5, shift=0, animation_time=220):
         config = {
             'attack_dist': 3.5,
-            'health': 1000,
+            'health': 800,
             'attack_damage': 20,
-            'speed': 0.06,
-            'accuracy': 0.45,
+            'speed': 0.055,
+            'accuracy': 0.4,
             'death_height_shift': 0.3,
             'behavior': 'melee',
             'sounds': {
