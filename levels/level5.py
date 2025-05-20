@@ -27,7 +27,7 @@ def get_level_data():
     # Add the plasma gun at the beginning of level 5
     level_data['weapons'] = [
         {
-            'position': (9, 3),
+            'position': (16.5, 3.5),
             'weapon_type': 'plasmagun',
             'path': 'resources/sprites/weapon/plasma_stand.png'
         }
@@ -64,7 +64,7 @@ def get_level_data():
     # Dialogue NPCs
     level_data['dialogue_npcs'] = [
         {
-            'pos': (9.5, 3.5),
+            'pos': (11.5, 4.5),
             'dialogue_id': 'marvin_ending',
             'path': 'resources/sprites/npc/dialogue_npc/0.png'
         }
