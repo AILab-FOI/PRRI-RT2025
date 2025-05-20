@@ -58,6 +58,10 @@ class Sound:
             'igrac_damage': 0.7,
             'player_dash': 0.5,
 
+            # Game state sounds
+            'victory': 0.7,
+            'defeat': 0.7,
+
             # Generic NPC sounds
             'npc_pain': 0.5,
             'npc_death': 0.9,
@@ -161,6 +165,10 @@ class Sound:
         # ===== MENU SOUNDS =====
         self.menu_hover = self.load_sound('menu_hover.mp3', self.volume_factors['menu_hover'])
         self.menu_click = self.load_sound('menu_klik.wav', self.volume_factors['menu_click'])
+
+        # ===== GAME STATE SOUNDS =====
+        self.victory = self.load_sound('pobjeda.mp3', self.volume_factors['victory'])
+        self.defeat = self.load_sound('poraz.mp3', self.volume_factors['defeat'])
 
         # ===== DIALOGUE SOUNDS =====
         # Placeholder zvuk za dijalog - koristimo crash.wav za sve linije
@@ -364,6 +372,10 @@ class Sound:
             # Menu sounds
             'menu_hover': self.menu_hover,
             'menu_click': self.menu_click,
+
+            # Game state sounds
+            'victory': self.victory,
+            'defeat': self.defeat,
 
             # Dialogue sounds
             'dialogue_line': self.dialogue_line

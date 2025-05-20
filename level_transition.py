@@ -84,7 +84,7 @@ class LevelTransition:
 
     def _show_victory_screen(self):
         """Show the victory screen after completing all levels"""
-        self.game.victory_screen.start()
+        self.game.victory_screen.start()  # Ovo će reproducirati zvuk pobjede
         self.transition_state = None
         self.screen_transitions.start_fade_out(speed=5)
 
