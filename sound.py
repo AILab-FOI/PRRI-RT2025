@@ -41,6 +41,11 @@ class Sound:
         self.music_volume = 0.1
         self.sfx_volume = 0.7
 
+        # Atributi za audio ducking (smanjenje glasnoće glazbe tijekom dijaloga)
+        self.normal_music_volume = 0.1  # Normalna glasnoća glazbe
+        self.ducking_music_volume = 0.03  # Smanjena glasnoća glazbe tijekom dijaloga
+        self.is_ducking = False  # Zastavica koja označava je li glasnoća glazbe smanjena
+
         # Sound volume factors
         self.volume_factors = {
             # Weapon sounds
@@ -374,7 +379,22 @@ class Sound:
 
     def update_music_volume(self):
         """Update background music volume based on music_volume setting"""
-        pg.mixer.music.set_volume(self.music_volume)
+        if self.is_ducking:
+            pg.mixer.music.set_volume(self.ducking_music_volume)
+        else:
+            pg.mixer.music.set_volume(self.normal_music_volume)
+
+    def duck_music(self):
+        """Reduce music volume during dialogue"""
+        if not self.is_ducking:
+            self.is_ducking = True
+            pg.mixer.music.set_volume(self.ducking_music_volume)
+
+    def unduck_music(self):
+        """Restore normal music volume after dialogue"""
+        if self.is_ducking:
+            self.is_ducking = False
+            pg.mixer.music.set_volume(self.normal_music_volume)
 
     def change_music_for_level(self, level):
         """Change background music based on the current level"""
@@ -384,8 +404,11 @@ class Sound:
             # Učitaj novu glazbu
             music_path = resource_path(os.path.join(self.path, self.background_music[level]))
             pg.mixer.music.load(music_path)
-            # Postavi volumen
-            pg.mixer.music.set_volume(self.music_volume)
+            # Postavi volumen ovisno o tome je li dijalog aktivan
+            if self.is_ducking:
+                pg.mixer.music.set_volume(self.ducking_music_volume)
+            else:
+                pg.mixer.music.set_volume(self.normal_music_volume)
             # Pokreni glazbu
             pg.mixer.music.play(-1)  # -1 znači beskonačno ponavljanje
             # Ažuriraj trenutnu razinu glazbe

@@ -59,6 +59,9 @@ class DialogueManager:
             self.current_line_index = 0
             self.dialogue_active = True
 
+            # Smanji glasnoću glazbe tijekom dijaloga
+            self.game.sound.duck_music()
+
             self.play_dialogue_sound()
 
             return True
@@ -111,6 +114,9 @@ class DialogueManager:
             self.current_sound.stop()
             self.sound_playing = False
             self.current_sound = None
+
+        # Vrati glasnoću glazbe na normalnu razinu
+        self.game.sound.unduck_music()
 
         pg.mouse.set_pos([HALF_WIDTH, HALF_HEIGHT])
         pg.mouse.get_rel()
