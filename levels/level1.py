@@ -26,7 +26,7 @@ def get_level_data():
         {
             'position': (5, 13),
             'weapon_type': 'pistol',
-            'path': 'resources/sprites/weapon/pistol/3.png'
+            'path': 'resources/sprites/weapon/pistol_stand.png'
         }
     ]
 

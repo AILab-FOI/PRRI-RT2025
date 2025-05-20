@@ -168,7 +168,7 @@ def get_level_data():
 
     # Enemy configuration
     level_data['enemies'] = {
-        'count': 15,
+        'count': 14,
         'types': [TosterNPC, MadracNPC],
         'weights': [50, 50],
         'restricted_area': {

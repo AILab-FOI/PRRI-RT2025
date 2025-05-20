@@ -11,7 +11,7 @@ class KlonoviNPC(NPC):
     def __init__(self, game, path='resources/sprites/npc/klonovi/0.png', pos=(10.5, 5.5),
                  scale=0.6, shift=0.38, animation_time=180):
         config = {
-            'attack_dist': 3.0,
+            'attack_dist': 4,
             'health': 70,
             'attack_damage': 5,
             'speed': 0.04,
@@ -36,7 +36,7 @@ class StakorNPC(NPC):
             'attack_dist': 1.5,
             'health': 50,
             'attack_damage': 7,
-            'speed': 0.035,
+            'speed': 0.04,
             'accuracy': 0.3,
             'death_height_shift': 0.8,
             'behavior': 'melee',
@@ -84,7 +84,7 @@ class ParazitNPC(NPC):
                  scale=0.8, shift=0.4, animation_time=200):
         config = {
             'attack_dist': 2.0,
-            'health': 525,
+            'health': 550,
             'attack_damage': 15,
             'speed': 0.055,
             'accuracy': 0.4,
