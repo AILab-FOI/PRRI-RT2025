@@ -27,7 +27,9 @@ def get_level_data():
     # Add the plasma gun at the beginning of level 5
     level_data['weapons'] = [
         {
+
             'position': (16.5, 3.5),
+
             'weapon_type': 'plasmagun',
             'path': 'resources/sprites/weapon/plasma_stand.png'
         }
