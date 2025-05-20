@@ -69,6 +69,12 @@ class DeathScreen:
                 if button.is_clicked(event, self.game):
                     if i == 0:
                         self.active = False
+
+                        # Zaustavi zvuk poraza prije resetiranja razine
+                        if self.game.sound.defeat:
+                            self.game.sound.defeat.stop()
+
+                        # Resetiraj razinu
                         self.game.reset_current_level()
                         return False
 

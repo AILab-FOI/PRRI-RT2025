@@ -185,6 +185,10 @@ class Game:
     def reset_current_level(self):
         """Reset the current level when player dies"""
         current_level = self.level_manager.current_level
+
+        # Resetiraj trenutnu razinu glazbe da bi se glazba ponovno pokrenula
+        self.sound.current_music_level = -1  # Postavi na vrijednost koja nije valjana razina
+
         self.map.load_level(current_level)
         self.new_game()  # new_game() će promijeniti glazbu
         pg.mouse.set_visible(False)
