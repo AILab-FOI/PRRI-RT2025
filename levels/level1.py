@@ -1,11 +1,11 @@
 """
-Level 1 configuration
+Level 1 configuration - Final level
 """
 from npc import KlonoviNPC, StakorNPC, MadracNPC
 from levels.base_level import create_base_level_structure
 
 def get_level_data():
-    """Return the complete level 5 data"""
+    """Return the complete level 1 data"""
     level_data = create_base_level_structure()
 
     # Level narrative
