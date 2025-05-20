@@ -249,8 +249,8 @@ class Sound:
         if sound_key in self.dialogue_sounds:
             return self.dialogue_sounds[sound_key]
 
-        # Posebna obrada za marvin_intro i level2_puzzle dijaloge
-        if (dialogue_id == "marvin_intro" or dialogue_id == "level2_puzzle") and speaker:
+        # Posebna obrada za marvin_intro, level2_puzzle i marvin_ending dijaloge
+        if (dialogue_id == "marvin_intro" or dialogue_id == "level2_puzzle" or dialogue_id == "marvin_ending") and speaker:
             try:
                 # Brojimo koliko puta se svaki govornik pojavio do trenutne linije
                 speaker_count = 0
@@ -274,6 +274,8 @@ class Sound:
                     prefix = "Intro_"
                 elif dialogue_id == "level2_puzzle":
                     prefix = "Puzzle_"
+                elif dialogue_id == "marvin_ending":
+                    prefix = "Ending_"
                 else:
                     # Ako dijalog nije podržan, koristi placeholder
                     print(f"Unsupported dialogue: {dialogue_id}, using placeholder")
