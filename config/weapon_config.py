@@ -33,7 +33,7 @@ SMG_CONFIG = {
 PLASMA_GUN_CONFIG = {
     'name': 'plasmagun',
     'path': 'resources/sprites/weapon/plasmagun/0.png',
-    'scale': 15.0,
+    'scale': 0.5,
     'animation_time': 30,  # Fastest fire rate of all weapons
     'damage': 50,  # Highest damage per shot
     'accuracy': 0.9,  # High accuracy
