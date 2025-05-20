@@ -36,12 +36,12 @@ class VictoryScreen:
         # Zaustavi sve zvukove koji se trenutno reproduciraju
         pg.mixer.stop()
 
-        # Reproduciraj zvuk pobjede s većim volumenom
+        # Reproduciraj zvuk pobjede s prilagođenim volumenom
         print("Reproduciram zvuk pobjede...")
         if self.game.sound.victory:
-            # Privremeno povećaj volumen zvuka pobjede
+            # Privremeno postavi volumen zvuka pobjede na umjerenu razinu
             self.original_volume = self.game.sound.victory.get_volume()
-            self.game.sound.victory.set_volume(1.0)  # Postavi na maksimalni volumen
+            self.game.sound.victory.set_volume(0.4)  # Postavi na 40% maksimalnog volumena
             self.game.sound.victory.play()
             # Vrati volumen na originalnu vrijednost nakon 500ms
             pg.time.set_timer(pg.USEREVENT + 3, 500)

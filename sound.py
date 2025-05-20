@@ -59,8 +59,8 @@ class Sound:
             'player_dash': 0.5,
 
             # Game state sounds
-            'victory': 0.7,
-            'defeat': 0.7,
+            'victory': 0.5,
+            'defeat': 0.4,
 
             # Generic NPC sounds
             'npc_pain': 0.5,
