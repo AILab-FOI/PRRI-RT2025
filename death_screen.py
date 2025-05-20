@@ -29,6 +29,24 @@ class DeathScreen:
         self.active = True
         pg.mouse.set_visible(True)
 
+        # Zaustavi pozadinsku glazbu
+        pg.mixer.music.stop()
+
+        # Zaustavi sve zvukove koji se trenutno reproduciraju
+        pg.mixer.stop()
+
+        # Reproduciraj zvuk poraza s većim volumenom
+        print("Reproduciram zvuk poraza...")
+        if self.game.sound.defeat:
+            # Privremeno povećaj volumen zvuka poraza
+            self.original_volume = self.game.sound.defeat.get_volume()
+            self.game.sound.defeat.set_volume(1.0)  # Postavi na maksimalni volumen
+            self.game.sound.defeat.play()
+            # Vrati volumen na originalnu vrijednost nakon 500ms
+            pg.time.set_timer(pg.USEREVENT + 2, 500)
+        else:
+            print("Zvuk poraza nije učitan!")
+
     def handle_events(self):
         if not self.active:
             return False
@@ -40,11 +58,23 @@ class DeathScreen:
                 pg.quit()
                 exit()
 
+            # Obradi događaj za vraćanje volumena zvuka poraza na originalnu vrijednost
+            elif event.type == pg.USEREVENT + 2:
+                if hasattr(self, 'original_volume') and self.game.sound.defeat:
+                    self.game.sound.defeat.set_volume(self.original_volume)
+                pg.time.set_timer(pg.USEREVENT + 2, 0)  # Zaustavi timer
+
             for i, button in enumerate(self.buttons):
                 button.update(mouse_pos, self.game)
                 if button.is_clicked(event, self.game):
                     if i == 0:
                         self.active = False
+
+                        # Zaustavi zvuk poraza prije resetiranja razine
+                        if self.game.sound.defeat:
+                            self.game.sound.defeat.stop()
+
+                        # Resetiraj razinu
                         self.game.reset_current_level()
                         return False
 

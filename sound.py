@@ -58,6 +58,10 @@ class Sound:
             'igrac_damage': 0.7,
             'player_dash': 0.5,
 
+            # Game state sounds
+            'victory': 0.7,
+            'defeat': 0.7,
+
             # Generic NPC sounds
             'npc_pain': 0.5,
             'npc_death': 0.9,
@@ -161,6 +165,10 @@ class Sound:
         # ===== MENU SOUNDS =====
         self.menu_hover = self.load_sound('menu_hover.mp3', self.volume_factors['menu_hover'])
         self.menu_click = self.load_sound('menu_klik.wav', self.volume_factors['menu_click'])
+
+        # ===== GAME STATE SOUNDS =====
+        self.victory = self.load_sound('pobjeda.mp3', self.volume_factors['victory'])
+        self.defeat = self.load_sound('poraz.mp3', self.volume_factors['defeat'])
 
         # ===== DIALOGUE SOUNDS =====
         # Placeholder zvuk za dijalog - koristimo crash.wav za sve linije
@@ -365,6 +373,10 @@ class Sound:
             'menu_hover': self.menu_hover,
             'menu_click': self.menu_click,
 
+            # Game state sounds
+            'victory': self.victory,
+            'defeat': self.defeat,
+
             # Dialogue sounds
             'dialogue_line': self.dialogue_line
         }
@@ -398,18 +410,26 @@ class Sound:
 
     def change_music_for_level(self, level):
         """Change background music based on the current level"""
-        if level in self.background_music and level != self.current_music_level:
-            # Zaustavi trenutnu glazbu
-            pg.mixer.music.stop()
-            # Učitaj novu glazbu
-            music_path = resource_path(os.path.join(self.path, self.background_music[level]))
-            pg.mixer.music.load(music_path)
-            # Postavi volumen ovisno o tome je li dijalog aktivan
-            if self.is_ducking:
-                pg.mixer.music.set_volume(self.ducking_music_volume)
-            else:
-                pg.mixer.music.set_volume(self.normal_music_volume)
-            # Pokreni glazbu
-            pg.mixer.music.play(-1)  # -1 znači beskonačno ponavljanje
-            # Ažuriraj trenutnu razinu glazbe
-            self.current_music_level = level
+        if level in self.background_music:
+            # Provjeri je li potrebno promijeniti glazbu
+            change_music = level != self.current_music_level
+
+            # Ako je glazba već zaustavljena, uvijek je ponovno pokreni
+            if not pg.mixer.music.get_busy():
+                change_music = True
+
+            if change_music:
+                # Zaustavi trenutnu glazbu
+                pg.mixer.music.stop()
+                # Učitaj novu glazbu
+                music_path = resource_path(os.path.join(self.path, self.background_music[level]))
+                pg.mixer.music.load(music_path)
+                # Postavi volumen ovisno o tome je li dijalog aktivan
+                if self.is_ducking:
+                    pg.mixer.music.set_volume(self.ducking_music_volume)
+                else:
+                    pg.mixer.music.set_volume(self.normal_music_volume)
+                # Pokreni glazbu
+                pg.mixer.music.play(-1)  # -1 znači beskonačno ponavljanje
+                # Ažuriraj trenutnu razinu glazbe
+                self.current_music_level = level
