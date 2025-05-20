@@ -11,8 +11,18 @@ class KlonoviNPC(NPC):
     def __init__(self, game, path='resources/sprites/npc/klonovi/0.png', pos=(10.5, 5.5),
                  scale=0.6, shift=0.38, animation_time=180):
         config = {
+            'attack_dist': 3.0,
+            'health': 70,
+            'attack_damage': 5,
+            'speed': 0.04,
+            'accuracy': 0.2,
             'death_height_shift': 0.7,
-            'behavior': 'basic'
+            'behavior': 'basic',
+            'sounds': {
+                'attack': 'npc_attack',
+                'pain': 'npc_pain',
+                'death': 'npc_death'
+            }
         }
         super().__init__(game, path, pos, scale, shift, animation_time, config)
         self.original_height_shift = self.SPRITE_HEIGHT_SHIFT
@@ -24,16 +34,16 @@ class StakorNPC(NPC):
                  scale=0.5, shift=0.4, animation_time=200):
         config = {
             'attack_dist': 1.5,
-            'health': 50,
-            'attack_damage': 8,
-            'speed': 0.035,
+            'health': 100,
+            'attack_damage': 7,
+            'speed': 0.045,
             'accuracy': 0.3,
             'death_height_shift': 0.8,
-            'behavior': 'melee',
+            'behavior': 'ranged',
             'sounds': {
-                'attack': 'napad_stakor',
+                'attack': 'npc_attack',
                 'pain': 'npc_pain',
-                'death': 'stakor_smrt'
+                'death': 'npc_death'
             }
         }
         super().__init__(game, path, pos, scale, shift, animation_time, config)

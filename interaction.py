@@ -20,6 +20,7 @@ class Interaction:
         self.message = ""
         self.message_time = 0
         self.message_duration = 3000
+        self.is_showing_indicator = False  # Add this flag
 
     def add_object(self, obj):
         self.interaction_objects.append(obj)
@@ -41,18 +42,42 @@ class Interaction:
 
     def draw(self):
         if hasattr(self.game, 'intro_sequence') and self.game.intro_sequence.active:
+            self.is_showing_indicator = False
             return
 
+        # Reset the flag at the beginning of each frame
+        self.is_showing_indicator = False
+
         if self.show_interaction_prompt and not self.input_active:
-            # Draw + sign in center
-            indicator_size = 15
-            line_width = 2
-            pg.draw.line(self.game.screen, (255, 255, 255),
-                        (HALF_WIDTH - indicator_size, HALF_HEIGHT),
-                        (HALF_WIDTH + indicator_size, HALF_HEIGHT), line_width)
-            pg.draw.line(self.game.screen, (255, 255, 255),
-                        (HALF_WIDTH, HALF_HEIGHT - indicator_size),
-                        (HALF_WIDTH, HALF_HEIGHT + indicator_size), line_width)
+            # Set the flag to true when we're showing the interaction indicator
+            self.is_showing_indicator = True
+            
+            # Get crosshair position from game_ui instead of ui
+            if hasattr(self.game, 'game_ui') and hasattr(self.game.game_ui, 'crosshair_pos'):
+                crosshair_pos = self.game.game_ui.crosshair_pos
+                crosshair_size = self.game.game_ui.crosshair_size
+                
+                # Calculate center of crosshair
+                center_x = crosshair_pos[0] + crosshair_size // 2
+                center_y = crosshair_pos[1] + crosshair_size // 2
+                
+                # Draw + sign at crosshair position
+                indicator_size = 15
+                line_width = 2
+                pg.draw.line(self.game.screen, (255, 255, 255),
+                            (center_x - indicator_size, center_y),
+                            (center_x + indicator_size, center_y), line_width)
+                pg.draw.line(self.game.screen, (255, 255, 255),
+                            (center_x, center_y - indicator_size),
+                            (center_x, center_y + indicator_size), line_width)
+            else:
+                # Fallback to center of screen if game_ui or crosshair_pos not available
+                pg.draw.line(self.game.screen, (255, 255, 255),
+                            (HALF_WIDTH - 15, HALF_HEIGHT),
+                            (HALF_WIDTH + 15, HALF_HEIGHT), 2)
+                pg.draw.line(self.game.screen, (255, 255, 255),
+                            (HALF_WIDTH, HALF_HEIGHT - 15),
+                            (HALF_WIDTH, HALF_HEIGHT + 15), 2)
 
             # Get appropriate prompt text
             if self.active_object.interaction_type == "level_door":

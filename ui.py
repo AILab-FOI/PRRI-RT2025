@@ -37,8 +37,15 @@ class GameUI:
         # Load crosshair
         self.crosshair_size = 48  # Size to display the crosshair (smaller than original)
         self.crosshair = self.load_texture('resources/teksture/Blue-crosshair.png', (self.crosshair_size, self.crosshair_size))
-        # Calculate position to center the crosshair
-        self.crosshair_pos = (HALF_WIDTH - self.crosshair_size // 2, HALF_HEIGHT - self.crosshair_size // 2)
+        
+        # Offset from center (positive values move it down)
+        self.crosshair_y_offset = 40  # Adjust this value to move crosshair down
+        
+        # Calculate position to center the crosshair horizontally, but offset vertically
+        self.crosshair_pos = (
+            HALF_WIDTH - self.crosshair_size // 2, 
+            HALF_HEIGHT - self.crosshair_size // 2 + self.crosshair_y_offset
+        )
 
     def load_texture(self, path, res):
         texture_path = resource_path(path)
@@ -92,7 +99,9 @@ class GameUI:
 
     def draw_crosshair(self):
         """Draw the crosshair in the center of the screen"""
-        self.screen.blit(self.crosshair, self.crosshair_pos)
+        # Only draw the crosshair if we're not showing the interaction indicator
+        if not hasattr(self.game, 'interaction') or not self.game.interaction.is_showing_indicator:
+            self.screen.blit(self.crosshair, self.crosshair_pos)
 
     def draw_dash_indicator(self):
         current_time = pg.time.get_ticks()
