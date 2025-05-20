@@ -4,8 +4,8 @@ PISTOL_CONFIG = {
     'name': 'pistol',
     'path': 'resources/sprites/weapon/pistol/0.png',
     'scale': 0.22,
-    'animation_time': 200,  # Lower = faster firing rate
-    'damage': 30,  # Damage per shot (30 damage requires ~3-4 shots for standard 100 HP enemy)
+    'animation_time': 210,  # Lower = faster firing rate
+    'damage': 25,  # Damage per shot (30 damage requires ~3-4 shots for standard 100 HP enemy)
     'accuracy': 0.95,  # High precision with minimal spread (not currently used but prepared for future implementation)
     'auto_fire': False,  # Whether the weapon can be fired automatically by holding the mouse button
     'sound': 'pistolj',  # Sound effect to play when firing
@@ -34,7 +34,7 @@ PLASMA_GUN_CONFIG = {
     'name': 'plasmagun',
     'path': 'resources/sprites/weapon/plasmagun/0.png',
     'scale': 0.5,
-    'animation_time': 325,  # Fastest fire rate of all weapons
+    'animation_time': 500,  # Fastest fire rate of all weapons
     'damage': 50,  # Highest damage per shot
     'accuracy': 0.9,  # High accuracy
     'auto_fire': False,  # Can be fired automatically by holding the mouse button

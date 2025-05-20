@@ -176,7 +176,7 @@ def get_level_data():
             *{(i, j) for i in range(15, 20) for j in range(6)}
             },  # Larger restricted area like in level 1
         'fixed_positions': [
-            {'type': ParazitNPC, 'position': (17, 30)},  # Miniboss Parazit in the arena area
+            {'type': ParazitNPC, 'position': (22, 28)},  # Miniboss Parazit in the arena area
         ]
     }
 

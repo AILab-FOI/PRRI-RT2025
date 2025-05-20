@@ -15,7 +15,7 @@ class KlonoviNPC(NPC):
             'health': 70,
             'attack_damage': 5,
             'speed': 0.04,
-            'accuracy': 0.2,
+            'accuracy': 0.25,
             'death_height_shift': 0.7,
             'behavior': 'basic',
             'sounds': {
@@ -34,16 +34,16 @@ class StakorNPC(NPC):
                  scale=0.5, shift=0.4, animation_time=200):
         config = {
             'attack_dist': 1.5,
-            'health': 100,
+            'health': 50,
             'attack_damage': 7,
-            'speed': 0.045,
+            'speed': 0.035,
             'accuracy': 0.3,
             'death_height_shift': 0.8,
-            'behavior': 'ranged',
+            'behavior': 'melee',
             'sounds': {
-                'attack': 'npc_attack',
+                'attack': 'stakor_napad',
                 'pain': 'npc_pain',
-                'death': 'npc_death'
+                'death': 'stakor_smrt'
             }
         }
         super().__init__(game, path, pos, scale, shift, animation_time, config)
@@ -64,9 +64,9 @@ class TosterNPC(NPC):
         config = {
             'attack_dist': 4.0,
             'health': 80,
-            'attack_damage': 8,
-            'speed': 0.03,
-            'accuracy': 0.45,
+            'attack_damage': 7,
+            'speed': 0.035,
+            'accuracy': 0.35,
             'death_height_shift': 0.7,
             'behavior': 'ranged',
             'sounds': {
@@ -84,7 +84,7 @@ class ParazitNPC(NPC):
                  scale=0.8, shift=0.4, animation_time=200):
         config = {
             'attack_dist': 2.0,
-            'health': 500,
+            'health': 525,
             'attack_damage': 15,
             'speed': 0.05,
             'accuracy': 0.4,
@@ -105,7 +105,7 @@ class JazavacNPC(NPC):
                  scale=0.6, shift=0.38, animation_time=180):
         config = {
             'attack_dist': 2.0,
-            'health': 100,
+            'health': 120,
             'attack_damage': 12,
             'speed': 0.025,
             'accuracy': 0.3,
@@ -125,11 +125,11 @@ class MadracNPC(NPC):
     def __init__(self, game, path='resources/sprites/npc/madraci/0.png', pos=(10.5, 5.5),
                  scale=0.6, shift=0.4, animation_time=180):
         config = {
-            'attack_dist': 2.5,
-            'health': 200,
+            'attack_dist': 1.5,
+            'health': 250,
             'attack_damage': 12,
-            'speed': 0.04,
-            'accuracy': 0.35,
+            'speed': 0.03,
+            'accuracy': 0.3,
             'death_height_shift': 0.7,
             'behavior': 'ranged',
             'sounds': {
@@ -147,9 +147,9 @@ class BossNPC(NPC):
         config = {
             'attack_dist': 3.5,
             'health': 1000,
-            'attack_damage': 10,
-            'speed': 0.04,
-            'accuracy': 0.4,
+            'attack_damage': 20,
+            'speed': 0.06,
+            'accuracy': 0.5,
             'death_height_shift': 0.3,
             'behavior': 'melee',
             'sounds': {

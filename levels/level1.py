@@ -43,7 +43,7 @@ def get_level_data():
     # Enemy configuration - challenging final level
     level_data['enemies'] = {
         'count': 0,  # Many enemies in final level
-        'types': [KlonoviNPC, StakorNPC, MadracNPC],
+        'types': [ ],
         'weights': [30, 30, 40],  # More Madrac enemies in the final level
         'restricted_area': {(i, j) for i in range(9, 12) for j in range(9, 12)},  # Keep center area clear
         'fixed_positions': []  # Strategic enemy positions
