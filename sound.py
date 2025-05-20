@@ -102,7 +102,7 @@ class Sound:
         # ===== WEAPON SOUNDS =====
         self.pistolj = self.load_sound('Pistolj.wav', self.volume_factors['pistolj'])
         self.smg = self.load_sound('Puska.wav', self.volume_factors['smg'])
-        self.plasmagun = self.load_sound('Puska.wav', self.volume_factors['plasmagun'])
+        self.plasmagun = self.load_sound('plasmaGun.wav', self.volume_factors['plasmagun'])
         self.weapon_pickup = self.load_sound('podizanje_oruzja.wav', self.volume_factors['weapon_pickup'])
 
         # ===== PLAYER SOUNDS =====
