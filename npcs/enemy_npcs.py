@@ -126,7 +126,7 @@ class MadracNPC(NPC):
                  scale=0.6, shift=0.4, animation_time=180):
         config = {
             'attack_dist': 1.5,
-            'health': 180,
+            'health': 200,
             'attack_damage': 10,
             'speed': 0.03,
             'accuracy': 0.3,
@@ -148,8 +148,8 @@ class BossNPC(NPC):
             'attack_dist': 3.5,
             'health': 800,
             'attack_damage': 20,
-            'speed': 0.055,
-            'accuracy': 0.4,
+            'speed': 0.06,
+            'accuracy': 0.45,
             'death_height_shift': 0.3,
             'behavior': 'melee',
             'sounds': {
