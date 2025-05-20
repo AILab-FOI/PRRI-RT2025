@@ -34,7 +34,7 @@ PLASMA_GUN_CONFIG = {
     'name': 'plasmagun',
     'path': 'resources/sprites/weapon/plasmagun/0.png',
     'scale': 0.5,
-    'animation_time': 300,  # Fastest fire rate of all weapons
+    'animation_time': 325,  # Fastest fire rate of all weapons
     'damage': 50,  # Highest damage per shot
     'accuracy': 0.9,  # High accuracy
     'auto_fire': False,  # Can be fired automatically by holding the mouse button

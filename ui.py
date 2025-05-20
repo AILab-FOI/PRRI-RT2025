@@ -33,6 +33,12 @@ class GameUI:
         self.digit_images = self.load_digit_images()
 
         self.powerup_icon = self.load_texture('resources/teksture/level1/powerup.png', (100, 100))
+        
+        # Load crosshair
+        self.crosshair_size = 48  # Size to display the crosshair (smaller than original)
+        self.crosshair = self.load_texture('resources/teksture/Blue-crosshair.png', (self.crosshair_size, self.crosshair_size))
+        # Calculate position to center the crosshair
+        self.crosshair_pos = (HALF_WIDTH - self.crosshair_size // 2, HALF_HEIGHT - self.crosshair_size // 2)
 
     def load_texture(self, path, res):
         texture_path = resource_path(path)
@@ -82,6 +88,11 @@ class GameUI:
         self.draw_dash_indicator()
         self.draw_enemy_counter()
         self.draw_invulnerability_indicator()
+        self.draw_crosshair()  # Add this line to draw the crosshair
+
+    def draw_crosshair(self):
+        """Draw the crosshair in the center of the screen"""
+        self.screen.blit(self.crosshair, self.crosshair_pos)
 
     def draw_dash_indicator(self):
         current_time = pg.time.get_ticks()

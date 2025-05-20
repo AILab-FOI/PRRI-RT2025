@@ -23,10 +23,10 @@ class StakorNPC(NPC):
     def __init__(self, game, path='resources/sprites/npc/stakor/0.png', pos=(10.5, 5.5),
                  scale=0.5, shift=0.4, animation_time=200):
         config = {
-            'attack_dist': 1.0,
+            'attack_dist': 1.5,
             'health': 50,
-            'attack_damage': 5,
-            'speed': 0.05,
+            'attack_damage': 8,
+            'speed': 0.035,
             'accuracy': 0.3,
             'death_height_shift': 0.8,
             'behavior': 'melee',
@@ -56,7 +56,7 @@ class TosterNPC(NPC):
             'health': 80,
             'attack_damage': 8,
             'speed': 0.03,
-            'accuracy': 0.25,
+            'accuracy': 0.45,
             'death_height_shift': 0.7,
             'behavior': 'ranged',
             'sounds': {
@@ -74,7 +74,7 @@ class ParazitNPC(NPC):
                  scale=0.8, shift=0.4, animation_time=200):
         config = {
             'attack_dist': 2.0,
-            'health': 200,
+            'health': 500,
             'attack_damage': 15,
             'speed': 0.05,
             'accuracy': 0.4,
@@ -94,9 +94,9 @@ class JazavacNPC(NPC):
     def __init__(self, game, path='resources/sprites/npc/jazavac/0.png', pos=(10.5, 5.5),
                  scale=0.6, shift=0.38, animation_time=180):
         config = {
-            'attack_dist': 2.5,
-            'health': 120,
-            'attack_damage': 15,
+            'attack_dist': 2.0,
+            'health': 100,
+            'attack_damage': 12,
             'speed': 0.025,
             'accuracy': 0.3,
             'death_height_shift': 0.7,
@@ -115,8 +115,8 @@ class MadracNPC(NPC):
     def __init__(self, game, path='resources/sprites/npc/madraci/0.png', pos=(10.5, 5.5),
                  scale=0.6, shift=0.4, animation_time=180):
         config = {
-            'attack_dist': 3.0,
-            'health': 90,
+            'attack_dist': 2.5,
+            'health': 200,
             'attack_damage': 12,
             'speed': 0.04,
             'accuracy': 0.35,
@@ -136,7 +136,7 @@ class BossNPC(NPC):
                  scale=1.5, shift=0, animation_time=220):
         config = {
             'attack_dist': 3.5,
-            'health': 500,
+            'health': 1000,
             'attack_damage': 10,
             'speed': 0.04,
             'accuracy': 0.4,

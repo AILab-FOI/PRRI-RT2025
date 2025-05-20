@@ -55,7 +55,7 @@ def get_level_data():
     # Enemy configuration
     level_data['enemies'] = {
         'count': 0,
-        'types': [BossNPC],
+        'typessssssssssss': [BossNPC],
         'weights': [50, 50],
         'restricted_area': {(i, j) for i in range(10) for j in range(10)},
         'fixed_positions': [

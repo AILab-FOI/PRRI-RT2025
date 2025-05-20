@@ -137,7 +137,7 @@ def get_level_data():
 
     # Enemy configuration
     level_data['enemies'] = {
-        'count': 7,  # Number of enemies to spawn
+        'count': 20,  # Number of enemies to spawn
         'types': [StakorNPC],  # Types of enemies that can spawn
         'weights': [100],  # Equal spawn weights for each enemy type
         'restricted_area': {(i, j) for i in range(10) for j in range(10)},  # Areas where enemies cannot spawn
