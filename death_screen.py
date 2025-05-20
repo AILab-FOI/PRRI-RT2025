@@ -35,12 +35,12 @@ class DeathScreen:
         # Zaustavi sve zvukove koji se trenutno reproduciraju
         pg.mixer.stop()
 
-        # Reproduciraj zvuk poraza s većim volumenom
+        # Reproduciraj zvuk poraza s prilagođenim volumenom
         print("Reproduciram zvuk poraza...")
         if self.game.sound.defeat:
-            # Privremeno povećaj volumen zvuka poraza
+            # Privremeno postavi volumen zvuka poraza na umjerenu razinu
             self.original_volume = self.game.sound.defeat.get_volume()
-            self.game.sound.defeat.set_volume(1.0)  # Postavi na maksimalni volumen
+            self.game.sound.defeat.set_volume(0.4)  # Postavi na 40% maksimalnog volumena
             self.game.sound.defeat.play()
             # Vrati volumen na originalnu vrijednost nakon 500ms
             pg.time.set_timer(pg.USEREVENT + 2, 500)
