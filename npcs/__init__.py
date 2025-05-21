@@ -1,6 +1,5 @@
 """
 NPC package for the game.
-This package contains all NPC-related classes.
 """
 
 from npcs.base_npc import NPC, StaticNPC
@@ -16,7 +15,6 @@ from npcs.enemy_npcs import (
 )
 from npcs.npc_factory import NPCFactory
 
-# For backwards compatibility
 __all__ = [
     'NPC',
     'StaticNPC',

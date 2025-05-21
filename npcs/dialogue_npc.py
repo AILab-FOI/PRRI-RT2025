@@ -24,7 +24,6 @@ class DialogueNPC(StaticNPC):
         self.interaction_cooldown = 1000
         self.last_interaction_time = 0
         self.interaction_indicator_visible = False
-
         self.indicator_font = load_custom_font(16)
 
     def update(self):
@@ -62,17 +61,15 @@ class DialogueNPC(StaticNPC):
         """Logic for dialogue NPCs - check distance to player and show interaction indicator"""
         super().run_logic()
 
-        # Calculate distance to player and check if within interaction radius
         player_dist = self.get_distance_to_player()
         self.interaction_indicator_visible = player_dist <= self.interaction_radius
 
-        # Show interaction indicator if player is close enough and dialogue is not active
         if self.interaction_indicator_visible and hasattr(self.game, 'dialogue_manager') and not self.game.dialogue_manager.dialogue_active:
             self.draw_interaction_indicator()
 
 
 def create_dialogue_npcs(game, npc_data):
-    """Create dialogue NPCs from data"""
+    """Create dialogue NPCs from level data"""
     npcs = []
     for data in npc_data:
         npc = DialogueNPC(

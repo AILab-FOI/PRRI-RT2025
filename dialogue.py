@@ -59,9 +59,7 @@ class DialogueManager:
             self.current_line_index = 0
             self.dialogue_active = True
 
-            # Smanji glasnoću glazbe tijekom dijaloga
             self.game.sound.duck_music()
-
             self.play_dialogue_sound()
 
             return True
@@ -115,7 +113,6 @@ class DialogueManager:
             self.sound_playing = False
             self.current_sound = None
 
-        # Vrati glasnoću glazbe na normalnu razinu
         self.game.sound.unduck_music()
 
         pg.mouse.set_pos([HALF_WIDTH, HALF_HEIGHT])
@@ -214,6 +211,3 @@ class DialogueManager:
         prompt_x = box_x + box_width - prompt_text.get_width() - self.dialogue_box_padding
         prompt_y = box_y + box_height - prompt_text.get_height() - self.dialogue_box_padding
         screen.blit(prompt_text, (prompt_x, prompt_y))
-
-
-# DialogueNPC and create_dialogue_npcs are now imported directly in files that need them

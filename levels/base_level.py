@@ -1,19 +1,10 @@
 """
-Base level module with common functions and structures for all levels
+Base level module providing the common structure for all game levels
 """
-# No imports needed for the base structure
 
 def create_base_level_structure():
-    """
-    Create a base level structure with common fields
-    that all levels should have
-    """
+    """Returns a dictionary with the standard structure for all game levels"""
     return {
-        'narrative': {
-            'intro': "",
-            'objective': "",
-            'conclusion': ""
-        },
         'terminals': [],
         'doors': [],
         'weapons': [],

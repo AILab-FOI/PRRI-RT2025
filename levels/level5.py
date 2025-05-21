@@ -7,11 +7,6 @@ from levels.base_level import create_base_level_structure
 def get_level_data():
     """Return the complete level 5 data"""
     level_data = create_base_level_structure()
-    level_data['narrative'] = {
-        'intro': "Ovo je posljednji nivo. Probij se do mosta broda da oslobodiš posadu i završiš svoju misiju.",
-        'conclusion': "Brod je tih i ekrani trepere. Arthur stoji na mostu broda, iscrpljen i pun prašine i osušene krvi, dok kraj njega stoji Marvin gledajući ga pogledom čiste ravnodušnosti. Na ekranu titra poruka: 'IDENTIFIKACIJA POTVRĐENA: VI STE SLUŽBENI KAPETAN SVEMIRSKOG BRODA BESMISLENO BEZNAĐE.'"
-    }
-
     # Terminals
     level_data['terminals'] = [
         #{
