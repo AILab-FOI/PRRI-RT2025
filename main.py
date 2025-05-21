@@ -1,4 +1,6 @@
 import pygame as pg
+import os
+import sys
 from settings import *
 from map import *
 from player import *
@@ -21,11 +23,17 @@ from death_screen import DeathScreen
 from victory_screen import VictoryScreen
 from ui import GameUI
 from visual_effects import DisorientingEffects
+from font_manager import resource_path
 
 class Game:
     def __init__(self):
         pg.init()
         pg.display.set_caption("Galaxy's Doom")
+
+        icon_path = resource_path('resources/icons/game_icon.ico')
+        icon = pg.image.load(icon_path)
+        pg.display.set_icon(icon)
+
         pg.mouse.set_visible(False)
         self.screen = pg.display.set_mode(RES)
         self.clock = pg.time.Clock()
