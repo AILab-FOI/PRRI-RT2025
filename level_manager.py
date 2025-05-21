@@ -95,6 +95,10 @@ class LevelManager:
 
         if 'weapons' in level_data:
             for weapon_data in level_data['weapons']:
+                if hasattr(self.game, 'weapon') and self.game.weapon and \
+                   self.game.weapon.name == weapon_data['weapon_type']:
+                    continue
+
                 weapon_pickup = InteractiveObject(
                     self.game,
                     path=weapon_data['path'],
