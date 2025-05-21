@@ -2,6 +2,9 @@ import pygame as pg
 import time
 from settings import *
 import math
+import os
+import sys
+from font_manager import resource_path
 
 class IntroSequence:
 
@@ -19,10 +22,12 @@ class IntroSequence:
         self.original_music_volume = 0.3
 
         try:
-            self.crash_sound = pg.mixer.Sound('resources/sound/crash.wav')
-            self.high_pitch_sound = pg.mixer.Sound('resources/sound/high_pitch.wav')
+            crash_sound_path = resource_path('resources/sound/crash.wav')
+            high_pitch_sound_path = resource_path('resources/sound/high_pitch.wav')
+            self.crash_sound = pg.mixer.Sound(crash_sound_path)
+            self.high_pitch_sound = pg.mixer.Sound(high_pitch_sound_path)
             self.sounds_loaded = True
-        except:
+        except Exception as e:
             self.sounds_loaded = False
 
         self.screen = game.screen
@@ -49,23 +54,18 @@ class IntroSequence:
         if not self.active:
             return
 
-        keys = pg.key.get_pressed()
-        if keys[pg.K_SPACE]:
-            self._end_sequence()
-            return
-
         elapsed = time.time() - self.start_time
 
         if not self.crash_sound_started and self.sounds_loaded:
             self.crash_sound_started = True
-            self.crash_sound.set_volume(1.0)
+            self.crash_sound.set_volume(0.5)
             self.crash_sound.play()
 
         transition_point = self.black_screen_duration - 0.5
         if self.crash_sound_started and elapsed >= transition_point and elapsed < self.black_screen_duration:
             progress = (elapsed - transition_point) / (self.black_screen_duration - transition_point)
-            volume = 1.0 - (progress * 0.8)
-            self.crash_sound.set_volume(max(0.2, volume))
+            volume = 0.5 - (progress * 0.4)
+            self.crash_sound.set_volume(max(0.1, volume))
 
         if not self.high_pitch_sound_started and elapsed >= transition_point and self.sounds_loaded:
             self.high_pitch_sound_started = True

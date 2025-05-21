@@ -28,10 +28,6 @@ class GameEvents:
             elif event.type == pg.USEREVENT:
                 self.game.intro_sequence.start_music_with_fade()
 
-            # Debug key to advance to next level (N key)
-            elif event.type == pg.KEYDOWN and event.key == pg.K_n:
-                self.game.level_transition.transition_to_next_level()
-
             elif event.type == pg.KEYDOWN and event.key == pg.K_e:
                 self._handle_e_key_press()
 

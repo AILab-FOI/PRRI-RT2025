@@ -25,7 +25,7 @@ from visual_effects import DisorientingEffects
 class Game:
     def __init__(self):
         pg.init()
-        pg.display.set_caption('PRRI-RT2025')
+        pg.display.set_caption("Galaxy's Doom")
         pg.mouse.set_visible(False)
         self.screen = pg.display.set_mode(RES)
         self.clock = pg.time.Clock()
