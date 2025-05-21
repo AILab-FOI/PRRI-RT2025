@@ -5,4 +5,3 @@ A RayCasting based FPS game developed by students and the [Artificial Intelligen
 # Credits
 
 This game is based on [Stanislav Petrov's implementation](https://github.com/StanislavPetrovV/DOOM-style-Game) licensed under the MIT license.
-a
