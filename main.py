@@ -22,7 +22,6 @@ from victory_screen import VictoryScreen
 from ui import GameUI
 from visual_effects import DisorientingEffects
 
-
 class Game:
     def __init__(self):
         pg.init()
@@ -64,10 +63,7 @@ class Game:
         else:
             self.object_handler.reset()
 
-
-        # Create the appropriate weapon based on the stored weapon type
         if self.level_manager.current_level == 1:
-            # No weapon for level 1 until pickup
             self.weapon = None
         elif hasattr(self, 'level_manager'):
             if self.level_manager.current_weapon_type == 'smg':
@@ -82,22 +78,18 @@ class Game:
         self.pathfinding = PathFinding(self)
         self.interaction = Interaction(self)
 
-        # Initialize dialogue manager
         if not hasattr(self, 'dialogue_manager'):
             self.dialogue_manager = DialogueManager(self)
 
-        # Initialize or update UI
         if not hasattr(self, 'game_ui'):
             self.game_ui = GameUI(self)
         else:
-            # Update UI for the current level
             self.game_ui.update_level(self.level_manager.current_level)
 
         self.level_manager.setup_dialogue_npcs()
         self.level_manager.setup_interactive_objects()
         self.pathfinding.update_graph()
 
-        # Set player position based on level
         if self.level_manager.current_level == 1:
             self.player.x, self.player.y = PLAYER_POS
         elif self.level_manager.current_level == 2:
@@ -110,8 +102,6 @@ class Game:
             self.player.x, self.player.y = PLAYER_POS_LEVEL5
 
         self.object_renderer.update_sky_image()
-
-        # Promijeni glazbu ovisno o trenutnoj razini
         self.sound.change_music_for_level(self.level_manager.current_level)
 
         if self.level_manager.current_level == 1:
@@ -126,11 +116,10 @@ class Game:
             self.victory_screen.update()
             return
 
-        # Update game components
         self.player.update()
         self.raycasting.update()
         self.object_handler.update()
-        if self.weapon:  # Only update weapon if it exists
+        if self.weapon:
             self.weapon.update()
         self.interaction.update()
         self.dialogue_manager.update()
@@ -153,18 +142,14 @@ class Game:
             self.victory_screen.draw()
             return
 
-        # Draw game components
         self.object_renderer.draw()
-        if self.weapon:  # Only draw weapon if it exists
+        if self.weapon:
             self.weapon.draw()
         self.game_ui.draw()
         self.interaction.draw()
         self.dialogue_manager.draw()
 
-        # Apply visual effects
         self.disorienting_effects.draw()
-
-        # Draw overlays
         self.intro_sequence.draw()
         self.loading_screen.draw()
         self.level_transition.draw()
@@ -179,18 +164,13 @@ class Game:
         return self.game_events.process_events()
 
     def next_level(self):
-        """Advance to the next level"""
         return self.level_transition.transition_to_next_level()
 
     def reset_current_level(self):
-        """Reset the current level when player dies"""
         current_level = self.level_manager.current_level
-
-        # Resetiraj trenutnu razinu glazbe da bi se glazba ponovno pokrenula
-        self.sound.current_music_level = -1  # Postavi na vrijednost koja nije valjana razina
-
+        self.sound.current_music_level = -1
         self.map.load_level(current_level)
-        self.new_game()  # new_game() će promijeniti glazbu
+        self.new_game()
         pg.mouse.set_visible(False)
 
     def show_menu(self):

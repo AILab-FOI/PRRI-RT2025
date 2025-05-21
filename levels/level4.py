@@ -8,14 +8,6 @@ def get_level_data():
     """Return the complete level 4 data"""
     level_data = create_base_level_structure()
 
-    # Terminals
-    level_data['terminals'] = [
-        #{
-            #'position': (5, 5),
-            #'code': '9999',
-            #'unlocks_door_id': None
-        #}
-    ]
     level_data['powerups'] = [
         {
             'position': (24, 27),
@@ -172,23 +164,11 @@ def get_level_data():
         'types': [TosterNPC, MadracNPC],
         'weights': [50, 50],
         'restricted_area': {
-            #*{(i, j) for i in range(10) for j in range(10)
             *{(i, j) for i in range(14, 21) for j in range(8)}
-            },  # Larger restricted area like in level 1
+            },
         'fixed_positions': [
-            {'type': ParazitNPC, 'position': (24, 28)},  # Miniboss Parazit in the arena area
+            {'type': ParazitNPC, 'position': (24, 28)},
         ]
     }
-
-    # Dialogue NPCs
-    level_data['dialogue_npcs'] = [
-        #{
-            #'pos': (12.5, 5.5),
-            #'dialogue_id': 'level3_intro',
-            #'path': 'resources/sprites/npc/dialogue_npc/0.png'
-        #}
-    ]
-
     
-
     return level_data

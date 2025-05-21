@@ -46,7 +46,6 @@ class Weapon(AnimatedSprite):
 
 class SMG(Weapon):
     def __init__(self, game):
-        # Get SMG configuration
         config = get_weapon_config('smg')
 
         super().__init__(game=game,
@@ -58,14 +57,12 @@ class SMG(Weapon):
         self.accuracy = config['accuracy']
         self.auto_fire = config['auto_fire']
 
-        # Set weapon position with right offset
         right_offset = config.get('right_offset', 230)
         self.weapon_pos = (HALF_WIDTH - self.images[0].get_width() // 2 + right_offset,
                           HEIGHT - self.images[0].get_height())
 
 class Pistol(Weapon):
     def __init__(self, game):
-        # Get pistol configuration
         config = get_weapon_config('pistol')
 
         super().__init__(game=game,
@@ -75,17 +72,14 @@ class Pistol(Weapon):
                          damage=config['damage'],
                          name=config['name'])
 
-        # Set additional properties from config
         self.accuracy = config['accuracy']
         self.auto_fire = config['auto_fire']
 
-        # Set weapon position
         self.weapon_pos = (HALF_WIDTH - self.images[0].get_width() // 2,
                           HEIGHT - self.images[0].get_height())
 
 class PlasmaGun(Weapon):
     def __init__(self, game):
-        # Get plasma gun configuration
         config = get_weapon_config('plasmagun')
 
         super().__init__(game=game,
@@ -95,11 +89,9 @@ class PlasmaGun(Weapon):
                          damage=config['damage'],
                          name=config['name'])
 
-        # Set additional properties from config
         self.accuracy = config['accuracy']
         self.auto_fire = config['auto_fire']
 
-        # Set weapon position with right offset
         right_offset = config.get('right_offset', 200)
         self.weapon_pos = (HALF_WIDTH - self.images[0].get_width() // 2 + right_offset,
                           HEIGHT - self.images[0].get_height())

@@ -1,5 +1,4 @@
 import pygame as pg
-import os
 import sys
 from settings import *
 from font_manager import load_custom_font, resource_path
@@ -244,7 +243,6 @@ class Menu:
     def __init__(self, game):
         self.game = game
         self.screen = game.screen
-        self.running = True
         self.state = 'main'
         button_height = 60
 
@@ -254,7 +252,6 @@ class Menu:
         all_texts = set(self.main_menu_texts + self.pause_menu_texts)
         for text in all_texts:
             font = load_custom_font(36)
-
             text_width = font.size(text)[0]
             button_width = max(300, text_width + 100)
             button_widths.append(button_width)

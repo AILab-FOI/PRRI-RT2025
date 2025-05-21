@@ -7,11 +7,9 @@ from levels.base_level import create_base_level_structure
 def get_level_data():
     """Return the complete level 2 data"""
     level_data = create_base_level_structure()
-
-    # Terminals
     level_data['terminals'] = [
         {
-            'position': (47, 17), # Neka pozicija blizu vrata sobe s oružjem (16)
+            'position': (47, 17),
             'code': None,
             'unlocks_door_id': None,
 
@@ -26,80 +24,65 @@ def get_level_data():
             'position': (5, 2),
             'door_id': 1,
             'requires_code': False,
-            'code': None,  # Uses code from first terminal
-            'requires_door_id': None  # Requires second door to be opened
+            'code': None, 
+            'requires_door_id': None
         },
         {
             #soba blizu početka
             'position': (3, 6),
             'door_id': 2,
             'requires_code': False,
-            'code': None,  # Uses code from first terminal
-            'requires_door_id': None  # Requires second door to be opened
+            'code': None, 
+            'requires_door_id': None
         },
         {
             #srednja soba gornja
             'position': (15, 12),
             'door_id': 3,
             'requires_code': False,
-            'code': None,  # Uses code from first terminal
-            'requires_door_id': None  # Requires second door to be opened
+            'code': None, 
+            'requires_door_id': None
         },
         {
             #unutarnja soba lijeve sobe
             'position': (4, 16),
             'door_id': 4,
             'requires_code': False,
-            'code': None,  # Uses code from first terminal
-            'requires_door_id': None  # Requires second door to be opened
+            'code': None, 
+            'requires_door_id': None
         },
-        #{
-        #    #lijeva soba
-        #    'position': (7, 16),
-        #    'door_id': 5,
-        #    'requires_code': False,
-        #    'code': None,  # Uses code from first terminal
-        #    'requires_door_id': None  # Requires second door to be opened
-        #},
         {
             #srednja soba lijeva
             'position': (10, 16),
             'door_id': 6,
             'requires_code': False,
-            'code': None,  # Uses code from first terminal
-            'requires_door_id': None  # Requires second door to be opened
+            'code': None, 
+            'requires_door_id': None
         },
         {
             #srednja soba desna
             'position': (20, 16),
             'door_id': 7,
             'requires_code': False,
-            'code': None,  # Uses code from first terminal
-            'requires_door_id': None  # Requires second door to be opened
+            'code': None,
+            'requires_door_id': None
         },
-        #{
-        #    #desna soba
-        #    'position': (23, 16),
-        #    'door_id': 8,
-        #    'requires_code': False,
-        #    'code': None,  # Uses code from first terminal
-        #    'requires_door_id': None  # Requires second door to be opened
-        #},
+
         {
             #unutarnja soba desne sobe
             'position': (29, 16),
             'door_id': 9,
             'requires_code': True,
-            'code': '42',  # Uses code from first terminal
-            'requires_door_id': None  # Requires second door to be opened
+            'code': '42',
+            'requires_door_id': None
         },
         {
             #srednja soba donja
             'position': (15, 20),
             'door_id': 10,
             'requires_code': False,
-            'code': None,  # Uses code from first terminal
-            'requires_door_id': None  # Requires second door to be opened
+            'code': None,
+            'requires_door_id': None
         }
     ]
 
@@ -178,16 +161,6 @@ def get_level_data():
         (('level2', 'ukras3'), (14.1, 17.9)),
         (('level2', 'ukras3'), (16.9, 17.9)),
 
-
-        #LIJEVA SOBA
-        #lijeva soba vanjska vrata vanjsko
-        #(('level2', 'ukras2'), (8.1, 15.9)),
-        #(('level2', 'ukras2'), (8.1, 17.1)),
-
-        #lijeva soba vanjska vrata
-        #(('level2', 'ukras2'), (6.9, 15.9)),
-        #(('level2', 'ukras2'), (6.9, 17.1)),
-
         #lijeva soba unutarnja vrata vanjsko
         (('level2', 'ukras2'), (5.1, 15.9)),
         (('level2', 'ukras2'), (5.1, 17.1)),
@@ -195,17 +168,6 @@ def get_level_data():
         #lijeva soba unutarnja vrata
         (('level2', 'ukras2'), (3.9, 15.9)),
         (('level2', 'ukras2'), (3.9, 17.1)),
-
-
-        #DESNA SOBA
-        #desna soba vanjska vrata vanjsko
-        #(('level2', 'ukras2'), (22.9, 15.9)),
-        #(('level2', 'ukras2'), (22.9, 17.1)),
-
-        #desna soba vanjska vrata
-        #(('level2', 'ukras2'), (24.1, 15.9)),
-        #(('level2', 'ukras2'), (24.1, 17.1)),
-
 
         #PROLAZI
 
@@ -235,11 +197,9 @@ def get_level_data():
 
         #LIJEVI HODNIK
         #ulaz lijevi hodnik
-        #(('level2', 'ukras3'), (7.5, 11.9)),
         (('level2', 'ukras3'), (10.5, 11.9)),
 
         #izlaz lijevi hodnik
-        #(('level2', 'ukras3'), (7.5, 21.1)),
         (('level2', 'ukras3'), (10.5, 21.1)),
 
 
@@ -250,8 +210,6 @@ def get_level_data():
 
         #izlaz desni hodnik
         (('level2', 'ukras3'), (20.5, 21.1)),
-        #(('level2', 'ukras3'), (23.5, 21.1)),
-
 
         #DUGI HODNIK NAKON SREDNJE SOBE
         #lijevi zid gornji dio
@@ -334,16 +292,14 @@ def get_level_data():
         (('level2', 'ukras2'), (30.9, 34.1))
     ]
 
-    # Enemy configuration
     level_data['enemies'] = {
-        'count': 23,  # More enemies in level 2
+        'count': 23,
         'types': [KlonoviNPC, JazavacNPC],
-        'weights': [60, 40],  # 60% KlonoviNPC, 40% JazavacNPC
-        'restricted_area': {(i, j) for i in range(5) for j in range(5)},  # Different restricted area
-        'fixed_positions': []  # No fixed positions for this level
+        'weights': [60, 40],
+        'restricted_area': {(i, j) for i in range(5) for j in range(5)},
+        'fixed_positions': []
     }
 
-    #Dialogue NPCs
     level_data['dialogue_npcs'] = [
        {
             'pos': (30.8, 12.3),

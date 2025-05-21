@@ -3,7 +3,6 @@ import pygame as pg
 import math
 from config.weapon_config import get_weapon_config
 
-
 class Player:
     def __init__(self, game):
         self.game = game
@@ -57,7 +56,6 @@ class Player:
         if self.dialogue_mode or (hasattr(self.game, 'intro_sequence') and self.game.intro_sequence.active):
             return
 
-        # Check if weapon exists before processing fire events
         if not hasattr(self.game, 'weapon') or self.game.weapon is None:
             return
 
@@ -75,7 +73,6 @@ class Player:
                 self.auto_fire = False
 
     def fire_weapon(self):
-        # Check if weapon exists before firing
         if not hasattr(self.game, 'weapon') or self.game.weapon is None:
             return
 
@@ -215,7 +212,6 @@ class Player:
         self.update_auto_fire()
 
     def update_auto_fire(self):
-        # Check if weapon exists before processing auto-fire
         if not hasattr(self.game, 'weapon') or self.game.weapon is None:
             return
 

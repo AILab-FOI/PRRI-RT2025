@@ -30,23 +30,19 @@ class VictoryScreen:
         self.active = True
         pg.mouse.set_visible(True)
 
-        # Zaustavi pozadinsku glazbu
+        # Stop background music
         pg.mixer.music.stop()
 
-        # Zaustavi sve zvukove koji se trenutno reproduciraju
+        # Stop all currently playing sounds
         pg.mixer.stop()
 
-        # Reproduciraj zvuk pobjede s prilagođenim volumenom
-        print("Reproduciram zvuk pobjede...")
+        # Play victory sound with adjusted volume
         if self.game.sound.victory:
-            # Privremeno postavi volumen zvuka pobjede na umjerenu razinu
             self.original_volume = self.game.sound.victory.get_volume()
-            self.game.sound.victory.set_volume(0.4)  # Postavi na 40% maksimalnog volumena
+            self.game.sound.victory.set_volume(0.4)
             self.game.sound.victory.play()
-            # Vrati volumen na originalnu vrijednost nakon 500ms
+            # Return volume to original value after 500ms
             pg.time.set_timer(pg.USEREVENT + 3, 500)
-        else:
-            print("Zvuk pobjede nije učitan!")
 
     def handle_events(self):
         if not self.active:
@@ -59,11 +55,11 @@ class VictoryScreen:
                 pg.quit()
                 sys.exit()
 
-            # Obradi događaj za vraćanje volumena zvuka pobjede na originalnu vrijednost
+            # Handle event for restoring victory sound volume to original value
             elif event.type == pg.USEREVENT + 3:
                 if hasattr(self, 'original_volume') and self.game.sound.victory:
                     self.game.sound.victory.set_volume(self.original_volume)
-                pg.time.set_timer(pg.USEREVENT + 3, 0)  # Zaustavi timer
+                pg.time.set_timer(pg.USEREVENT + 3, 0)  # Stop timer
 
             for i, button in enumerate(self.buttons):
                 button.update(mouse_pos, self.game)

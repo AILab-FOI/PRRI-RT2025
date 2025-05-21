@@ -29,21 +29,16 @@ class GameUI:
         self.dash_chamfer_size = 6
 
         self.digit_size = 90
-        self.current_level = 1  # Default to level 1
+        self.current_level = 1
         self.digit_images = self.load_digit_images()
 
         self.powerup_icon = self.load_texture('resources/teksture/level1/powerup.png', (100, 100))
-        
-        # Load crosshair
-        self.crosshair_size = 48  # Size to display the crosshair (smaller than original)
+
+        self.crosshair_size = 48
         self.crosshair = self.load_texture('resources/teksture/Blue-crosshair.png', (self.crosshair_size, self.crosshair_size))
-        
-        # Offset from center (positive values move it down)
-        self.crosshair_y_offset = 40  # Adjust this value to move crosshair down
-        
-        # Calculate position to center the crosshair horizontally, but offset vertically
+        self.crosshair_y_offset = 40
         self.crosshair_pos = (
-            HALF_WIDTH - self.crosshair_size // 2, 
+            HALF_WIDTH - self.crosshair_size // 2,
             HALF_HEIGHT - self.crosshair_size // 2 + self.crosshair_y_offset
         )
 
@@ -53,24 +48,14 @@ class GameUI:
         return pg.transform.scale(texture, res)
 
     def load_digit_images(self):
-        """Load digit images for the current level
-
-        Each level has its own digit images in resources/teksture/level{level_number}/brojevi/
-        If a specific digit image is missing or the level doesn't have its own digit folder,
-        fall back to level1's digit images (orange numbers).
-        """
+        """Load digit images for the current level with fallback to level1 digits"""
         digits = {}
-
-        # Use level-specific digit images
         level_digit_path = f'resources/teksture/level{self.current_level}/brojevi'
-        fallback_digit_path = 'resources/teksture/level1/brojevi'  # Level 1 has the orange numbers as fallback
-
-        # Check if the level-specific digit folder exists
+        fallback_digit_path = 'resources/teksture/level1/brojevi'
         level_digit_path_abs = resource_path(level_digit_path)
 
         if os.path.exists(level_digit_path_abs) and os.path.isdir(level_digit_path_abs):
             for i in range(11):
-                # Check if the specific digit exists in the level folder
                 digit_file = f'{level_digit_path}/{i}.png'
                 digit_file_abs = resource_path(digit_file)
 
@@ -78,12 +63,10 @@ class GameUI:
                     img = self.load_texture(digit_file, [self.digit_size] * 2)
                     digits[str(i)] = img
                 else:
-                    # If a specific digit is missing, use level1's digit as fallback
                     fallback_digit = f'{fallback_digit_path}/{i}.png'
                     img = self.load_texture(fallback_digit, [self.digit_size] * 2)
                     digits[str(i)] = img
         else:
-            # If level-specific folder doesn't exist, use level1's digits
             for i in range(11):
                 img = self.load_texture(f'{fallback_digit_path}/{i}.png', [self.digit_size] * 2)
                 digits[str(i)] = img
@@ -95,11 +78,10 @@ class GameUI:
         self.draw_dash_indicator()
         self.draw_enemy_counter()
         self.draw_invulnerability_indicator()
-        self.draw_crosshair()  # Add this line to draw the crosshair
+        self.draw_crosshair()
 
     def draw_crosshair(self):
         """Draw the crosshair in the center of the screen"""
-        # Only draw the crosshair if we're not showing the interaction indicator
         if not hasattr(self.game, 'interaction') or not self.game.interaction.is_showing_indicator:
             self.screen.blit(self.crosshair, self.crosshair_pos)
 
@@ -196,5 +178,4 @@ class GameUI:
         """Update UI elements when the level changes"""
         if self.current_level != level_number:
             self.current_level = level_number
-            # Reload digit images for the new level
             self.digit_images = self.load_digit_images()

@@ -3,8 +3,6 @@ import time
 import math
 import json
 import random
-import os
-import sys
 from settings import *
 from font_manager import load_custom_font, resource_path
 from menu import MetallicUIRenderer, Button
@@ -124,7 +122,6 @@ class LoadingScreen:
 
         self.screen.blit(self.bg_image, (0, 0))
 
-
         title_text = "LOADING"
         if not self.auto_continue and self.level_number is not None:
             title_text = f"LEVEL {self.level_number}"
@@ -136,12 +133,10 @@ class LoadingScreen:
             bg_alpha=128
         )
 
-
         if self.level_number is not None and self.auto_continue:
             level_text = self.info_font.render(f"LEVEL {self.level_number}", True, self.text_color)
             level_rect = level_text.get_rect(center=(HALF_WIDTH, HALF_HEIGHT))
             self.screen.blit(level_text, level_rect)
-
 
         if self.current_tip:
             tip_rect = pg.Rect(0, 0, WIDTH - 200, 70)
@@ -156,7 +151,6 @@ class LoadingScreen:
             tip_text = self.tip_font.render(self.current_tip, True, self.text_color)
             tip_text_rect = tip_text.get_rect(center=(HALF_WIDTH, HALF_HEIGHT + 200))
             self.screen.blit(tip_text, tip_text_rect)
-
 
         if self.auto_continue:
             circle_center = (HALF_WIDTH, self.circle_y)
@@ -181,7 +175,6 @@ class LoadingScreen:
                             self.circle_radius * 2,
                             self.circle_radius * 2),
                            start_angle, end_angle, self.circle_width)
-
 
         if not self.auto_continue:
             for button in self.buttons:

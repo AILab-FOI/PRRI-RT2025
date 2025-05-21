@@ -3,7 +3,6 @@ from npc import *
 from powerup import PowerUp
 from random import choices, shuffle
 
-
 class ObjectHandler:
     def __init__(self, game):
         self.game = game
@@ -20,7 +19,6 @@ class ObjectHandler:
         self.load_decorative_sprites()
 
     def spawn_npc(self):
-        """Load enemy configuration and spawn NPCs based on the current level"""
         if len(self.npc_list) > 0:
             self.npc_list = []
             self.npc_positions = {}
@@ -80,21 +78,15 @@ class ObjectHandler:
         self.all_enemies_defeated = all_enemies_defeated_now
 
     def update(self):
-        # Update NPC positions, excluding friendly NPCs for win condition checking
         self.npc_positions = {npc.map_pos for npc in self.npc_list if npc.alive}
-
-        # Update all sprites and NPCs
         [sprite.update() for sprite in self.sprite_list]
         [npc.update() for npc in self.npc_list]
-
-        # Check win condition
         self.check_win()
 
     def add_npc(self, npc):
         self.npc_list.append(npc)
 
     def enable_level_exit(self, show_message=True):
-        """Enable the level exit door after all enemies are defeated"""
         for obj in self.game.interaction.interaction_objects:
             if hasattr(obj, 'is_level_exit') and obj.is_level_exit:
                 obj.is_enabled = True
@@ -106,13 +98,11 @@ class ObjectHandler:
         self.sprite_list.append(sprite)
 
     def add_powerup(self, pos, powerup_type='invulnerability'):
-        """Add a powerup at the specified position"""
         powerup = PowerUp(self.game, pos=pos, powerup_type=powerup_type)
         self.add_sprite(powerup)
         return powerup
 
     def load_decorative_sprites(self):
-        """Load decorative sprites for the current level"""
         sprite_data = self.game.level_manager.get_sprite_data()
 
         for sprite_info, pos in sprite_data:
@@ -132,20 +122,17 @@ class ObjectHandler:
                 elif folder == 'teksture':
                     sprite_path_to_load = 'resources/teksture/' + sprite_type + '.png'
                 else:
-                    print(f"Warning: Unknown folder '{folder}' for sprite type '{sprite_type}'. Defaulting.")
                     sprite_path_to_load = self.static_sprite_path + sprite_type + '.png'
             elif isinstance(sprite_info, str):
                 sprite_type = sprite_info
                 sprite_path_to_load = self.static_sprite_path + sprite_type + '.png'
             else:
-                print(f"Warning: Invalid sprite_info format: {sprite_info}")
                 continue
 
             if sprite_path_to_load:
                 self.add_sprite(SpriteObject(self.game, path=sprite_path_to_load, pos=pos))
 
     def _spawn_random_enemies(self, count):
-        """Helper method to spawn a given number of enemies at random positions"""
         if not self.npc_types:
             return
 
@@ -171,7 +158,6 @@ class ObjectHandler:
             spawned += 1
 
     def reset(self):
-        """Reset the object handler for a new level or game start."""
         self.sprite_list = []
         self.npc_list = []
         self.npc_positions = {}

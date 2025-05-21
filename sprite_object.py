@@ -14,21 +14,22 @@ class SpriteObject:
         self.player = game.player
         self.x, self.y = pos
 
-        # Add error handling for missing textures
         try:
             sprite_path = resource_path(path)
             self.image = pg.image.load(sprite_path).convert_alpha()
         except Exception:
-            # Create a small blank/transparent surface
             self.image = pg.Surface((32, 32), pg.SRCALPHA)
-            self.image.fill((0, 0, 0, 0))  # Transparent
+            self.image.fill((0, 0, 0, 0))
+
         self.IMAGE_WIDTH = self.image.get_width()
-        self.IMAGE_HALF_WIDTH = self.image.get_width() // 2
+        self.IMAGE_HALF_WIDTH = self.IMAGE_WIDTH // 2
         self.IMAGE_RATIO = self.IMAGE_WIDTH / self.image.get_height()
         self.dx, self.dy, self.theta, self.screen_x, self.dist, self.norm_dist = 0, 0, 0, 0, 1, 1
         self.sprite_half_width = 0
         self.SPRITE_SCALE = scale
         self.SPRITE_HEIGHT_SHIFT = shift
+        self._current_image_id = 0
+        self._scaled_image_cache = {}
 
     def get_sprite_projection(self):
         proj = SCREEN_DIST / self.norm_dist * self.SPRITE_SCALE
@@ -37,18 +38,13 @@ class SpriteObject:
         proj_width = round(proj_width)
         proj_height = round(proj_height)
 
-        if not hasattr(self, '_current_image_id'):
-            self._current_image_id = 0
-
         cache_key = (proj_width, proj_height, self._current_image_id)
 
-        if not hasattr(self, '_scaled_image_cache'):
-            self._scaled_image_cache = {}
-
         if cache_key not in self._scaled_image_cache:
-            self._scaled_image_cache = {}
-            self._scaled_image_cache[cache_key] = pg.transform.scale(self.image, (proj_width, proj_height))
+            scaled_image = pg.transform.scale(self.image, (proj_width, proj_height))
+            self._scaled_image_cache[cache_key] = scaled_image
 
+            # Limit cache size to prevent memory issues
             if len(self._scaled_image_cache) > 10:
                 oldest_key = next(iter(self._scaled_image_cache))
                 del self._scaled_image_cache[oldest_key]
@@ -102,12 +98,8 @@ class AnimatedSprite(SpriteObject):
         if self.animation_trigger:
             images.rotate(-1)
             self.image = images[0]
-            if hasattr(self, '_current_image_id'):
-                self._current_image_id += 1
-            else:
-                self._current_image_id = 0
-            if hasattr(self, '_scaled_image_cache'):
-                self._scaled_image_cache = {}
+            self._current_image_id += 1
+            self._scaled_image_cache = {}
 
     def check_animation_time(self):
         self.animation_trigger = False
@@ -119,9 +111,7 @@ class AnimatedSprite(SpriteObject):
     def get_images(self, path):
         images = deque()
         try:
-            # Check if path exists in the filesystem
             real_path = resource_path(path)
-
             if os.path.isdir(real_path):
                 for file_name in sorted(os.listdir(real_path)):
                     if os.path.isfile(os.path.join(real_path, file_name)):
@@ -130,7 +120,7 @@ class AnimatedSprite(SpriteObject):
                             img = pg.image.load(frame_path).convert_alpha()
                             images.append(img)
                         except Exception:
-                            pass
+                            continue
             else:
                 blank_img = pg.Surface((32, 32), pg.SRCALPHA)
                 blank_img.fill((0, 0, 0, 0))
