@@ -39,6 +39,14 @@ def get_level_data():
             'position': (20, 22),
             'powerup_type': 'invulnerability'
         },
+        {
+            'position': (11, 6),
+            'powerup_type': 'invulnerability'
+        },
+        {
+            'position': (15, 6),
+            'powerup_type': 'invulnerability'
+        },
 
     ]
 
