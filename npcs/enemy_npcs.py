@@ -1,12 +1,9 @@
 import pygame as pg
-import os
-from collections import deque
 from settings import *
 from npcs.base_npc import NPC
 
 
 class KlonoviNPC(NPC):
-    """Klonovi enemy type"""
     def __init__(self, game, path='resources/sprites/npc/klonovi/0.png', pos=(10.5, 5.5),
                  scale=0.6, shift=0.38, animation_time=180):
         config = {
@@ -28,7 +25,6 @@ class KlonoviNPC(NPC):
 
 
 class StakorNPC(NPC):
-    """Stakor (rat) enemy type"""
     def __init__(self, game, path='resources/sprites/npc/stakor/0.png', pos=(10.5, 5.5),
                  scale=0.5, shift=0.4, animation_time=200):
         config = {
@@ -46,18 +42,11 @@ class StakorNPC(NPC):
             }
         }
         super().__init__(game, path, pos, scale, shift, animation_time, config)
-
-        self.death_images = deque()
-        death_path = self.path + '/death'
-        for file_name in ['0.png', '1.png']:
-            if os.path.isfile(os.path.join(death_path, file_name)):
-                img = pg.image.load(death_path + '/' + file_name).convert_alpha()
-                self.death_images.append(img)
+        self.death_images = self.get_images(self.path + '/death')
         self.walk_images = self.get_images(self.path + '/walk')
 
 
 class TosterNPC(NPC):
-    """Toster enemy type"""
     def __init__(self, game, path='resources/sprites/npc/toster/0.png', pos=(10.5, 5.5),
                  scale=0.6, shift=0.4, animation_time=180):
         config = {
@@ -78,7 +67,6 @@ class TosterNPC(NPC):
 
 
 class ParazitNPC(NPC):
-    """Parazit enemy type - mini-boss in level 3"""
     def __init__(self, game, path='resources/sprites/npc/parazit/0.png', pos=(10.5, 5.5),
                  scale=0.8, shift=0.4, animation_time=200):
         config = {
@@ -99,7 +87,6 @@ class ParazitNPC(NPC):
 
 
 class JazavacNPC(NPC):
-    """Jazavac enemy type"""
     def __init__(self, game, path='resources/sprites/npc/jazavac/0.png', pos=(10.5, 5.5),
                  scale=0.6, shift=0.38, animation_time=180):
         config = {
@@ -120,7 +107,6 @@ class JazavacNPC(NPC):
 
 
 class MadracNPC(NPC):
-    """Madrac enemy type"""
     def __init__(self, game, path='resources/sprites/npc/madraci/0.png', pos=(10.5, 5.5),
                  scale=0.6, shift=0.4, animation_time=180):
         config = {
@@ -141,7 +127,6 @@ class MadracNPC(NPC):
 
 
 class BossNPC(NPC):
-    """Final boss enemy type with high health and damage"""
     def __init__(self, game, path='resources/sprites/npc/boss/0.png', pos=(10.5, 5.5),
                  scale=1.5, shift=0, animation_time=220):
         config = {

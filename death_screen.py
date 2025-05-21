@@ -1,4 +1,5 @@
 import pygame as pg
+import sys
 from settings import *
 from font_manager import load_custom_font, resource_path
 from menu import Button, MetallicUIRenderer
@@ -47,7 +48,7 @@ class DeathScreen:
         for event in pg.event.get():
             if event.type == pg.QUIT:
                 pg.quit()
-                exit()
+                sys.exit()
 
             elif event.type == pg.USEREVENT + 2:
                 if hasattr(self, 'original_volume') and self.game.sound.defeat:
@@ -68,7 +69,7 @@ class DeathScreen:
 
                     elif i == 1:
                         pg.quit()
-                        exit()
+                        sys.exit()
 
         return False
 

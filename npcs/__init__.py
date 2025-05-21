@@ -1,7 +1,3 @@
-"""
-NPC package for the game.
-"""
-
 from npcs.base_npc import NPC, StaticNPC
 from npcs.dialogue_npc import DialogueNPC
 from npcs.enemy_npcs import (

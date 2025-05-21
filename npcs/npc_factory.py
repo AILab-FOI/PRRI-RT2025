@@ -1,7 +1,3 @@
-"""
-NPC Factory for creating NPCs with appropriate configurations.
-"""
-
 from npcs.enemy_npcs import (
     KlonoviNPC,
     StakorNPC,

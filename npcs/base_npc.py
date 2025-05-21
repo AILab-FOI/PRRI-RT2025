@@ -1,7 +1,3 @@
-"""
-Base NPC classes for the game.
-"""
-
 from sprite_object import AnimatedSprite
 from random import randint, random
 import math
@@ -9,7 +5,6 @@ from settings import *
 
 
 class StaticNPC(AnimatedSprite):
-    """Base class for static NPCs that don't move or attack"""
     def __init__(self, game, path='resources/sprites/npc/dialogue_npc/0.png', pos=(10.5, 5.5),
                  scale=0.6, shift=0.38, animation_time=180):
         super().__init__(game, path, pos, scale, shift, animation_time)
@@ -28,7 +23,6 @@ class StaticNPC(AnimatedSprite):
         self.run_logic()
 
     def run_logic(self):
-        """Simple logic for static NPCs - just display the static image"""
         if self.alive:
             self.image = self.static_image
 
@@ -42,7 +36,6 @@ class StaticNPC(AnimatedSprite):
 
 
 class NPC(AnimatedSprite):
-    """Base class for enemy NPCs that can move and attack"""
     def __init__(self, game, path='resources/sprites/npc/soldier/0.png', pos=(10.5, 5.5),
                  scale=0.6, shift=0.38, animation_time=180, config=None):
         super().__init__(game, path, pos, scale, shift, animation_time)
@@ -81,7 +74,6 @@ class NPC(AnimatedSprite):
         self.death_sound_delay = 0
 
     def _update_config_recursive(self, target, source):
-        """Recursively update nested configuration dictionaries"""
         for key, value in source.items():
             if key in target and isinstance(target[key], dict) and isinstance(value, dict):
                 self._update_config_recursive(target[key], value)
@@ -89,7 +81,6 @@ class NPC(AnimatedSprite):
                 target[key] = value
 
     def _load_animations(self):
-        """Load all animation sequences"""
         self.attack_images = self.get_images(self.path + '/attack')
         self.death_images = self.get_images(self.path + '/death')
         self.idle_images = self.get_images(self.path + '/idle')
@@ -120,7 +111,6 @@ class NPC(AnimatedSprite):
             self.check_wall_collision(dx, dy)
 
     def attack(self):
-        """Handle attack logic and sound effects"""
         if self.animation_trigger:
             sound_name = self.config['sounds']['attack']
             if hasattr(self.game.sound, sound_name):
@@ -129,7 +119,7 @@ class NPC(AnimatedSprite):
                 self.game.player.get_damage(self.attack_damage)
 
     def animate_death(self):
-        if not self.alive and len(self.death_images) > 0:
+        if not self.alive:
             if self.play_death_sound:
                 self.death_sound_delay -= 1
                 if self.death_sound_delay <= 0:
@@ -154,7 +144,6 @@ class NPC(AnimatedSprite):
             self.pain = False
 
     def check_hit_in_npc(self):
-        """Check if player's shot hits this NPC"""
         if self.ray_cast_value and self.game.player.shot:
             if HALF_WIDTH - self.sprite_half_width < self.screen_x < HALF_WIDTH + self.sprite_half_width:
                 sound_name = self.config['sounds']['pain']
@@ -166,24 +155,22 @@ class NPC(AnimatedSprite):
                 self.check_health()
 
     def check_health(self):
-        """Check if NPC is dead and handle death animation"""
         if self.health < 1 and self.alive:
             self.alive = False
             self.play_death_sound = True
             self.death_sound_delay = 5
             self.death_frame = 0
             self.SPRITE_HEIGHT_SHIFT = self.death_height_shift
-            if len(self.death_images) > 0:
-                self.image = self.death_images[0]
-                if hasattr(self, '_current_image_id'):
-                    self._current_image_id += 1
-                else:
-                    self._current_image_id = 0
-                if hasattr(self, '_scaled_image_cache'):
-                    self._scaled_image_cache = {}
+
+            self.image = self.death_images[0]
+            if hasattr(self, '_current_image_id'):
+                self._current_image_id += 1
+            else:
+                self._current_image_id = 0
+            if hasattr(self, '_scaled_image_cache'):
+                self._scaled_image_cache = {}
 
     def run_logic(self):
-        """Run the appropriate behavior logic based on NPC state and behavior type"""
         if not self.alive:
             self.animate_death()
             return
@@ -200,7 +187,6 @@ class NPC(AnimatedSprite):
             self._run_basic_behavior()
 
     def _run_basic_behavior(self):
-        """Default behavior for NPCs"""
         if self.ray_cast_value:
             self.player_search_trigger = True
             if self.dist < self.attack_dist:
@@ -216,7 +202,6 @@ class NPC(AnimatedSprite):
             self.animate(self.idle_images)
 
     def _run_ranged_behavior(self):
-        """Ranged attack behavior - keep distance from player"""
         if self.ray_cast_value:
             self.player_search_trigger = True
             if self.dist < self.attack_dist * 0.5:
@@ -234,7 +219,6 @@ class NPC(AnimatedSprite):
             self.animate(self.idle_images)
 
     def _run_melee_behavior(self):
-        """Melee attack behavior - aggressive approach"""
         if self.ray_cast_value:
             self.player_search_trigger = True
             if self.dist < self.attack_dist:
@@ -252,7 +236,6 @@ class NPC(AnimatedSprite):
             self.animate(self.idle_images)
 
     def _retreat_from_player(self):
-        """Move away from player"""
         angle = math.atan2(self.y - self.game.player.y, self.x - self.game.player.x)
         dx = math.cos(angle) * self.speed
         dy = math.sin(angle) * self.speed
@@ -264,7 +247,6 @@ class NPC(AnimatedSprite):
         return int(self.x), int(self.y)
 
     def ray_cast_player_npc(self):
-        """Cast a ray from player to NPC to check if there's a direct line of sight"""
         if self.game.player.map_pos == self.map_pos:
             return True
 
@@ -279,7 +261,6 @@ class NPC(AnimatedSprite):
         sin_a = math.sin(ray_angle)
         cos_a = math.cos(ray_angle)
 
-        # Prevent division by zero
         EPSILON = 1e-6
         sin_a = sin_a if abs(sin_a) > EPSILON else EPSILON * (1 if sin_a >= 0 else -1)
         cos_a = cos_a if abs(cos_a) > EPSILON else EPSILON * (1 if cos_a >= 0 else -1)

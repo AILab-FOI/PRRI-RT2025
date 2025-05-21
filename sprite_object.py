@@ -114,21 +114,15 @@ class AnimatedSprite(SpriteObject):
             real_path = resource_path(path)
             if os.path.isdir(real_path):
                 for file_name in sorted(os.listdir(real_path)):
-                    if os.path.isfile(os.path.join(real_path, file_name)):
+                    file_path = os.path.join(real_path, file_name)
+                    if os.path.isfile(file_path):
                         try:
-                            frame_path = os.path.join(real_path, file_name)
-                            img = pg.image.load(frame_path).convert_alpha()
+                            img = pg.image.load(file_path).convert_alpha()
                             images.append(img)
                         except Exception:
                             continue
-            else:
-                blank_img = pg.Surface((32, 32), pg.SRCALPHA)
-                blank_img.fill((0, 0, 0, 0))
-                images.append(blank_img)
         except Exception:
-            blank_img = pg.Surface((32, 32), pg.SRCALPHA)
-            blank_img.fill((0, 0, 0, 0))
-            images.append(blank_img)
+            pass
 
         if not images:
             blank_img = pg.Surface((32, 32), pg.SRCALPHA)

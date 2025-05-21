@@ -316,7 +316,7 @@ class Menu:
         for event in pg.event.get():
             if event.type == pg.QUIT:
                 pg.quit()
-                exit()
+                sys.exit()
 
             if self.state == 'main':
                 for button in self.main_buttons:

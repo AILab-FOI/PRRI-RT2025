@@ -3,6 +3,7 @@ import time
 import math
 import json
 import random
+import sys
 from settings import *
 from font_manager import load_custom_font, resource_path
 from menu import MetallicUIRenderer, Button
@@ -83,7 +84,7 @@ class LoadingScreen:
         for event in pg.event.get():
             if event.type == pg.QUIT:
                 pg.quit()
-                exit()
+                sys.exit()
 
             for i, button in enumerate(self.buttons):
                 button.update(mouse_pos, self.game)
@@ -93,7 +94,7 @@ class LoadingScreen:
                         return True
                     elif i == 1:
                         pg.quit()
-                        exit()
+                        sys.exit()
 
         return False
 
