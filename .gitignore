@@ -33,6 +33,7 @@ MANIFEST
 *.manifest
 *.spec
 build.bat
+build_dir.bat
 
 # Installer logs
 pip-log.txt

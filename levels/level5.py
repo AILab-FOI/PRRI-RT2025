@@ -7,16 +7,7 @@ from levels.base_level import create_base_level_structure
 def get_level_data():
     """Return the complete level 5 data"""
     level_data = create_base_level_structure()
-    # Terminals
-    level_data['terminals'] = [
-        #{
-            #'position': (5, 5),
-            #'code': '6789',
-            #'unlocks_door_id': None
-        #}
-    ]
 
-    
     level_data['doors'] = []
 
     
