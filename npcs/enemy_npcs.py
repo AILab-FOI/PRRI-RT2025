@@ -1,7 +1,6 @@
 import pygame as pg
 import os
 from collections import deque
-from random import random
 from settings import *
 from npcs.base_npc import NPC
 
@@ -142,6 +141,7 @@ class MadracNPC(NPC):
 
 
 class BossNPC(NPC):
+    """Final boss enemy type with high health and damage"""
     def __init__(self, game, path='resources/sprites/npc/boss/0.png', pos=(10.5, 5.5),
                  scale=1.5, shift=0, animation_time=220):
         config = {

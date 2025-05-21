@@ -20,7 +20,7 @@ class Interaction:
         self.message = ""
         self.message_time = 0
         self.message_duration = 3000
-        self.is_showing_indicator = False  # Add this flag
+        self.is_showing_indicator = False
 
     def add_object(self, obj):
         self.interaction_objects.append(obj)
@@ -45,23 +45,18 @@ class Interaction:
             self.is_showing_indicator = False
             return
 
-        # Reset the flag at the beginning of each frame
         self.is_showing_indicator = False
 
         if self.show_interaction_prompt and not self.input_active:
-            # Set the flag to true when we're showing the interaction indicator
             self.is_showing_indicator = True
-            
-            # Get crosshair position from game_ui instead of ui
+
             if hasattr(self.game, 'game_ui') and hasattr(self.game.game_ui, 'crosshair_pos'):
                 crosshair_pos = self.game.game_ui.crosshair_pos
                 crosshair_size = self.game.game_ui.crosshair_size
-                
-                # Calculate center of crosshair
+
                 center_x = crosshair_pos[0] + crosshair_size // 2
                 center_y = crosshair_pos[1] + crosshair_size // 2
-                
-                # Draw + sign at crosshair position
+
                 indicator_size = 15
                 line_width = 2
                 pg.draw.line(self.game.screen, (255, 255, 255),
@@ -71,7 +66,6 @@ class Interaction:
                             (center_x, center_y - indicator_size),
                             (center_x, center_y + indicator_size), line_width)
             else:
-                # Fallback to center of screen if game_ui or crosshair_pos not available
                 pg.draw.line(self.game.screen, (255, 255, 255),
                             (HALF_WIDTH - 15, HALF_HEIGHT),
                             (HALF_WIDTH + 15, HALF_HEIGHT), 2)
@@ -79,9 +73,7 @@ class Interaction:
                             (HALF_WIDTH, HALF_HEIGHT - 15),
                             (HALF_WIDTH, HALF_HEIGHT + 15), 2)
 
-            # Get appropriate prompt text
             if self.active_object.interaction_type == "level_door":
-                # For the last level (level 5), show "Finish the game" instead of "Go to next level"
                 if hasattr(self.game, 'level_manager') and self.game.level_manager.current_level == 5:
                     prompt_text = "Press 'E' to finish the game"
                 else:
@@ -95,14 +87,12 @@ class Interaction:
             else:
                 prompt_text = f"Press 'E' to {self.active_object.interaction_type}"
 
-            # Draw prompt text
             margin_y = int(HEIGHT * UI_MARGIN_PERCENT_Y)
             text_surface = self.font.render(prompt_text, True, (255, 255, 255))
             text_rect = text_surface.get_rect(center=(HALF_WIDTH, HEIGHT - 100 - margin_y))
             self.game.screen.blit(text_surface, text_rect)
 
         if self.input_active:
-            # Draw main background
             bg_width, bg_height = 600, 300
             bg_rect = (HALF_WIDTH - bg_width//2, HALF_HEIGHT - bg_height//2, bg_width, bg_height)
 
@@ -111,12 +101,10 @@ class Interaction:
             self.game.screen.blit(bg_surface, bg_rect[:2])
             pg.draw.rect(self.game.screen, (50, 50, 50), bg_rect, 2)
 
-            # Draw title
             title_surface = self.font.render("Enter Code:", True, (255, 255, 255))
             title_rect = title_surface.get_rect(center=(HALF_WIDTH, HALF_HEIGHT - 100))
             self.game.screen.blit(title_surface, title_rect)
 
-            # Draw input field
             input_text = self.input_code + "_" if len(self.input_code) < 4 else self.input_code
             large_font = load_custom_font(60)
 
@@ -129,7 +117,6 @@ class Interaction:
             input_rect = input_surface.get_rect(center=(HALF_WIDTH, HALF_HEIGHT))
             self.game.screen.blit(input_surface, input_rect)
 
-            # Draw instructions
             instructions = [
                 ("Press Enter to confirm", HALF_HEIGHT + 80),
                 ("Press Escape to cancel", HALF_HEIGHT + 110)
@@ -205,8 +192,7 @@ class Interaction:
             self.unlocked_doors.add(self.active_object.door_id)
             self.open_door()
         else:
-            # Incorrect code - damage the player and play hurt sound
-            self.game.player.get_damage(10)  # Apply 10 damage to player
+            self.game.player.get_damage(10)
             self.message = "Incorrect code! Security system activated!"
             self.message_time = pg.time.get_ticks()
 
@@ -232,7 +218,6 @@ class Interaction:
 
             self.active_object = None
             self.show_interaction_prompt = False
-
 
     def pickup_weapon(self):
         weapon_type = self.active_object.weapon_type
@@ -266,20 +251,19 @@ class InteractiveObject(SpriteObject):
     def __init__(self, game, path, pos, interaction_type, door_id=None, code=None,
                  unlocks_door_id=None, requires_code=False, requires_door_id=None,
                  is_level_exit=False, weapon_type=None):
-        # Add 0.5 to position for proper sprite rendering in the center of the tile
         adjusted_pos = (pos[0] + 0.5, pos[1] + 0.5) if isinstance(pos, tuple) else pos
         super().__init__(game, path, adjusted_pos)
-        self.interaction_type = interaction_type  # "terminal", "door", "level_door", or "weapon"
-        self.door_id = door_id  # Unique ID for this door
-        self.original_pos = pos  # Store original position for map reference
-        self.code = code  # Code displayed by terminal or required by door
-        self.unlocks_door_id = unlocks_door_id  # Door ID that this terminal unlocks
-        self.requires_code = requires_code  # Whether this door requires a code
-        self.requires_door_id = requires_door_id  # Door ID that must be opened first
-        self.is_unlocked = False  # Whether this door has been unlocked
-        self.is_level_exit = is_level_exit  # Whether this door leads to the next level
-        self.is_enabled = False  # Whether this door is enabled (for level exits)
-        self.weapon_type = weapon_type  # Type of weapon ("smg", "pistol", etc.)
+        self.interaction_type = interaction_type
+        self.door_id = door_id
+        self.original_pos = pos
+        self.code = code
+        self.unlocks_door_id = unlocks_door_id
+        self.requires_code = requires_code
+        self.requires_door_id = requires_door_id
+        self.is_unlocked = False
+        self.is_level_exit = is_level_exit
+        self.is_enabled = False
+        self.weapon_type = weapon_type
 
     @property
     def map_pos(self):

@@ -130,15 +130,13 @@ class NPC(AnimatedSprite):
 
     def animate_death(self):
         if not self.alive and len(self.death_images) > 0:
-            # Reproduciraj zvuk smrti nakon određenog kašnjenja
-            if hasattr(self, 'play_death_sound') and self.play_death_sound:
-                if hasattr(self, 'death_sound_delay'):
-                    self.death_sound_delay -= 1
-                    if self.death_sound_delay <= 0:
-                        sound_name = self.config['sounds']['death']
-                        if hasattr(self.game.sound, sound_name):
-                            getattr(self.game.sound, sound_name).play()
-                        self.play_death_sound = False
+            if self.play_death_sound:
+                self.death_sound_delay -= 1
+                if self.death_sound_delay <= 0:
+                    sound_name = self.config['sounds']['death']
+                    if hasattr(self.game.sound, sound_name):
+                        getattr(self.game.sound, sound_name).play()
+                    self.play_death_sound = False
 
             if self.animation_trigger and self.death_frame < len(self.death_images) - 1:
                 self.death_frame += 1
@@ -171,10 +169,8 @@ class NPC(AnimatedSprite):
         """Check if NPC is dead and handle death animation"""
         if self.health < 1 and self.alive:
             self.alive = False
-            # Postavi zastavicu za reprodukciju zvuka smrti u sljedećem frame-u
-            # kako bi se izbjeglo preklapanje sa zvukom boli
             self.play_death_sound = True
-            self.death_sound_delay = 5  # Broj frame-ova za čekanje prije reprodukcije zvuka smrti
+            self.death_sound_delay = 5
             self.death_frame = 0
             self.SPRITE_HEIGHT_SHIFT = self.death_height_shift
             if len(self.death_images) > 0:
@@ -268,6 +264,7 @@ class NPC(AnimatedSprite):
         return int(self.x), int(self.y)
 
     def ray_cast_player_npc(self):
+        """Cast a ray from player to NPC to check if there's a direct line of sight"""
         if self.game.player.map_pos == self.map_pos:
             return True
 
@@ -282,16 +279,15 @@ class NPC(AnimatedSprite):
         sin_a = math.sin(ray_angle)
         cos_a = math.cos(ray_angle)
 
+        # Prevent division by zero
         EPSILON = 1e-6
         sin_a = sin_a if abs(sin_a) > EPSILON else EPSILON * (1 if sin_a >= 0 else -1)
         cos_a = cos_a if abs(cos_a) > EPSILON else EPSILON * (1 if cos_a >= 0 else -1)
 
-        # horizontals
+        # Check horizontal lines
         y_hor, dy = (y_map + 1, 1) if sin_a > 0 else (y_map - 1e-6, -1)
-
         depth_hor = (y_hor - oy) / sin_a
         x_hor = ox + depth_hor * cos_a
-
         delta_depth = dy / sin_a
         dx = delta_depth * cos_a
 
@@ -307,12 +303,10 @@ class NPC(AnimatedSprite):
             y_hor += dy
             depth_hor += delta_depth
 
-        # verticals
+        # Check vertical lines
         x_vert, dx = (x_map + 1, 1) if cos_a > 0 else (x_map - 1e-6, -1)
-
         depth_vert = (x_vert - ox) / cos_a
         y_vert = oy + depth_vert * sin_a
-
         delta_depth = dx / cos_a
         dy = delta_depth * sin_a
 
