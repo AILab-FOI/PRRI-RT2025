@@ -336,7 +336,7 @@ def get_level_data():
 
     # Enemy configuration
     level_data['enemies'] = {
-        'count': 20,  # More enemies in level 2
+        'count': 23,  # More enemies in level 2
         'types': [KlonoviNPC, JazavacNPC],
         'weights': [60, 40],  # 60% KlonoviNPC, 40% JazavacNPC
         'restricted_area': {(i, j) for i in range(5) for j in range(5)},  # Different restricted area

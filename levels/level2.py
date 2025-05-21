@@ -101,7 +101,7 @@ def get_level_data():
     ]
 
     level_data['enemies'] = {
-        'count': 25,
+        'count': 20,
         'types': [StakorNPC],
         'weights': [100],
         'restricted_area': {(i, j) for i in range(10) for j in range(10)},
