@@ -1,7 +1,7 @@
 """
 Level 5 configuration
 """
-from npc import BossNPC
+from npcs.enemy_npcs import BossNPC
 from levels.base_level import create_base_level_structure
 
 def get_level_data():
@@ -10,7 +10,7 @@ def get_level_data():
 
     level_data['doors'] = []
 
-    
+
     level_data['weapons'] = [
         {
 

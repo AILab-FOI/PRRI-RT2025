@@ -1,7 +1,7 @@
 """
 Level 4 configuration
 """
-from npc import MadracNPC, ParazitNPC, TosterNPC
+from npcs.enemy_npcs import MadracNPC, ParazitNPC, TosterNPC
 from levels.base_level import create_base_level_structure
 
 def get_level_data():
@@ -170,5 +170,5 @@ def get_level_data():
             {'type': ParazitNPC, 'position': (24, 28)},
         ]
     }
-    
+
     return level_data

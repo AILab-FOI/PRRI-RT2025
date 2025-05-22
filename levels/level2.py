@@ -1,7 +1,7 @@
 """
 Level 2 configuration
 """
-from npc import StakorNPC
+from npcs.enemy_npcs import StakorNPC
 from levels.base_level import create_base_level_structure
 
 def get_level_data():

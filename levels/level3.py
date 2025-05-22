@@ -1,7 +1,7 @@
 """
 Level 3 configuration
 """
-from npc import KlonoviNPC, JazavacNPC
+from npcs.enemy_npcs import KlonoviNPC, JazavacNPC
 from levels.base_level import create_base_level_structure
 
 def get_level_data():
@@ -24,7 +24,7 @@ def get_level_data():
             'position': (5, 2),
             'door_id': 1,
             'requires_code': False,
-            'code': None, 
+            'code': None,
             'requires_door_id': None
         },
         {
@@ -32,7 +32,7 @@ def get_level_data():
             'position': (3, 6),
             'door_id': 2,
             'requires_code': False,
-            'code': None, 
+            'code': None,
             'requires_door_id': None
         },
         {
@@ -40,7 +40,7 @@ def get_level_data():
             'position': (15, 12),
             'door_id': 3,
             'requires_code': False,
-            'code': None, 
+            'code': None,
             'requires_door_id': None
         },
         {
@@ -48,7 +48,7 @@ def get_level_data():
             'position': (4, 16),
             'door_id': 4,
             'requires_code': False,
-            'code': None, 
+            'code': None,
             'requires_door_id': None
         },
         {
@@ -56,7 +56,7 @@ def get_level_data():
             'position': (10, 16),
             'door_id': 6,
             'requires_code': False,
-            'code': None, 
+            'code': None,
             'requires_door_id': None
         },
         {

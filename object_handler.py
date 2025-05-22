@@ -1,5 +1,4 @@
 from sprite_object import *
-from npc import *
 from powerup import PowerUp
 from random import choices, shuffle
 
